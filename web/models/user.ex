@@ -6,7 +6,9 @@ defmodule PhoenixChina.User do
     field :password_hash, :string
     field :avatar, :string
     field :nickname, :string
+
     field :password, :string, virtual: true
+    
     timestamps()
   end
 
