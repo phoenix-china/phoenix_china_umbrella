@@ -17,11 +17,12 @@ defmodule PhoenixChina.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    
+
     get "/signup", UserController, :new
     post "/signup", UserController, :create
 
     resources "/users", UserController
+    resources "/posts", PostController
   end
 
   # Other scopes may use custom stacks.

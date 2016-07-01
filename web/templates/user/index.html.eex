@@ -15,8 +15,6 @@
 <%= for user <- @users do %>
     <tr>
       <td><%= user.email %></td>
-      <td><%= user.password_hash %></td>
-      <td><%= user.avatar %></td>
       <td><%= user.nickname %></td>
 
       <td class="text-right">

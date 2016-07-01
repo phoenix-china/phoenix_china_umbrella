@@ -1,6 +1,5 @@
 <h2>欢迎注册Phoenix中文社区</h2>
 
-<%= render "form.html", changeset: @changeset,
-                        action: user_path(@conn, :create) %>
+<%= render "signup_form.html", changeset: @changeset, action: user_path(@conn, :create) %>
 
 <%= link "回到首页", to: page_path(@conn, :index) %>

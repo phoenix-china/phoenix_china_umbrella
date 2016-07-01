@@ -3,7 +3,7 @@ defmodule PhoenixChina.UserTest do
 
   alias PhoenixChina.User
 
-  @valid_attrs %{avatar: "some content", email: "some content", nickname: "some content", password_hash: "some content"}
+  @valid_attrs %{email: "some content", nickname: "some content"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do
