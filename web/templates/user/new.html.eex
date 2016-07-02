@@ -3,3 +3,5 @@
 <%= render "signup_form.html", changeset: @changeset, action: user_path(@conn, :create) %>
 
 <%= link "回到首页", to: page_path(@conn, :index) %>
+
+<%= link "已有账号", to: session_path(@conn, :new) %>

@@ -9,12 +9,12 @@ defmodule PhoenixChina.UserController do
   end
 
   def new(conn, _params) do
-    changeset = User.changeset(%User{}, :signup)
+    changeset = User.changeset(:signup, %User{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"user" => user_params}) do
-    changeset = User.changeset(%User{}, user_params, :signup)
+    changeset = User.changeset(:signup, %User{}, user_params)
     |> User.put_password_hash
 
     case Repo.insert(changeset) do

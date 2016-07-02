@@ -21,6 +21,10 @@ defmodule PhoenixChina.Router do
     get "/signup", UserController, :new
     post "/signup", UserController, :create
 
+    get "/signin", SessionController, :new
+    post "/signin", SessionController, :create
+    get "/signout", SessionController, :delete
+
     resources "/users", UserController
     resources "/posts", PostController
   end
