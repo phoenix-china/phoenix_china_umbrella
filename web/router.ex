@@ -9,12 +9,19 @@ defmodule PhoenixChina.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :browser_session do
+    plug Guardian.Plug.VerifySession
+    plug Guardian.Plug.LoadResource
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
+    plug Guardian.Plug.VerifyHeader
+    plug Guardian.Plug.LoadResource
   end
 
   scope "/", PhoenixChina do
-    pipe_through :browser # Use the default browser stack
+    pipe_through [:browser, :browser_session]
 
     get "/", PageController, :index
 
@@ -25,7 +32,6 @@ defmodule PhoenixChina.Router do
     post "/signin", SessionController, :create
     get "/signout", SessionController, :delete
 
-    resources "/users", UserController
     resources "/posts", PostController
   end
 

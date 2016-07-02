@@ -17,10 +17,9 @@ defmodule PhoenixChina.SessionController do
       true ->
         user = (from User, where: [email: ^user_params["email"]]) |> first |> Repo.one
         conn
-        |> put_session(:user_id, user.id)
-        |> put_session(:current_user, user)
+        |> Guardian.Plug.sign_in(user)
         |> put_flash(:info, "登陆成功！")
-        |> redirect(to: page_path(conn, :index))
+        |> redirect(to: post_path(conn, :index))
       false ->
         changeset = %{changeset | action: :signin}
         render(conn, "new.html", changeset: changeset)
@@ -29,28 +28,30 @@ defmodule PhoenixChina.SessionController do
 
   defp validate_email(changeset) do
     user = (from User, where: [email: ^changeset.changes.email]) |> first |> Repo.one
-    if !changeset.errors[:email] && !user do
-      changeset = changeset
-      |> Ecto.Changeset.add_error(:email, "用户不存在")
+    case !changeset.errors[:email] && !user do
+      true ->
+        changeset
+        |> Ecto.Changeset.add_error(:email, "用户不存在")
+      false ->
+        changeset
     end
-    changeset
   end
 
   defp validate_password(changeset) do
     user = (from User, where: [email: ^changeset.changes.email]) |> first |> Repo.one
-    if !changeset.errors[:email]
-    && !changeset.errors[:password]
+
+    case !changeset.errors[:email] && !changeset.errors[:password]
     && !User.check_password(changeset.changes.password, user.password_hash) do
-      changeset = changeset
-      |> Ecto.Changeset.add_error(:password, "密码错误，请重新输入")
+      true ->
+        changeset
+        |> Ecto.Changeset.add_error(:password, "密码错误，请重新输入")
+      false ->
+        changeset
     end
-    changeset
   end
 
   def delete(conn, _params) do
-    conn
-    |> put_session(:user_id, nil)
-    |> put_session(:current_user, nil)
+    Guardian.Plug.sign_out(conn)
     |> put_flash(:info, "已退出登陆")
     |> redirect(to: page_path(conn, :index))
   end

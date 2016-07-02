@@ -1,9 +1,13 @@
 defmodule PhoenixChina.PostController do
   use PhoenixChina.Web, :controller
-
+  use Guardian.Phoenix.Controller
+  
   alias PhoenixChina.Post
 
-  def index(conn, _params) do
+  plug Guardian.Plug.EnsureAuthenticated, handler: PhoenixChina.GuardianHandler
+
+  def index(conn, _params, current_user, _claims) do
+    IO.puts(current_user.email)
     posts = Repo.all(Post)
     render(conn, "index.html", posts: posts)
   end

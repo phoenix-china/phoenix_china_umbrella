@@ -32,11 +32,11 @@ defmodule PhoenixChina.UserController do
     render(conn, "show.html", user: user)
   end
 
-  def edit(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
-    changeset = User.changeset(user)
-    render(conn, "edit.html", user: user, changeset: changeset)
-  end
+  # def edit(conn, %{"id" => id}) do
+  #   user = Repo.get!(User, id)
+  #   changeset = User.changeset(user)
+  #   render(conn, "edit.html", user: user, changeset: changeset)
+  # end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Repo.get!(User, id)
