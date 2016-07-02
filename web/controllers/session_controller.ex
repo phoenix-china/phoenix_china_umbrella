@@ -22,7 +22,7 @@ defmodule PhoenixChina.SessionController do
         |> put_flash(:info, "登陆成功！")
         |> redirect(to: page_path(conn, :index))
       false ->
-        changeset = %{changeset | action: :update}
+        changeset = %{changeset | action: :signin}
         render(conn, "new.html", changeset: changeset)
     end
   end
@@ -47,15 +47,11 @@ defmodule PhoenixChina.SessionController do
     changeset
   end
 
-  def delete(conn, %{"id" => id}) do
-    session = Repo.get!(Session, id)
-
-    # Here we use delete! (with a bang) because we expect
-    # it to always work (and if it does not, it will raise).
-    Repo.delete!(session)
-
+  def delete(conn, _params) do
     conn
-    |> put_flash(:info, "Session deleted successfully.")
-    |> redirect(to: session_path(conn, :index))
+    |> put_session(:user_id, nil)
+    |> put_session(:current_user, nil)
+    |> put_flash(:info, "已退出登陆")
+    |> redirect(to: page_path(conn, :index))
   end
 end
