@@ -1,0 +1,7 @@
+<h2>欢迎登陆Phoenix中文社区</h2>
+
+<%= render "form.html", changeset: @changeset, action: session_path(@conn, :create) %>
+
+<%= link "回到首页", to: page_path(@conn, :index) %>
+
+<%= link "没有账号？", to: user_path(@conn, :new) %>
