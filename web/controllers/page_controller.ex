@@ -1,12 +1,12 @@
 defmodule PhoenixChina.PageController do
   use PhoenixChina.Web, :controller
   alias PhoenixChina.Post
-  
+
   plug PhoenixChina.GuardianPlug
 
-  def index(conn, _params) do
-    posts = (from Post, order_by: [desc: :inserted_at], preload: [:user])
-    |> Repo.all
-    render conn, "index.html", posts: posts
+  def index(conn, params) do
+    page = (from Post, order_by: [desc: :inserted_at], preload: [:user])
+    |> Repo.paginate(params)
+    render conn, "index.html", posts: page.entries, page: page
   end
 end

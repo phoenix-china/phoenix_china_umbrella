@@ -40,6 +40,9 @@ defmodule PhoenixChina.Mixfile do
      {:cowboy, "~> 1.0"},
      {:comeonin, "~> 2.5"},
      {:guardian, "~> 0.12.0"},
+     {:scrivener, "~> 2.0"},
+     {:scrivener_ecto, "~> 1.0"},
+    #  {:scrivener_html, "~> 1.2"},
    ]
   end
 

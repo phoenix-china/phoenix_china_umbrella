@@ -23,5 +23,6 @@
     </div>
   </li>
   <% end %>
-
 </ul>
+
+<%= render "page.html", conn: @conn, page: @page %>

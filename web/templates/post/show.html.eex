@@ -32,5 +32,5 @@
 </ul>
 
 <%= render "comment_list.html", conn: @conn, post: @post, comments: @comments, logged_in: @logged_in, current_user: @current_user %>
-
+<%= render "page.html", conn: @conn, post: @post, page: @page %>
 <%= render "comment_form.html", changeset: @changeset, action: post_comment_path(@conn, :create, @post) %>

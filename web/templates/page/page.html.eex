@@ -1,0 +1,9 @@
+<span>共有<%= @page.total_entries %>条，当前第<%= @page.page_number %>页</span>
+
+<%= if @page.page_number > 1 do %>
+  <%= link "上一页", to: page_path(@conn, :index, page: @page.page_number - 1) %>
+<%= end %>
+
+<%= if @page.page_number < @page.total_pages do %>
+  <%= link "下一页", to: page_path(@conn, :index, page: @page.page_number + 1) %>
+<%= end %>

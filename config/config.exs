@@ -26,8 +26,8 @@ config :guardian, Guardian,
   issuer: "PhoenixChina.#{Mix.env}",
   ttl: { 30, :days },
   verify_issuer: true,
-  secret_key: to_string(Mix.env), # <- Your Key
-  serializer: PhoenixChina.GuardianSerializer # <- We'll create this next
+  secret_key: to_string(Mix.env),
+  serializer: PhoenixChina.GuardianSerializer
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
