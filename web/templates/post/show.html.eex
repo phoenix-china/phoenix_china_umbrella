@@ -19,5 +19,8 @@
 
 </ul>
 
-<%= link "Edit", to: post_path(@conn, :edit, @post) %>
-<%= link "Back", to: post_path(@conn, :index) %>
+<ul>
+  <li><%= link "返回", to: post_path(@conn, :index) %></li>
+  <li><%= link "编辑", to: post_path(@conn, :edit, @post) %></li>
+  <li><%= link "评论", to: post_comment_path(@conn, :new, @post) %></li>
+</ul>
