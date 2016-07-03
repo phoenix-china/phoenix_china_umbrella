@@ -3,7 +3,7 @@ defmodule PhoenixChina.PostController do
 
   alias PhoenixChina.Post
   alias PhoenixChina.Comment
-  import PhoenixChina.ViewHelpers, only: [logged_in?: 1, current_user: 1]
+  import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
   when action in [:new, :create, :edit, :update, :delete]

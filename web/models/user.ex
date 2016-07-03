@@ -14,6 +14,15 @@ defmodule PhoenixChina.User do
 
   def changeset(action, struct, params \\ %{})
 
+  def changeset(:edit, struct, params) do
+    struct
+    |> cast(params, [:avatar, :nickname])
+    |> validate_required([:avatar, :nickname], message: "不能为空")
+    |> validate_length(:nickname, min: 1, max: 18)
+    |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许使用的用户名")
+    |> unique_constraint(:nickname, message: "昵称已被注册啦！")
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
@@ -25,7 +34,7 @@ defmodule PhoenixChina.User do
     |> unique_constraint(:email, message: "邮箱已被注册啦！")
     |> validate_length(:password, min: 6, max: 128)
     |> validate_length(:nickname, min: 1, max: 18)
-    |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许注册的用户名")
+    |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许使用的用户名")
     |> unique_constraint(:nickname, message: "昵称已被注册啦！")
   end
 
