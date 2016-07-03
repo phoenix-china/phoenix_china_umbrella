@@ -4,7 +4,7 @@
     本项目使用基于Elixir语言的PhoenixFramework框架开发
   </p>
   <p class="lead">
-    <%= link "本项目github地址", to: "https://github.com/PhoenixChina/phoenix_china" %>
+    <%= link "本项目github地址", to: "https://github.com/PhoenixChina/phoenix_china", target: "_blank" %>
     欢迎fork和提交代码！
   </p>
 </div>

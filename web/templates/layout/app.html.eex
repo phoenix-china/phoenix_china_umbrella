@@ -12,14 +12,15 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container" >
       <header class="header">
-        <nav role="navigation">
+        <nav role="navigation" class="clearfix">
           <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
+            <li><%= link "登陆", to: session_path(@conn, :new) %></li>
+            <li><%= link "注册", to: user_path(@conn, :new) %></li>
           </ul>
+          <%= link "PhoenixChina", to: page_path(@conn, :index), class: "logo" %>
         </nav>
-        <span class="logo"></span>
       </header>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
