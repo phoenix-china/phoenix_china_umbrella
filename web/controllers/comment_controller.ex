@@ -20,7 +20,7 @@ defmodule PhoenixChina.CommentController do
         |> put_flash(:info, "评论创建成功.")
         |> redirect(to: post_path(conn, :show, post_id))
       {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, post_id: post_id)
     end
   end
 

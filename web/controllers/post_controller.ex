@@ -53,34 +53,61 @@ defmodule PhoenixChina.PostController do
   end
 
   def edit(conn, %{"id" => id}) do
+    current_user = current_user(conn)
     post = Repo.get!(Post, id)
-    changeset = Post.changeset(post)
-    render(conn, "edit.html", post: post, changeset: changeset)
-  end
 
-  def update(conn, %{"id" => id, "post" => post_params}) do
-    post = Repo.get!(Post, id)
-    changeset = Post.changeset(post, post_params)
-
-    case Repo.update(changeset) do
-      {:ok, post} ->
+    case post.user_id == current_user.id do
+      false ->
         conn
-        |> put_flash(:info, "Post updated successfully.")
-        |> redirect(to: post_path(conn, :show, post))
-      {:error, changeset} ->
+        |> put_flash(:info, "不是自己的帖子，不允许编辑！")
+        |> redirect(to: post_path(conn, :show, id))
+
+      true ->
+        changeset = Post.changeset(post)
         render(conn, "edit.html", post: post, changeset: changeset)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
+  def update(conn, %{"id" => id, "post" => post_params}) do
+    current_user = current_user(conn)
     post = Repo.get!(Post, id)
 
-    # Here we use delete! (with a bang) because we expect
-    # it to always work (and if it does not, it will raise).
-    Repo.delete!(post)
+    case post.user_id == current_user.id do
+      false ->
+        conn
+        |> put_flash(:info, "不是自己的帖子，不允许编辑！")
+        |> redirect(to: post_path(conn, :show, id))
 
-    conn
-    |> put_flash(:info, "Post deleted successfully.")
-    |> redirect(to: post_path(conn, :index))
+      true ->
+        changeset = Post.changeset(post, post_params)
+
+        case Repo.update(changeset) do
+          {:ok, post} ->
+            conn
+            |> put_flash(:info, "帖子更新成功.")
+            |> redirect(to: post_path(conn, :show, post))
+          {:error, changeset} ->
+            render(conn, "edit.html", post: post, changeset: changeset)
+        end
+    end
+  end
+
+  def delete(conn, %{"id" => id}) do
+    current_user = current_user(conn)
+    post = Repo.get!(Post, id)
+
+    case post.user_id == current_user.id do
+      false ->
+        conn
+        |> put_flash(:info, "不是自己的帖子，不允许删除！")
+        |> redirect(to: post_path(conn, :show, id))
+
+      true ->
+        Repo.delete!(post)
+
+        conn
+        |> put_flash(:info, "帖子删除成功")
+        |> redirect(to: page_path(conn, :index))
+    end
   end
 end
