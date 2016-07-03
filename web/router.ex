@@ -32,7 +32,10 @@ defmodule PhoenixChina.Router do
     post "/signin", SessionController, :create
     get "/signout", SessionController, :delete
 
-    resources "/posts", PostController
+    resources "/posts", PostController do
+       resources "/comments", CommentController, except: [:index, :show]
+    end
+
   end
 
   # Other scopes may use custom stacks.

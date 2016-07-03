@@ -18,6 +18,7 @@
       <td><%= post.user.email %></td>
 
       <td class="text-right">
+        <%= link "回复", to: post_comment_path(@conn, :new, post.id), class: "btn btn-default btn-xs" %>
         <%= link "Show", to: post_path(@conn, :show, post), class: "btn btn-default btn-xs" %>
         <%= link "Edit", to: post_path(@conn, :edit, post), class: "btn btn-default btn-xs" %>
         <%= link "Delete", to: post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
