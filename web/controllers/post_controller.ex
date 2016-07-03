@@ -2,7 +2,8 @@ defmodule PhoenixChina.PostController do
   use PhoenixChina.Web, :controller
 
   alias PhoenixChina.Post
-  import PhoenixChina.ViewHelpers, only: [current_user: 1]
+  alias PhoenixChina.Comment
+  import PhoenixChina.ViewHelpers, only: [logged_in?: 1, current_user: 1]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
   when action in [:new, :create, :edit, :update, :delete]
@@ -35,7 +36,18 @@ defmodule PhoenixChina.PostController do
 
   def show(conn, %{"id" => id}) do
     post = Repo.get!(Post, id)
-    render(conn, "show.html", post: post)
+    comments = (from Comment, where: [post_id: ^id], order_by: [desc: :inserted_at], preload: [:user])
+    |> Repo.all
+    changeset = Comment.changeset(%Comment{})
+    logged_in = logged_in?(conn)
+    current_user = current_user(conn)
+
+    render conn, "show.html",
+      post: post,
+      comments: comments,
+      changeset: changeset,
+      logged_in: logged_in,
+      current_user: current_user
   end
 
   def edit(conn, %{"id" => id}) do

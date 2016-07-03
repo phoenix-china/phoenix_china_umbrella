@@ -1,0 +1,17 @@
+<%= for comment <- @comments do %>
+<div class="media">
+  <div class="media-body">
+    <h5><%= comment.user.nickname %></h5>
+    <div class="">
+      评论：<%= comment.content %>
+    </div>
+    <div class="">
+      发表于 <span><%= comment.inserted_at %></span>
+      <%= if @logged_in && comment.user_id == @current_user.id do %>
+        <%= link "编辑", to: post_comment_path(@conn, :edit, @post, comment) %>
+        <%= link "删除", to: post_comment_path(@conn, :delete, @post, comment), method: :delete, data: [confirm: "确定删除评论吗?"], class: "btn btn-danger btn-xs" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% end %>

@@ -1,4 +1,4 @@
-<h2>Show post</h2>
+<h2>帖子详情</h2>
 
 <ul>
 
@@ -16,11 +16,21 @@
     <strong>User:</strong>
     <%= @post.user_id %>
   </li>
+  <li>
+    <strong>发布时间:</strong>
+    <%= @post.inserted_at %>
+  </li>
 
 </ul>
 
 <ul>
-  <li><%= link "返回", to: post_path(@conn, :index) %></li>
-  <li><%= link "编辑", to: post_path(@conn, :edit, @post) %></li>
-  <li><%= link "评论", to: post_comment_path(@conn, :new, @post) %></li>
+  <%= if @logged_in && @post.user_id == @current_user.id do %>
+    <%= link "编辑", to: post_path(@conn, :edit, @post), class: "btn btn-default btn-xs" %>
+    <%= link "删除", to: post_path(@conn, :delete, @post), method: :delete, data: [confirm: "确定要删除帖子吗?"], class: "btn btn-danger btn-xs" %>
+  <%= end %>
+  <%= link "返回", to: post_path(@conn, :index), class: "btn btn-default btn-xs" %>
 </ul>
+
+<%= render "comment_list.html", conn: @conn, post: @post, comments: @comments, logged_in: @logged_in, current_user: @current_user %>
+
+<%= render "comment_form.html", changeset: @changeset, action: post_comment_path(@conn, :create, @post) %>

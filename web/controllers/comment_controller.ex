@@ -32,7 +32,7 @@ defmodule PhoenixChina.CommentController do
     current_user = current_user(conn)
     comment = Repo.get!(Comment, id)
 
-    case comment.user_id != current_user.id do
+    case comment.user_id == current_user.id do
       false ->
         conn
         |> put_flash(:info, "不是自己的评论，不允许编辑！")
@@ -48,7 +48,7 @@ defmodule PhoenixChina.CommentController do
     current_user = current_user(conn)
     comment = Repo.get!(Comment, id)
 
-    case comment.user_id != current_user.id do
+    case comment.user_id == current_user.id do
       false ->
         conn
         |> put_flash(:info, "不是自己的评论，不允许编辑！")
@@ -60,7 +60,7 @@ defmodule PhoenixChina.CommentController do
         case Repo.update(changeset) do
           {:ok, _comment} ->
             conn
-            |> put_flash(:info, "Comment updated successfully.")
+            |> put_flash(:info, "评论更新成功！")
             |> redirect(to: post_path(conn, :show, post_id))
           {:error, changeset} ->
             render(conn, "edit.html", comment: comment, changeset: changeset)
@@ -72,7 +72,7 @@ defmodule PhoenixChina.CommentController do
     current_user = current_user(conn)
     comment = Repo.get!(Comment, id)
 
-    case comment.user_id != current_user.id do
+    case comment.user_id == current_user.id do
       false ->
         conn
         |> put_flash(:info, "不是自己的评论，不允许删除！")
