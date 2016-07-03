@@ -1,36 +1,26 @@
 <div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}", name: "Phoenix!" %></h2>
-  <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
+  <h2><%= gettext "欢迎来到 %{name}", name: "Phoenix中文社区" %></h2>
+  <p>
+    本项目使用基于Elixir语言的PhoenixFramework框架开发
+  </p>
+  <p class="lead">
+    <%= link "本项目github地址", to: "https://github.com/PhoenixChina/phoenix_china" %>
+    欢迎fork和提交代码！
+  </p>
 </div>
 
-<div class="row marketing">
-  <div class="col-lg-6">
-    <h4>Resources</h4>
-    <ul>
-      <li>
-        <a href="http://phoenixframework.org/docs/overview">Guides</a>
-      </li>
-      <li>
-        <a href="https://hexdocs.pm/phoenix">Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-    </ul>
-  </div>
+<ul class="list-group">
+  <%= for post <- @posts do %>
+  <li class="list-group-item">
+    <div class="">
+      <h3><%= link post.title, to: post_path(@conn, :show, post) %></h3>
+    </div>
+    <div class="">
+      <span>用户 <%= post.user.nickname %></span>
+      <span>创建于 <%= post.inserted_at %></span>
+    </div>
 
-  <div class="col-lg-6">
-    <h4>Help</h4>
-    <ul>
-      <li>
-        <a href="http://groups.google.com/group/phoenix-talk">Mailing list</a>
-      </li>
-      <li>
-        <a href="http://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">@elixirphoenix</a>
-      </li>
-    </ul>
-  </div>
-</div>
+  </li>
+  <% end %>
+
+</ul>

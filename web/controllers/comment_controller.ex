@@ -5,12 +5,7 @@ defmodule PhoenixChina.CommentController do
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
-  when action in [:new, :create, :edit, :update, :delete]
-
-  def new(conn, %{"post_id" => post_id}) do
-    changeset = Comment.changeset(%Comment{})
-    render(conn, "new.html", post_id: post_id, changeset: changeset)
-  end
+  when action in [:create, :edit, :update, :delete]
 
   def create(conn, %{"post_id" => post_id, "comment" => comment_params}) do
     current_user = current_user(conn)
