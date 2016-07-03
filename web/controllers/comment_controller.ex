@@ -6,6 +6,7 @@ defmodule PhoenixChina.CommentController do
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
   when action in [:create, :edit, :update, :delete]
+  plug PhoenixChina.GuardianPlug
 
   def create(conn, %{"post_id" => post_id, "comment" => comment_params}) do
     current_user = current_user(conn)

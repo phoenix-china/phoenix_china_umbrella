@@ -7,6 +7,7 @@ defmodule PhoenixChina.PostController do
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
   when action in [:new, :create, :edit, :update, :delete]
+  plug PhoenixChina.GuardianPlug
 
   def index(conn, _params) do
     posts = (from Post, order_by: [desc: :inserted_at], preload: [:user])
@@ -39,15 +40,11 @@ defmodule PhoenixChina.PostController do
     comments = (from Comment, where: [post_id: ^id], order_by: [desc: :inserted_at], preload: [:user])
     |> Repo.all
     changeset = Comment.changeset(%Comment{})
-    logged_in = logged_in?(conn)
-    current_user = current_user(conn)
 
     render conn, "show.html",
       post: post,
       comments: comments,
-      changeset: changeset,
-      logged_in: logged_in,
-      current_user: current_user
+      changeset: changeset
   end
 
   def edit(conn, %{"id" => id}) do

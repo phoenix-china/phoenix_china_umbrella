@@ -1,5 +1,5 @@
-<h2>Edit comment</h2>
+<h2>编辑评论内容</h2>
 
 <%= render "form.html", changeset: @changeset, action: post_comment_path(@conn, :update, @post_id, @comment) %>
 
-<%= link "Back", to: post_path(@conn, :show, @post_id) %>
+<%= link "返回", to: post_path(@conn, :show, @post_id) %>
