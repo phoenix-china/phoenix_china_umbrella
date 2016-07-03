@@ -19,7 +19,7 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] session验证
 - [x] 发布帖子
 - [ ] 用户积分
-- [ ] 发布评论
+- [x] 发布评论
 - [ ] 收藏帖子
 - [ ] 点赞帖子
 - [ ] 点赞评论

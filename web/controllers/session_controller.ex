@@ -16,9 +16,8 @@ defmodule PhoenixChina.SessionController do
 
     case changeset.valid? do
       true ->
-        user = (from User, where: [email: ^user_params["email"]]) |> first |> Repo.one
         conn
-        |> Guardian.Plug.sign_in(user)
+        |> Guardian.Plug.sign_in(changeset.changes.user)
         |> put_flash(:info, "登陆成功！")
         |> redirect(to: page_path(conn, :index))
       false ->
@@ -35,14 +34,13 @@ defmodule PhoenixChina.SessionController do
         |> Ecto.Changeset.add_error(:email, "用户不存在")
       false ->
         changeset
+        |> Ecto.Changeset.put_change(:user, user)
     end
   end
 
   defp validate_password(changeset) do
-    user = (from User, where: [email: ^changeset.changes.email]) |> first |> Repo.one
-
     case !changeset.errors[:email] && !changeset.errors[:password]
-    && !User.check_password(changeset.changes.password, user.password_hash) do
+    && !User.check_password(changeset.changes.password, changeset.changes.user.password_hash) do
       true ->
         changeset
         |> Ecto.Changeset.add_error(:password, "密码错误，请重新输入")
