@@ -1,14 +1,15 @@
 defmodule PhoenixChina.PostController do
   use PhoenixChina.Web, :controller
-  use Guardian.Phoenix.Controller
-  
+
   alias PhoenixChina.Post
+  import PhoenixChina.ViewHelpers, only: [logged_in?: 1, current_user: 1]
 
-  plug Guardian.Plug.EnsureAuthenticated, handler: PhoenixChina.GuardianHandler
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
+  when action in [:new, :create, :edit, :update, :delete]
 
-  def index(conn, _params, current_user, _claims) do
-    IO.puts(current_user.email)
-    posts = Repo.all(Post)
+  def index(conn, _params) do
+    posts = (from Post, order_by: [desc: :inserted_at], preload: [:user])
+    |> Repo.all
     render(conn, "index.html", posts: posts)
   end
 
@@ -18,12 +19,14 @@ defmodule PhoenixChina.PostController do
   end
 
   def create(conn, %{"post" => post_params}) do
+    current_user = current_user(conn)
     changeset = Post.changeset(%Post{}, post_params)
+    |> Ecto.Changeset.put_change(:user_id, current_user.id)
 
     case Repo.insert(changeset) do
       {:ok, _post} ->
         conn
-        |> put_flash(:info, "Post created successfully.")
+        |> put_flash(:info, "帖子发布成功.")
         |> redirect(to: post_path(conn, :index))
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
