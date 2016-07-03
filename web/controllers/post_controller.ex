@@ -29,14 +29,14 @@ defmodule PhoenixChina.PostController do
       {:ok, _post} ->
         conn
         |> put_flash(:info, "帖子发布成功.")
-        |> redirect(to: post_path(conn, :index))
+        |> redirect(to: page_path(conn, :index))
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
   end
 
   def show(conn, %{"id" => id}) do
-    post = Repo.get!(Post, id)
+    post = (from Post, where: [id: ^id], preload: [:user]) |> first |> Repo.one
     comments = (from Comment, where: [post_id: ^id], order_by: [desc: :inserted_at], preload: [:user])
     |> Repo.all
     changeset = Comment.changeset(%Comment{})

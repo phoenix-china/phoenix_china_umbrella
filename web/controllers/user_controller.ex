@@ -2,11 +2,7 @@ defmodule PhoenixChina.UserController do
   use PhoenixChina.Web, :controller
 
   alias PhoenixChina.User
-
-  def index(conn, _params) do
-    users = Repo.all(User)
-    render(conn, "index.html", users: users)
-  end
+  plug PhoenixChina.GuardianPlug
 
   def new(conn, _params) do
     changeset = User.changeset(:signup, %User{})
@@ -21,7 +17,7 @@ defmodule PhoenixChina.UserController do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "注册成功了！.")
-        |> redirect(to: user_path(conn, :index))
+        |> redirect(to: session_path(conn, :new))
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
     end

@@ -2,4 +2,4 @@
 
 <%= render "form.html", changeset: @changeset, action: post_path(@conn, :create) %>
 
-<%= link "Back", to: post_path(@conn, :index) %>
+<%= link "返回", to: page_path(@conn, :index) %>

@@ -8,7 +8,9 @@
     欢迎fork和提交代码！
   </p>
 </div>
-
+<div class="">
+  <%= link "发布帖子", to: post_path(@conn, :new), class: "btn btn-success btn-xs" %>
+</div>
 <ul class="list-group">
   <%= for post <- @posts do %>
   <li class="list-group-item">
@@ -19,7 +21,6 @@
       <span>用户 <%= post.user.nickname %></span>
       <span>创建于 <%= post.inserted_at %></span>
     </div>
-
   </li>
   <% end %>
 
