@@ -48,38 +48,59 @@
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
 
       <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-4">
+
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="">
+                <div class="media">
+                  <div class="media-left">
+                    <a href="#">
+                      <img class="media-object img-circle img-thumbnail"
+                        src="http://o7f5caqlk.bkt.clouddn.com/avatar.jpg"
+                        alt="<%= @user.nickname %>"
+                        style="width: 100px; height: 100px;">
+                    </a>
+                  </div>
+                  <div class="media-body">
+                    <h4 class="media-heading"><%= @user.nickname %></h4>
+                    <div class="">第 <%= @user.id %> 位会员 / <%= @user.inserted_at |> Ecto.DateTime.to_erl |> Timex.from_now("ja") %>注册</div>
+                    <div class="">
+                      0 篇帖子 • 27 条回帖
+                    </div>
+                    <div class="">
+                      <%= gettext "can't be blank" %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="">
+                <ul>
+                  <li><a href="#">
+                    <strong>0</strong>
+                    <span>关注者</span>
+                  </a></li>
+                  <li><a href="#">
+                    <strong>0</strong>
+                    <span>正在关注</span>
+                  </a></li>
+                  <li><a href="#">
+                    <strong>0</strong>
+                    <span>收藏</span>
+                  </a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-md-8">
           <main role="main">
             <%= render @view_module, @view_template, assigns %>
           </main>
         </div>
-        <div class="col-md-3">
-          <div class="panel panel-default">
-            <div class="panel-heading">最新用户</div>
-            <div class="panel-body">
-              <ul>
-                <%= for user <- @new_users do %>
-                <li>
-                  <%= link user.nickname, to: "javascript:void(0)" %>
-                </li>
-                <%= end %>
-              </ul>
-            </div>
-          </div>
 
-          <div class="panel panel-default">
-            <div class="panel-heading">友情链接</div>
-            <div class="panel-body">
-              <ul>
-                <li><%= link "Elixir中文社区", to: "http://www.elixir-cn.com/", target: "_blank" %></li>
-                <li><%= link "Ruby中文社区", to: "https://ruby-china.org/", target: "_blank" %></li>
-                <li><%= link "Python中文社区", to: "https://python-china.org/", target: "_blank" %></li>
-                <li><%= link "Rust中文社区", to: "https://rust-china.org/", target: "_blank" %></li>
-                <li><%= link "掏抠客－为您省钱", to: "http://www.taokouke.com/", target: "_blank" %></li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </div>
 
 

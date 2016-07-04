@@ -32,7 +32,7 @@
     <h4 class="media-heading"><%= link post.title, to: post_path(@conn, :show, post) %></h4>
     <div class="media-body">
       <div class="post-info">
-        <%= link post.user.nickname, to: "" %> •
+        <%= link post.user.nickname, to: user_path(@conn, :show, post.user.nickname) %> •
         <%= link "发表于#{post.inserted_at}", to: post_path(@conn, :show, post) %>
       </div>
     </div>

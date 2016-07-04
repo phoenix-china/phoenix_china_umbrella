@@ -3,6 +3,7 @@ defmodule PhoenixChina.UserController do
 
   alias PhoenixChina.User
   plug PhoenixChina.GuardianPlug
+  plug :put_layout, "user.html"
 
   def new(conn, _params) do
     changeset = User.changeset(:signup, %User{})
@@ -23,8 +24,10 @@ defmodule PhoenixChina.UserController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
+  def show(conn, %{"nickname" => nickname}) do
+    user = (from User, where: [nickname: ^nickname])
+    |> first
+    |> Repo.one!
     render(conn, "show.html", user: user)
   end
 

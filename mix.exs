@@ -19,7 +19,7 @@ defmodule PhoenixChina.Mixfile do
   def application do
     [mod: {PhoenixChina, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :timex]]
   end
 
   # Specifies which paths to compile per environment.
@@ -42,6 +42,7 @@ defmodule PhoenixChina.Mixfile do
      {:guardian, "~> 0.12.0"},
      {:scrivener, "~> 2.0"},
      {:scrivener_ecto, "~> 1.0"},
+     {:timex, "~> 2.2.1"},
     #  {:scrivener_html, "~> 1.2"},
    ]
   end

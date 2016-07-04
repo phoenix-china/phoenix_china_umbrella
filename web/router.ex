@@ -36,6 +36,8 @@ defmodule PhoenixChina.Router do
        resources "/comments", CommentController, except: [:index, :show]
     end
 
+    get "/users/:nickname", UserController, :show
+
   end
 
   # Other scopes may use custom stacks.
