@@ -13,8 +13,10 @@ use Mix.Config
 # which you typically run after static files are built.
 config :phoenix_china, PhoenixChina.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/manifest.json"
+  url: [host: "www.phoenix-china.org", port: 80],
+  cache_static_manifest: "priv/static/manifest.json",
+  watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
+                    cd: Path.expand("../", __DIR__)]]
 
 # Do not print debug messages in production
 config :logger, level: :info
