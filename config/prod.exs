@@ -14,9 +14,7 @@ use Mix.Config
 config :phoenix_china, PhoenixChina.Endpoint,
   http: [port: {:system, "PORT"}],
   url: [host: "www.phoenix-china.org", port: 80],
-  cache_static_manifest: "priv/static/manifest.json",
-  watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
-                    cd: Path.expand("../", __DIR__)]]
+  cache_static_manifest: "priv/static/manifest.json"
 
 # Do not print debug messages in production
 config :logger, level: :info
