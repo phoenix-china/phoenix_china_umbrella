@@ -18,8 +18,16 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] 用户登出
 - [x] session验证
 - [x] 发布帖子
-- [ ] 用户积分
 - [x] 发布评论
+- [ ] 时间本地化
+- [ ] 用户中心
+- [ ] 用户修改头像
+- [ ] 用户修改密码
+- [ ] 用户找回密码
+- [ ] 用户积分
+- [ ] 帖子评论数量
+- [ ] 帖子最后回复时间
+- [ ] 回复用户的评论
 - [ ] 收藏帖子
 - [ ] 点赞帖子
 - [ ] 点赞评论
