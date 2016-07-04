@@ -58,4 +58,9 @@ defmodule PhoenixChina.User do
     password
     |> Comeonin.Bcrypt.checkpw(password_hash)
   end
+
+  def new_list do
+    query = from __MODULE__, order_by: [desc: :inserted_at], limit: 10
+    query |> PhoenixChina.Repo.all 
+  end
 end

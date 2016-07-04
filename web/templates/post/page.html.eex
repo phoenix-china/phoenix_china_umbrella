@@ -1,9 +1,21 @@
-<span>共有<%= @page.total_entries %>条，当前第<%= @page.page_number %>页</span>
+<%= if @page.total_pages > 1 do %>
+<nav>
+  <ul class="pagination">
+    <%= if @page.page_number > 1 do %>
+    <li>
+      <a href="<%= post_path(@conn, :show, @post, page: @page.page_number - 1) %>" aria-label="Previous">
+        <span aria-hidden="true">&laquo; 上一页</span>
+      </a>
+    </li>
+    <%= end %>
 
-<%= if @page.page_number > 1 do %>
-  <%= link "上一页", to: post_path(@conn, :show, @post, page: @page.page_number - 1) %>
-<%= end %>
-
-<%= if @page.page_number < @page.total_pages do %>
-  <%= link "下一页", to: post_path(@conn, :show, @post, page: @page.page_number + 1) %>
+    <%= if @page.page_number < @page.total_pages do %>
+    <li>
+      <a href="<%= post_path(@conn, :show, @post, page: @page.page_number + 1) %>" aria-label="Next">
+        <span aria-hidden="true">下一页 &raquo;</span>
+      </a>
+    </li>
+    <%= end %>
+  </ul>
+</nav>
 <%= end %>

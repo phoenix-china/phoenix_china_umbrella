@@ -8,21 +8,36 @@
     欢迎fork和提交代码！
   </p>
 </div>
-<div class="">
-  <%= link "发布帖子", to: post_path(@conn, :new), class: "btn btn-success btn-xs" %>
-</div>
-<ul class="list-group">
-  <%= for post <- @posts do %>
-  <li class="list-group-item">
-    <div class="">
-      <h3><%= link post.title, to: post_path(@conn, :show, post) %></h3>
-    </div>
-    <div class="">
-      <span>用户 <%= post.user.nickname %></span>
-      <span>创建于 <%= post.inserted_at %></span>
-    </div>
-  </li>
-  <% end %>
+
+<ul class="nav nav-pills" style="margin-top: 0;">
+  <li role="presentation" class="active"><a href="javascript:void(0)">全部</a></li>
 </ul>
+
+<div class="posts-info">
+  <%= link "发布帖子", to: post_path(@conn, :new), class: "btn btn-success btn-xs pull-right" %>
+  <span>共有<%= @page.total_entries %>条帖子，当前第<%= @page.page_number %>页</span>
+</div>
+
+<%= for post <- @posts do %>
+<div class="media data-item">
+  <div class="media-left">
+    <a href="javascript:void(0);">
+      <img class="media-object"
+      src="http://o7f5caqlk.bkt.clouddn.com/avatar.jpg"
+      alt="<%= post.user.nickname %>"
+      width="40">
+    </a>
+  </div>
+  <div class="media-body">
+    <h4 class="media-heading"><%= link post.title, to: post_path(@conn, :show, post) %></h4>
+    <div class="media-body">
+      <div class="post-info">
+        <%= link post.user.nickname, to: "" %> •
+        <%= link "发表于#{post.inserted_at}", to: post_path(@conn, :show, post) %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
 
 <%= render "page.html", conn: @conn, page: @page %>

@@ -1,35 +1,32 @@
-<h2>帖子详情</h2>
+<div class="post-detail">
+  <div class="clearfix post-top">
+    <div class="post-user pull-right">
+      <a href="javascript:void(0);">
+        <img class="media-object"
+        src="http://o7f5caqlk.bkt.clouddn.com/avatar.jpg"
+        alt="<%= @post.user.nickname %>"
+        width="40">
+      </a>
+    </div>
+    <div class="post-header pull-left">
+      <h1 class="post-title"><%= @post.title %></h1>
+      <div class="post-info">
+        <%= link @post.user.nickname, to: "" %> •
+        <%= link "发表于#{@post.inserted_at}", to: post_path(@conn, :show, @post) %>
+      </div>
+    </div>
+  </div>
 
-<ul>
-
-  <li>
-    <strong>标题:</strong>
-    <%= @post.title %>
-  </li>
-
-  <li>
-    <strong>内容:</strong>
+  <div class="post-content">
     <%= @post.content %>
-  </li>
-
-  <li>
-    <strong>用户:</strong>
-    <%= @post.user.nickname %>
-  </li>
-  <li>
-    <strong>发布时间:</strong>
-    <%= @post.inserted_at %>
-  </li>
-
-</ul>
-
-<ul>
+  </div>
   <%= if @logged_in && @post.user_id == @current_user.id do %>
+  <div class="post-handler clearfix text-right">
     <%= link "编辑", to: post_path(@conn, :edit, @post), class: "btn btn-default btn-xs" %>
     <%= link "删除", to: post_path(@conn, :delete, @post), method: :delete, data: [confirm: "确定要删除帖子吗?"], class: "btn btn-danger btn-xs" %>
+  </div>
   <%= end %>
-  <%= link "返回", to: page_path(@conn, :index), class: "btn btn-default btn-xs" %>
-</ul>
+</div>
 
 <%= render "comment_list.html", conn: @conn, post: @post, comments: @comments, logged_in: @logged_in, current_user: @current_user %>
 <%= render "page.html", conn: @conn, post: @post, page: @page %>

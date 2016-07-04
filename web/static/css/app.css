@@ -1,1 +1,60 @@
 /* This file is for your main application css. */
+body {
+  margin-top: 0;
+  background: #e9eaed;
+}
+.jumbotron {
+  background: #fff;
+}
+.nav-pills {
+  background: #fff;
+  padding: 1em;
+}
+.posts-info {
+  background: #fff;
+  margin-top: 1em;
+  padding: 1em;
+}
+.data-item {
+  background: #fff;
+  padding: 1em;
+}
+.data-item .media-heading a,
+.data-item .media-heading a:visited {
+  color: #333;
+}
+.post-info {
+  font-size: 12px;
+}
+.post-info a,
+.post-info a:visited {
+  color: #ABA8A6;
+}
+.panel ul {
+  margin: 0;
+  padding-left: 20px;
+}
+.phoenix_china-form {
+  background: #fff;
+  padding: 1em;
+}
+.phoenix_china-form form {
+  margin: 0;
+}
+.post-detail {
+  background: #fff;
+  padding: 1em;
+}
+.post-detail .post-top {
+  border-bottom: 1px solid #eee;
+  padding-bottom: .5em;
+  margin-bottom: .5em;
+}
+.post-detail .post-title {
+  font-size: 2em;
+  margin: 0;
+}
+.post-detail .post-content {
+  padding-bottom: 1em;
+  margin-bottom: .5em;
+}
