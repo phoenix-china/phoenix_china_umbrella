@@ -1,7 +1,6 @@
 defmodule PhoenixChina.PageController do
   use PhoenixChina.Web, :controller
   alias PhoenixChina.Post
-  alias PhoenixChina.User
 
   plug PhoenixChina.GuardianPlug
 
