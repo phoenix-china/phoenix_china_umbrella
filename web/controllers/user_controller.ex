@@ -14,9 +14,16 @@ defmodule PhoenixChina.UserController do
   plug PhoenixChina.GuardianPlug
   plug :put_layout, "user.html"
 
-  plug :load_data when action in [:profile, :account, :account_update]
-  defp load_data(conn, _params) do
-    user = current_user(conn)
+  plug :load_data when action in [:show, :profile, :account, :account_update, :comments]
+  defp load_data(conn, _) do
+    user = case conn.params do
+      %{"nickname" => nickname} ->
+        (from User, where: [nickname: ^nickname])
+        |> first
+        |> Repo.one!
+      _ ->
+        current_user(conn)
+    end
 
     post_count = Post
     |> where([p], p.user_id == ^user.id)
@@ -62,24 +69,11 @@ defmodule PhoenixChina.UserController do
     |> first
     |> Repo.one!
 
-    post_count = Post
-    |> where([p], p.user_id == ^user.id)
-    |> select([p], count(p.id))
-    |> Repo.one
-
-    comment_count = Comment
-    |> where([c], c.user_id == ^user.id)
-    |> select([c], count(c.id))
-    |> Repo.one
-
     page = (from Post, where: [user_id: ^user.id], order_by: [desc: :inserted_at], preload: [:user])
     |> Repo.paginate(%{"page" => page})
 
     render conn, "show.html",
       page: page,
-      user: user,
-      post_count: post_count,
-      comment_count: comment_count,
       current_page: nil
   end
 
@@ -127,7 +121,7 @@ defmodule PhoenixChina.UserController do
     |> User.put_password_hash
 
     case Repo.update(changeset) do
-      {:ok, user} ->
+      {:ok, _user} ->
         conn
         |> put_flash(:info, "密码修改成功！")
         |> redirect(to: user_path(conn, :account))
@@ -136,6 +130,24 @@ defmodule PhoenixChina.UserController do
           current_page: :account,
           changeset: changeset
     end
+  end
+
+
+  def comments(conn, %{"nickname" => nickname, "page" => page}) do
+    user = (from User, where: [nickname: ^nickname])
+    |> first
+    |> Repo.one!
+
+    page = (from Comment, where: [user_id: ^user.id], order_by: [desc: :inserted_at], preload: [:user, :post])
+    |> Repo.paginate(%{"page" => page})
+
+    render conn, "comments.html",
+      page: page,
+      current_page: nil
+  end
+
+  def comments(conn, %{"nickname" => nickname}) do
+    comments(conn, %{"nickname" => nickname, "page" => "1"})
   end
 
 end

@@ -1,6 +1,6 @@
 <div class="panel">
 
-  <%= render PhoenixChina.UserView, "tabs.html",
+  <%= render "tabs.html",
     current_page: :user_comments,
     conn: @conn,
     user: @user
@@ -8,7 +8,7 @@
 
   <div class="user-content">
 
-    <%= for comment <- @comments do %>
+    <%= for comment <- @page.entries do %>
     <div class="media data-item">
       <div class="media-left">
         <a href="<%= user_path(@conn, :show, comment.user.nickname) %>">
@@ -36,7 +36,7 @@
     </div>
     <% end %>
 
-    <%= render "page.html",
+    <%= render PhoenixChina.CommentView, "page.html",
       conn: @conn,
       user: @user,
       page: @page

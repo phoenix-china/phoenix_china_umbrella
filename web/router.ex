@@ -41,7 +41,7 @@ defmodule PhoenixChina.Router do
 
      get "/:nickname", UserController, :show
      get "/:nickname/posts", PostController, :user_posts
-     get "/:nickname/comments", CommentController, :user_comments
+     get "/:nickname/comments", UserController, :comments
      get "/:nickname/collects", PostController, :user_collects
   end
 
