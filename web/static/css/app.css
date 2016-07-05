@@ -59,3 +59,22 @@ body {
   padding-bottom: 1em;
   margin-bottom: .5em;
 }
+.user-info {
+  color: #999;
+}
+.user-data {
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding: 1.5em 0;
+  margin: 1.5em -1em 0;
+
+}
+.user-data .d {
+  font-size: 30px;
+  color: #356DD0;
+}
+.user-data .n {
+  font-weight: bold;
+  font-size: 16px;
+  color: #999;
+}

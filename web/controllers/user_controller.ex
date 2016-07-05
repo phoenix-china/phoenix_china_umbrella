@@ -2,6 +2,9 @@ defmodule PhoenixChina.UserController do
   use PhoenixChina.Web, :controller
 
   alias PhoenixChina.User
+  alias PhoenixChina.Post
+  alias PhoenixChina.Comment
+
   plug PhoenixChina.GuardianPlug
   plug :put_layout, "user.html"
 
@@ -28,7 +31,21 @@ defmodule PhoenixChina.UserController do
     user = (from User, where: [nickname: ^nickname])
     |> first
     |> Repo.one!
-    render(conn, "show.html", user: user)
+
+    post_count = Post
+    |> where([p], p.user_id == ^user.id)
+    |> select([p], count(p.id))
+    |> Repo.one
+
+    comment_count = Comment
+    |> where([c], c.user_id == ^user.id)
+    |> select([c], count(c.id))
+    |> Repo.one
+
+    render conn, "show.html",
+      user: user,
+      post_count: post_count,
+      comment_count: comment_count
   end
 
   def edit(conn, %{"id" => id}) do

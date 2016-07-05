@@ -52,43 +52,37 @@
 
           <div class="panel panel-default">
             <div class="panel-body">
-              <div class="">
+              <div class="user-panel">
                 <div class="media">
                   <div class="media-left">
                     <a href="#">
-                      <img class="media-object img-circle img-thumbnail"
+                      <img class="media-object img-thumbnail"
                         src="http://o7f5caqlk.bkt.clouddn.com/avatar.jpg"
                         alt="<%= @user.nickname %>"
-                        style="width: 100px; height: 100px;">
+                        style="width: 65px; height: 65px;">
                     </a>
                   </div>
                   <div class="media-body">
                     <h4 class="media-heading"><%= @user.nickname %></h4>
-                    <div class="">第 <%= @user.id %> 位会员 / <%= @user.inserted_at |> Ecto.DateTime.to_erl |> Timex.from_now("ja") %>注册</div>
-                    <div class="">
-                      0 篇帖子 • 27 条回帖
-                    </div>
-                    <div class="">
-                      <%= gettext "can't be blank" %>
-                    </div>
+                    <div class="user-info">第 <%= @user.id %> 位会员 / <%= @user.inserted_at |> from_now %>注册</div>
+                    <div class="user-info"><%= @post_count %> 篇帖子 • <%= @comment_count %> 条回帖</div>
                   </div>
                 </div>
-              </div>
-              <div class="">
-                <ul>
-                  <li><a href="#">
-                    <strong>0</strong>
-                    <span>关注者</span>
-                  </a></li>
-                  <li><a href="#">
-                    <strong>0</strong>
-                    <span>正在关注</span>
-                  </a></li>
-                  <li><a href="#">
-                    <strong>0</strong>
-                    <span>收藏</span>
-                  </a></li>
-                </ul>
+
+                <div class="row text-center user-data">
+                  <div class="col-md-4">
+                    <div class="d">0</div>
+                    <div class="n">关注者</div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="d">0</div>
+                    <div class="n">正在关注</div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="d">0</div>
+                    <div class="n">收藏</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

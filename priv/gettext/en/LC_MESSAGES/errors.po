@@ -16,34 +16,34 @@ msgstr "不能为空"
 
 ## From Ecto.Changeset.unique_constraint/3
 msgid "has already been taken"
-msgstr ""
+msgstr "已存在的数据"
 
 ## From Ecto.Changeset.put_change/3
 msgid "is invalid"
-msgstr ""
+msgstr "无效"
 
 ## From Ecto.Changeset.validate_format/3
 msgid "has invalid format"
-msgstr ""
+msgstr "无效的格式"
 
 ## From Ecto.Changeset.validate_subset/3
 msgid "has an invalid entry"
-msgstr ""
+msgstr "无效的项"
 
 ## From Ecto.Changeset.validate_exclusion/3
 msgid "is reserved"
-msgstr ""
+msgstr "这个是保留的"
 
 ## From Ecto.Changeset.validate_confirmation/3
 msgid "does not match confirmation"
-msgstr ""
+msgstr "没有匹配成功"
 
 ## From Ecto.Changeset.no_assoc_constraint/3
 msgid "is still associated to this entry"
-msgstr ""
+msgstr "仍然跟数据关联"
 
 msgid "are still associated to this entry"
-msgstr ""
+msgstr "仍然跟数据关联"
 
 ## From Ecto.Changeset.validate_length/3
 msgid "should be %{count} character(s)"

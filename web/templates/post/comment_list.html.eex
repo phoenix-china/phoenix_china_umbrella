@@ -1,7 +1,7 @@
 <%= for comment <- @comments do %>
 <div class="media data-item">
   <div class="media-left">
-    <a href="javascript:void(0);">
+    <a href="<%= user_path(@conn, :show, comment.user.nickname) %>">
       <img class="media-object"
       src="http://o7f5caqlk.bkt.clouddn.com/avatar.jpg"
       alt="<%= comment.user.nickname %>"
@@ -19,7 +19,7 @@
     <div class="media-body">
       <div class="post-info">
         <%= link comment.user.nickname, to: user_path(@conn, :show, comment.user.nickname) %> •
-        <%= link "发表于#{comment.inserted_at}", to: "javascript:void(0);" %>
+        <%= link "发表于#{comment.inserted_at |> from_now}", to: "javascript:void(0);" %>
       </div>
     </div>
   </div>

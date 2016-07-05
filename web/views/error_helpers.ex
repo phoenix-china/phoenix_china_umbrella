@@ -37,4 +37,10 @@ defmodule PhoenixChina.ErrorHelpers do
       Gettext.dgettext(PhoenixChina.Gettext, "errors", msg, opts)
     end
   end
+
+  def from_now(datetime) do
+    datetime
+    |> Ecto.DateTime.to_erl
+    |> Timex.from_now
+  end
 end

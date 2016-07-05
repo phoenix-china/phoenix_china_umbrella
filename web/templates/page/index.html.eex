@@ -21,7 +21,7 @@
 <%= for post <- @posts do %>
 <div class="media data-item">
   <div class="media-left">
-    <a href="javascript:void(0);">
+    <a href="<%= user_path(@conn, :show, post.user.nickname) %>">
       <img class="media-object"
       src="http://o7f5caqlk.bkt.clouddn.com/avatar.jpg"
       alt="<%= post.user.nickname %>"
@@ -33,7 +33,7 @@
     <div class="media-body">
       <div class="post-info">
         <%= link post.user.nickname, to: user_path(@conn, :show, post.user.nickname) %> •
-        <%= link "发表于#{post.inserted_at}", to: post_path(@conn, :show, post) %>
+        <%= link "发表于#{post.inserted_at |> from_now}", to: post_path(@conn, :show, post) %>
       </div>
     </div>
   </div>

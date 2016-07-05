@@ -60,7 +60,7 @@
               <ul>
                 <%= for user <- @new_users do %>
                 <li>
-                  <%= link user.nickname, to: "javascript:void(0)" %>
+                  <%= link user.nickname, to: user_path(@conn, :show, user.nickname) %>
                 </li>
                 <%= end %>
               </ul>
