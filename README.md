@@ -34,3 +34,5 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [ ] 点赞帖子
 - [ ] 点赞评论
 - [ ] 用户收藏的帖子列表
+- [ ] 文件上传
+- [ ] 邮件发送
