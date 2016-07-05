@@ -19,10 +19,12 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] session验证
 - [x] 发布帖子
 - [x] 发布评论
+- [x] 用户中心
+- [x] 用户修改密码
+- [x] 用户帖子列表
+- [x] 用户评论列表
 - [ ] 时间本地化
-- [ ] 用户中心
 - [ ] 用户修改头像
-- [ ] 用户修改密码
 - [ ] 用户找回密码
 - [ ] 用户积分
 - [ ] 帖子评论数量
@@ -31,6 +33,4 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [ ] 收藏帖子
 - [ ] 点赞帖子
 - [ ] 点赞评论
-- [ ] 用户帖子列表
-- [ ] 用户评论列表
 - [ ] 用户收藏的帖子列表
