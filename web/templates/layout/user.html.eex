@@ -11,7 +11,7 @@
         <div class="user-panel">
           <div class="media">
             <div class="media-left">
-              <a href="#">
+              <a href="<%= user_path(@conn, :show, @user.nickname)%>">
                 <img class="media-object img-thumbnail"
                   src="http://o7f5caqlk.bkt.clouddn.com/avatar.jpg"
                   alt="<%= @user.nickname %>"

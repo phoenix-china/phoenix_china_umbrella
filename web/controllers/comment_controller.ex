@@ -110,7 +110,8 @@ defmodule PhoenixChina.CommentController do
       post_count: post_count,
       comment_count: comment_count,
       comments: page.entries,
-      page: page
+      page: page,
+      current_page: nil
   end
 
   def user_comments(conn, %{"nickname" => nickname}) do
