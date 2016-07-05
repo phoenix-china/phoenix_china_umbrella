@@ -10,6 +10,7 @@ defmodule PhoenixChina.User do
     field :password, :string, virtual: true
     field :old_password, :string, virtual: true
     field :password_confirm, :string, virtual: true
+    field :token, :string, virtual: true
 
     timestamps()
   end
@@ -50,6 +51,13 @@ defmodule PhoenixChina.User do
     |> cast(params, [:old_password, :password, :password_confirm])
     |> validate_required([:old_password, :password, :password_confirm], message: "不能为空")
     |> validate_length(:password, min: 6, max: 128)
+  end
+
+  def changeset(:password_forget, struct, params) do
+    struct
+    |> cast(params, [:email])
+    |> validate_required([:email], message: "不能为空")
+    |> validate_format(:email, ~r/@/, message: "请输入正确的邮箱地址")
   end
 
   def put_password_hash(changeset) do
@@ -98,5 +106,9 @@ defmodule PhoenixChina.User do
   def new_list do
     query = from __MODULE__, order_by: [desc: :inserted_at], limit: 10
     query |> PhoenixChina.Repo.all
+  end
+
+  def generate_token(user) do
+    user.id
   end
 end

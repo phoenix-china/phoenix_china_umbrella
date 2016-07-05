@@ -14,7 +14,7 @@
 
   <div class="form-group">
     <%= label f, :password, "密码", class: "control-label" %>
-    <%= link "忘记密码？", to: "", style: "font-size: 12px; margin-left: 10px;" %>
+    <%= link "忘记密码？", to: user_path(@conn, :password_forget), style: "font-size: 12px; margin-left: 10px;" %>
     <%= password_input f, :password, class: "form-control" %>
     <%= error_tag f, :password %>
 

@@ -6,7 +6,7 @@ defmodule PhoenixChina.UserController do
   alias PhoenixChina.Comment
   alias PhoenixChina.LayoutView
 
-  import PhoenixChina.Mailer, only: [send_confirmation_email: 1]
+  import PhoenixChina.Mailer, only: [send_confirmation_email: 2, send_reset_password_email: 2]
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
@@ -55,7 +55,7 @@ defmodule PhoenixChina.UserController do
 
     case Repo.insert(changeset) do
       {:ok, user} ->
-        send_confirmation_email(user)
+        send_confirmation_email(conn, user)
         conn
         |> put_flash(:info, "注册成功了！.")
         |> redirect(to: session_path(conn, :new))
@@ -136,7 +136,9 @@ defmodule PhoenixChina.UserController do
     end
   end
 
-
+  @doc """
+  用户评论列表
+  """
   def comments(conn, %{"nickname" => nickname, "page" => page}) do
     user = (from User, where: [nickname: ^nickname])
     |> first
@@ -154,4 +156,50 @@ defmodule PhoenixChina.UserController do
     comments(conn, %{"nickname" => nickname, "page" => "1"})
   end
 
+  @doc """
+  用户请求通过邮件地址重置密码
+  """
+  def password_forget(conn, _params) do
+    changeset = User.changeset(:password_forget, %User{})
+    render conn, "password_forget.html",
+      layout: {LayoutView, "app.html"},
+      changeset: changeset
+  end
+
+  def post_password_forget(conn, %{"user" => user_params}) do
+    changeset = User.changeset(:password_forget, %User{}, user_params)
+    |> validate_email
+
+    case changeset.valid? do
+      true ->
+        send_reset_password_email(conn, changeset.changes.user)
+        conn
+        |> put_flash(:info, "稍后，您将收到重置密码的电子邮件。")
+        |> redirect(to: user_path(conn, :password_forget))
+      false ->
+        changeset = %{changeset | action: :password_forget}
+        render conn, "password_forget.html",
+          layout: {LayoutView, "app.html"},
+          changeset: changeset
+    end
+  end
+
+  defp validate_email(changeset) do
+    user = (from User, where: [email: ^changeset.changes.email]) |> first |> Repo.one
+    case !changeset.errors[:email] && !user do
+      true ->
+        changeset
+        |> Ecto.Changeset.add_error(:email, "邮箱未注册")
+      false ->
+        changeset
+        |> Ecto.Changeset.put_change(:user, user)
+    end
+  end
+
+  @doc """
+  用户重置密码
+  """
+  def password_reset(conn, %{"password_reset_token" => token}) do
+      text conn, "password reset"
+  end
 end
