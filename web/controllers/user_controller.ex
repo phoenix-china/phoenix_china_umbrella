@@ -109,7 +109,8 @@ defmodule PhoenixChina.UserController do
   end
 
   def account(conn, _params) do
-    changeset = User.changeset(:account, conn.user)
+    user = current_user(conn)
+    changeset = User.changeset(:account, user)
 
     render conn, "account.html",
       current_page: :account,
@@ -117,7 +118,8 @@ defmodule PhoenixChina.UserController do
   end
 
   def account_update(conn, %{"user" => user_params}) do
-    changeset = User.changeset(:account, conn.user, user_params)
+    user = current_user(conn)
+    changeset = User.changeset(:account, user, user_params)
     |> User.validate_password(:old_password)
     |> User.validate_equal_to(:password_confirm, :password)
     |> User.put_password_hash
