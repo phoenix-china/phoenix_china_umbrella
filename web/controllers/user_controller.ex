@@ -42,7 +42,7 @@ defmodule PhoenixChina.UserController do
     |> select([c], count(c.id))
     |> Repo.one
 
-    page = (from Post, order_by: [desc: :inserted_at], preload: [:user])
+    page = (from Post, where: [user_id: ^user.id], order_by: [desc: :inserted_at], preload: [:user])
     |> Repo.paginate(%{"page" => page})
 
     render conn, "show.html",

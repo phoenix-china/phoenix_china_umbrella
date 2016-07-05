@@ -101,7 +101,7 @@ defmodule PhoenixChina.CommentController do
     |> select([c], count(c.id))
     |> Repo.one
 
-    page = (from Comment, order_by: [desc: :inserted_at], preload: [:user, :post])
+    page = (from Comment, where: [user_id: ^user.id], order_by: [desc: :inserted_at], preload: [:user, :post])
     |> Repo.paginate(%{"page" => page})
 
     render conn, "user_comments.html",
