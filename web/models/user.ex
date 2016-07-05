@@ -49,6 +49,7 @@ defmodule PhoenixChina.User do
     struct
     |> cast(params, [:old_password, :password, :password_confirm])
     |> validate_required([:old_password, :password, :password_confirm], message: "不能为空")
+    |> validate_length(:password, min: 6, max: 128)
   end
 
   def put_password_hash(changeset) do
