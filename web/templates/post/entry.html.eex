@@ -2,7 +2,7 @@
   <div class="media-left">
     <a href="<%= user_path(@conn, :show, @post.user.nickname) %>">
       <img class="media-object"
-      src="http://o7f5caqlk.bkt.clouddn.com/avatar.jpg"
+      src="<%= avatar @post.user %>"
       alt="<%= @post.user.nickname %>"
       width="40">
     </a>

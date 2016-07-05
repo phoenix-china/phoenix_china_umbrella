@@ -43,4 +43,16 @@ defmodule PhoenixChina.ErrorHelpers do
     |> Ecto.DateTime.to_erl
     |> Timex.from_now
   end
+
+  def avatar(user) do
+    email = user.email
+    |> String.trim
+    |> String.downcase
+
+    email = :crypto.hash(:md5, email)
+    |> Base.encode16(case: :lower)
+    
+    "https://www.gravatar.com/avatar/#{email}"
+  end
+
 end
