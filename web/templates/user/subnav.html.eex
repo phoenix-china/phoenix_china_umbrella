@@ -1,0 +1,11 @@
+<%= if @user.id == @current_user.id do %>
+<div class="list-group">
+  <%= for {page, name, url} <- subnavs(@conn) do %>
+    <%= if page == @current_page do %>
+      <%= link name, to: url, class: "list-group-item active" %>
+    <%= else %>
+      <%= link name, to: url, class: "list-group-item" %>
+    <%= end %>
+  <%= end %>
+</div>
+<%= end %>

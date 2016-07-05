@@ -1,4 +1,8 @@
-<%= render "header.html", conn: @conn, logged_in: @logged_in, current_user: @current_user %>
+<%= render "header.html",
+  conn: @conn,
+  logged_in: @logged_in,
+  current_user: @current_user
+%>
 
 <div class="row">
   <div class="col-md-4">
@@ -38,6 +42,14 @@
         </div>
       </div>
     </div>
+
+    <%= render PhoenixChina.UserView, "subnav.html",
+      conn: @conn,
+      user: @user,
+      current_user: @current_user,
+      current_page: @current_page
+    %>
+
   </div>
   <div class="col-md-8">
     <main role="main">

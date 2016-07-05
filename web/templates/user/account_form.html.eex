@@ -1,0 +1,29 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>哎哟！密码没有修改成功呢，看看哪出错啦？</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :old_password, "原密码", class: "control-label" %>
+    <%= password_input f, :old_password, class: "form-control" %>
+    <%= error_tag f, :old_password %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :password, "新密码", class: "control-label" %>
+    <%= password_input f, :password, class: "form-control" %>
+    <%= error_tag f, :password %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :password_confirm, "确认新密码", class: "control-label" %>
+    <%= password_input f, :password_confirm, class: "form-control" %>
+    <%= error_tag f, :password_confirm %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "确定", class: "btn btn-primary" %>
+  </div>
+<% end %>

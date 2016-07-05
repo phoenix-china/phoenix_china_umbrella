@@ -8,6 +8,8 @@ defmodule PhoenixChina.User do
     field :nickname, :string
 
     field :password, :string, virtual: true
+    field :old_password, :string, virtual: true
+    field :password_confirm, :string, virtual: true
 
     timestamps()
   end
@@ -23,9 +25,6 @@ defmodule PhoenixChina.User do
     |> unique_constraint(:nickname, message: "昵称已被注册啦！")
   end
 
-  @doc """
-  Builds a changeset based on the `struct` and `params`.
-  """
   def changeset(:signup, struct, params) do
     struct
     |> cast(params, [:email, :password, :nickname])
@@ -46,6 +45,12 @@ defmodule PhoenixChina.User do
     |> validate_length(:password, min: 6, max: 128)
   end
 
+  def changeset(:account, struct, params) do
+    struct
+    |> cast(params, [:old_password, :password, :password_confirm])
+    |> validate_required([:old_password, :password, :password_confirm], message: "不能为空")
+  end
+
   def put_password_hash(changeset) do
     password_hash = changeset.changes.password
     |> Comeonin.Bcrypt.hashpwsalt
@@ -59,8 +64,38 @@ defmodule PhoenixChina.User do
     |> Comeonin.Bcrypt.checkpw(password_hash)
   end
 
+  def check_password?(password, password_hash) do
+    check_password(password, password_hash)
+  end
+
+  def validate_password(changeset, field) do
+    password = get_field(changeset, field)
+    password_hash = get_field(changeset, :password_hash)
+
+    case check_password?(password, password_hash) do
+      false ->
+        changeset
+        |> add_error(field, "密码错误")
+      true ->
+        changeset
+    end
+  end
+
+  def validate_equal_to(changeset, field, to_field) do
+    data1 = get_field(changeset, field)
+    data2 = get_field(changeset, to_field)
+
+    case data1 == data2 do
+      false ->
+        changeset
+        |> add_error(field, "两次输入不一致")
+      true ->
+        changeset
+    end
+  end
+
   def new_list do
     query = from __MODULE__, order_by: [desc: :inserted_at], limit: 10
-    query |> PhoenixChina.Repo.all 
+    query |> PhoenixChina.Repo.all
   end
 end
