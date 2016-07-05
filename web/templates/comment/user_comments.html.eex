@@ -36,7 +36,7 @@
     </div>
     <% end %>
 
-    <%= render PhoenixChina.CommentView, "page.html",
+    <%= render "page.html",
       conn: @conn,
       user: @user,
       page: @page

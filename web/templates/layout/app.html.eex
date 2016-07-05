@@ -1,89 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<%= render "header.html",
+  conn: @conn,
+  logged_in: @logged_in,
+  current_user: @current_user
+%>
 
-    <title>Phoenix中文社区</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-  </head>
-
-  <body>
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <%= link "PhoenixChina", to: page_path(@conn, :index), class: "navbar-brand" %>
-        </div>
-
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><%= link "首页", to: page_path(@conn, :index) %></li>
-          </ul>
-
-          <ul class="nav navbar-nav navbar-right">
-            <%= if @logged_in do %>
-            <li><%= link @current_user.nickname, to: user_path(@conn, :show, @current_user.nickname) %></li>
-            <li><%= link "退出登陆", to: session_path(@conn, :delete) %></li>
-            <%= else %>
-            <li><%= link "登陆", to: session_path(@conn, :new) %></li>
-            <li><%= link "注册", to: user_path(@conn, :new) %></li>
-            <%= end %>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
-
-    <div class="container">
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-
-      <div class="row">
-        <div class="col-md-9">
-          <main role="main">
-            <%= render @view_module, @view_template, assigns %>
-          </main>
-        </div>
-        <div class="col-md-3">
-          <div class="panel panel-default">
-            <div class="panel-heading">最新用户</div>
-            <div class="panel-body">
-              <ul>
-                <%= for user <- @new_users do %>
-                <li>
-                  <%= link user.nickname, to: user_path(@conn, :show, user.nickname) %>
-                </li>
-                <%= end %>
-              </ul>
-            </div>
-          </div>
-
-          <div class="panel panel-default">
-            <div class="panel-heading">友情链接</div>
-            <div class="panel-body">
-              <ul>
-                <li><%= link "Elixir中文社区", to: "http://www.elixir-cn.com/", target: "_blank" %></li>
-                <li><%= link "Ruby中文社区", to: "https://ruby-china.org/", target: "_blank" %></li>
-                <li><%= link "Python中文社区", to: "https://python-china.org/", target: "_blank" %></li>
-                <li><%= link "Rust中文社区", to: "https://rust-china.org/", target: "_blank" %></li>
-                <li><%= link "掏抠客－为您省钱", to: "http://www.taokouke.com/", target: "_blank" %></li>
-              </ul>
-            </div>
-          </div>
-        </div>
+<div class="row">
+  <div class="col-md-9">
+    <main role="main">
+      <%= render @view_module, @view_template, assigns %>
+    </main>
+  </div>
+  <div class="col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">最新用户</div>
+      <div class="panel-body">
+        <ul>
+          <%= for user <- @new_users do %>
+          <li>
+            <%= link user.nickname, to: user_path(@conn, :show, user.nickname) %>
+          </li>
+          <%= end %>
+        </ul>
       </div>
+    </div>
 
+    <div class="panel panel-default">
+      <div class="panel-heading">友情链接</div>
+      <div class="panel-body">
+        <ul>
+          <li><%= link "Elixir中文社区", to: "http://www.elixir-cn.com/", target: "_blank" %></li>
+          <li><%= link "Ruby中文社区", to: "https://ruby-china.org/", target: "_blank" %></li>
+          <li><%= link "Python中文社区", to: "https://python-china.org/", target: "_blank" %></li>
+          <li><%= link "Rust中文社区", to: "https://rust-china.org/", target: "_blank" %></li>
+          <li><%= link "掏抠客－为您省钱", to: "http://www.taokouke.com/", target: "_blank" %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 
-    </div> <!-- /container -->
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-  </body>
-</html>
+<%= render "footer.html", conn: @conn %>
