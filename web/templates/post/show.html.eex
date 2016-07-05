@@ -28,6 +28,21 @@
   <%= end %>
 </div>
 
-<%= render "comment_list.html", conn: @conn, post: @post, comments: @comments, logged_in: @logged_in, current_user: @current_user %>
-<%= render "page.html", conn: @conn, post: @post, page: @page %>
-<%= render "comment_form.html", changeset: @changeset, action: post_comment_path(@conn, :create, @post) %>
+<%= render PhoenixChina.CommentView, "entries.html",
+  conn: @conn,
+  post: @post,
+  page: @page,
+  logged_in: @logged_in,
+  current_user: @current_user
+%>
+
+<%= render PhoenixChina.CommentView, "entries_page.html",
+  conn: @conn,
+  post: @post,
+  page: @page
+%>
+
+<%= render PhoenixChina.CommentView, "form.html",
+  changeset: @changeset,
+  action: post_comment_path(@conn, :create, @post)
+%>

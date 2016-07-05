@@ -1,16 +1,13 @@
 <div class="panel">
 
-  <ul class="nav nav-tabs" style="margin-top: 20px;">
-    <li role="presentation">
-      <%= link "帖子", to: user_path(@conn, :show, @user.nickname) %>
-    </li>
-    <li role="presentation" class="active">
-      <%= link "评论", to: comment_path(@conn, :user_comments, @user.nickname) %>
-    </li>
-    <li role="presentation"><a href="#">收藏</a></li>
-  </ul>
+  <%= render PhoenixChina.UserView, "tabs.html",
+    current_page: :user_comments,
+    conn: @conn,
+    user: @user
+  %>
 
   <div class="user-content">
+
     <%= for comment <- @comments do %>
     <div class="media data-item">
       <div class="media-left">
@@ -39,7 +36,11 @@
     </div>
     <% end %>
 
-    <%= render "page.html", conn: @conn, user: @user, page: @page %>
+    <%= render PhoenixChina.CommentView, "page.html",
+      conn: @conn,
+      user: @user,
+      page: @page
+    %>
   </div>
 
 </div>

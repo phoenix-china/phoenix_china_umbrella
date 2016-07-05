@@ -1,0 +1,8 @@
+<%= for comment <- @page.entries do %>
+  <%= render "entry.html",
+    conn: @conn,
+    comment: comment,
+    post: @post ,
+    logged_in: @logged_in,
+    current_user: @current_user %>
+<%= end %>

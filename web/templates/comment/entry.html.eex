@@ -1,0 +1,25 @@
+<div class="media data-item">
+  <div class="media-left">
+    <a href="<%= user_path(@conn, :show, @comment.user.nickname) %>">
+      <img class="media-object"
+      src="http://o7f5caqlk.bkt.clouddn.com/avatar.jpg"
+      alt="<%= @comment.user.nickname %>"
+      width="40">
+    </a>
+  </div>
+  <div class="media-body">
+    <%= if @logged_in && @comment.user_id == @current_user.id do %>
+    <div class="comment-handler pull-right">
+      <%= link "编辑", to: post_comment_path(@conn, :edit, @post, @comment), class: "btn btn-default btn-xs" %>
+      <%= link "删除", to: post_comment_path(@conn, :delete, @post, @comment), method: :delete, data: [confirm: "确定删除评论吗?"], class: "btn btn-danger btn-xs" %>
+    </div>
+    <%= end %>
+    <div class="media-heading"><%= @comment.content %></div>
+    <div class="media-body">
+      <div class="post-info">
+        <%= link @comment.user.nickname, to: user_path(@conn, :show, @comment.user.nickname) %> •
+        <%= link "发表于#{@comment.inserted_at |> from_now}", to: "javascript:void(0);" %>
+      </div>
+    </div>
+  </div>
+</div>
