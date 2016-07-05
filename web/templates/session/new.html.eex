@@ -1,7 +1,10 @@
 <div class="phoenix_china-form">
   <h2>欢迎登陆Phoenix中文社区</h2>
 
-  <%= render "form.html", changeset: @changeset, action: session_path(@conn, :create) %>
+  <%= render "form.html",
+    changeset: @changeset,
+    action: session_path(@conn, :create),
+    conn: @conn
+  %>
 
-  <%= link "没有账号？", to: user_path(@conn, :new) %>
 </div>
