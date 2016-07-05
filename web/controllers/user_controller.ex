@@ -6,6 +6,7 @@ defmodule PhoenixChina.UserController do
   alias PhoenixChina.Comment
   alias PhoenixChina.LayoutView
 
+  import PhoenixChina.Mailer, only: [send_confirmation_email: 1]
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
@@ -53,7 +54,8 @@ defmodule PhoenixChina.UserController do
     |> User.put_password_hash
 
     case Repo.insert(changeset) do
-      {:ok, _user} ->
+      {:ok, user} ->
+        send_confirmation_email(user)
         conn
         |> put_flash(:info, "注册成功了！.")
         |> redirect(to: session_path(conn, :new))
