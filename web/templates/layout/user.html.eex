@@ -86,9 +86,7 @@
               </div>
             </div>
           </div>
-
         </div>
-
         <div class="col-md-8">
           <main role="main">
             <%= render @view_module, @view_template, assigns %>

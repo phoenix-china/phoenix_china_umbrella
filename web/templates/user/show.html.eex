@@ -1,18 +1,39 @@
-<h2>Show user</h2>
+<div class="panel">
 
-<ul>
-  <li>
-    <strong>Email:</strong>
-    <%= @user.email %>
-  </li>
+  <ul class="nav nav-tabs" style="margin-top: 20px;">
+    <li role="presentation" class="active">
+      <%= link "帖子", to: post_path(@conn, :user_posts, @user.nickname) %>
+    </li>
+    <li role="presentation">
+      <%= link "评论", to: comment_path(@conn, :user_comments, @user.nickname) %>
+    </li>
+    <li role="presentation"><a href="#">收藏</a></li>
+  </ul>
 
-  <li>
-    <strong>Avatar:</strong>
-    <%= @user.avatar %>
-  </li>
+  <div class="user-content">
+    <%= for post <- @posts do %>
+    <div class="media data-item">
+      <div class="media-left">
+        <a href="<%= user_path(@conn, :show, post.user.nickname) %>">
+          <img class="media-object"
+          src="http://o7f5caqlk.bkt.clouddn.com/avatar.jpg"
+          alt="<%= post.user.nickname %>"
+          width="40">
+        </a>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading"><%= link post.title, to: post_path(@conn, :show, post) %></h4>
+        <div class="media-body">
+          <div class="post-info">
+            <%= link post.user.nickname, to: user_path(@conn, :show, post.user.nickname) %> •
+            <%= link "发表于#{post.inserted_at |> from_now}", to: post_path(@conn, :show, post) %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% end %>
 
-  <li>
-    <strong>Nickname:</strong>
-    <%= @user.nickname %>
-  </li>
-</ul>
+    <%= render "page.html", conn: @conn, page: @page %>
+  </div>
+
+</div>

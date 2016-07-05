@@ -27,7 +27,7 @@ defmodule PhoenixChina.UserController do
     end
   end
 
-  def show(conn, %{"nickname" => nickname}) do
+  def show(conn, %{"nickname" => nickname, "page" => page}) do
     user = (from User, where: [nickname: ^nickname])
     |> first
     |> Repo.one!
@@ -42,10 +42,19 @@ defmodule PhoenixChina.UserController do
     |> select([c], count(c.id))
     |> Repo.one
 
+    page = (from Post, order_by: [desc: :inserted_at], preload: [:user])
+    |> Repo.paginate(%{"page" => page})
+
     render conn, "show.html",
       user: user,
       post_count: post_count,
-      comment_count: comment_count
+      comment_count: comment_count,
+      posts: page.entries,
+      page: page
+  end
+
+  def show(conn, %{"nickname" => nickname}) do
+    show(conn, %{"nickname" => nickname, "page" => "1"})
   end
 
   def edit(conn, %{"id" => id}) do

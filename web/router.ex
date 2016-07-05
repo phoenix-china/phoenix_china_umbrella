@@ -36,8 +36,14 @@ defmodule PhoenixChina.Router do
        resources "/comments", CommentController, except: [:index, :show]
     end
 
-    get "/users/:nickname", UserController, :show
+  end
 
+  scope "/users", PhoenixChina do
+     pipe_through [:browser, :browser_session]
+     get "/:nickname", UserController, :show
+     get "/:nickname/posts", PostController, :user_posts
+     get "/:nickname/comments", CommentController, :user_comments
+     get "/:nickname/collects", PostController, :user_collects
   end
 
   # Other scopes may use custom stacks.

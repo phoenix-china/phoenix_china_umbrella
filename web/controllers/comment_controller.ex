@@ -1,7 +1,10 @@
 defmodule PhoenixChina.CommentController do
   use PhoenixChina.Web, :controller
 
+  alias PhoenixChina.User
+  alias PhoenixChina.Post
   alias PhoenixChina.Comment
+  alias PhoenixChina.LayoutView
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
@@ -81,5 +84,36 @@ defmodule PhoenixChina.CommentController do
         |> put_flash(:info, "评论删除成功！")
         |> redirect(to: post_path(conn, :show, post_id))
     end
+  end
+
+  def user_comments(conn, %{"nickname" => nickname, "page" => page}) do
+    user = (from User, where: [nickname: ^nickname])
+    |> first
+    |> Repo.one!
+
+    post_count = Post
+    |> where([p], p.user_id == ^user.id)
+    |> select([p], count(p.id))
+    |> Repo.one
+
+    comment_count = Comment
+    |> where([c], c.user_id == ^user.id)
+    |> select([c], count(c.id))
+    |> Repo.one
+
+    page = (from Comment, order_by: [desc: :inserted_at], preload: [:user, :post])
+    |> Repo.paginate(%{"page" => page})
+
+    render conn, "user_comments.html",
+      layout: {LayoutView, "user.html"},
+      user: user,
+      post_count: post_count,
+      comment_count: comment_count,
+      comments: page.entries,
+      page: page
+  end
+
+  def user_comments(conn, %{"nickname" => nickname}) do
+    user_comments(conn, %{"nickname" => nickname, "page" => "1"})
   end
 end
