@@ -13,7 +13,7 @@
             <div class="media-left">
               <a href="<%= user_path(@conn, :show, @user.nickname)%>">
                 <img class="media-object img-thumbnail"
-                  src="http://o7f5caqlk.bkt.clouddn.com/avatar.jpg"
+                  src="<%= avatar @user, 65 %>"
                   alt="<%= @user.nickname %>"
                   style="width: 65px; height: 65px;">
               </a>
@@ -26,15 +26,15 @@
           </div>
 
           <div class="row text-center user-data">
-            <div class="col-md-4">
+            <div class="col-xs-4">
               <div class="d">0</div>
               <div class="n">关注者</div>
             </div>
-            <div class="col-md-4">
+            <div class="col-xs-4">
               <div class="d">0</div>
               <div class="n">正在关注</div>
             </div>
-            <div class="col-md-4">
+            <div class="col-xs-4">
               <div class="d">0</div>
               <div class="n">收藏</div>
             </div>

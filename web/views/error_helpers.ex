@@ -44,15 +44,15 @@ defmodule PhoenixChina.ErrorHelpers do
     |> Timex.from_now
   end
 
-  def avatar(user) do
+  def avatar(user, size \\ 40) do
     email = user.email
     |> String.trim
     |> String.downcase
 
     email = :crypto.hash(:md5, email)
     |> Base.encode16(case: :lower)
-    
-    "https://www.gravatar.com/avatar/#{email}"
+
+    "https://www.gravatar.com/avatar/#{email}?s=#{size}"
   end
 
 end
