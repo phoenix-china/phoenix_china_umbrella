@@ -16,13 +16,13 @@ defmodule PhoenixChina.PostController do
   end
 
   def new(conn, _params) do
-    changeset = Post.changeset(%Post{})
+    changeset = Post.changeset(:insert, %Post{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"post" => post_params}) do
     current_user = current_user(conn)
-    changeset = Post.changeset(%Post{}, post_params)
+    changeset = Post.changeset(:insert, %Post{}, post_params)
     |> Ecto.Changeset.put_change(:user_id, current_user.id)
 
     case Repo.insert(changeset) do
@@ -63,7 +63,7 @@ defmodule PhoenixChina.PostController do
         |> redirect(to: post_path(conn, :show, id))
 
       true ->
-        changeset = Post.changeset(post)
+        changeset = Post.changeset(:update, post)
         render(conn, "edit.html", post: post, changeset: changeset)
     end
   end
@@ -79,7 +79,7 @@ defmodule PhoenixChina.PostController do
         |> redirect(to: post_path(conn, :show, id))
 
       true ->
-        changeset = Post.changeset(post, post_params)
+        changeset = Post.changeset(:update, post, post_params)
 
         case Repo.update(changeset) do
           {:ok, post} ->

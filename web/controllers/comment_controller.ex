@@ -2,6 +2,7 @@ defmodule PhoenixChina.CommentController do
   use PhoenixChina.Web, :controller
 
   alias PhoenixChina.Comment
+  alias PhoenixChina.Post
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
@@ -15,7 +16,8 @@ defmodule PhoenixChina.CommentController do
     |> Ecto.Changeset.put_change(:user_id, current_user.id)
 
     case Repo.insert(changeset) do
-      {:ok, _comment} ->
+      {:ok, comment} ->
+        comment_after_insert(comment)
         conn
         |> put_flash(:info, "评论创建成功.")
         |> redirect(to: post_path(conn, :show, post_id))
@@ -75,6 +77,7 @@ defmodule PhoenixChina.CommentController do
         |> redirect(to: post_path(conn, :show, post_id))
 
       true ->
+        comment_before_delete(comment)
         Repo.delete!(comment)
 
         conn
@@ -82,4 +85,33 @@ defmodule PhoenixChina.CommentController do
         |> redirect(to: post_path(conn, :show, post_id))
     end
   end
+
+  defp update_post_latest_comment_id(post, comment_id) do
+    changeset = Post.changeset(:update, post, %{"latest_comment_id" => comment_id})
+    Repo.update(changeset)
+  end
+
+  defp update_post_comment_count(post, num) do
+    changeset = Post.changeset(:update, post, %{"comment_count" => post.comment_count + num})
+    Repo.update(changeset)
+  end
+
+  defp comment_after_insert(comment) do
+    post = Post |> where(id: ^comment.post_id) |> Repo.one!
+    update_post_latest_comment_id(post, comment.id)
+    update_post_comment_count(post, 1)
+  end
+
+  defp comment_before_delete(comment) do
+    post = Post |> where(id: ^comment.post_id) |> Repo.one!
+
+    comment_id = Comment
+    |> where([c], c.post_id == ^comment.post_id and c.id != ^comment.id)
+    |> select([u], max(u.id))
+    |> Repo.one
+
+    update_post_latest_comment_id(post, comment_id)
+    update_post_comment_count(post, -1)
+  end
+
 end

@@ -23,12 +23,11 @@ body {
 .data-item .media-heading a:visited {
   color: #333;
 }
-.post-info {
-  font-size: 12px;
-}
+.post-info,
 .post-info a,
 .post-info a:visited {
   color: #ABA8A6;
+  font-size: 12px;
 }
 .panel ul {
   margin: 0;

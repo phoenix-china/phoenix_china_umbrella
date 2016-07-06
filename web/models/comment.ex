@@ -17,6 +17,7 @@ defmodule PhoenixChina.Comment do
     |> cast(params, [:content])
     |> validate_required([:content])
     |> strip_unsafe_content(params)
+    |> after_insert
   end
 
   defp strip_unsafe_content(struct, %{"content" => nil}) do
@@ -30,5 +31,15 @@ defmodule PhoenixChina.Comment do
 
   defp strip_unsafe_content(struct, _) do
     struct
+  end
+
+  defp after_insert(struct) do
+    case struct.data do
+      %{"id" => id} ->
+         Post |> update(set: [latest_comment_id: ^id])
+      _ ->
+        IO.inspect struct
+        struct
+    end
   end
 end

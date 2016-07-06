@@ -8,16 +8,38 @@ defmodule PhoenixChina.Post do
     belongs_to :user, PhoenixChina.User
     has_many :comments, Comment, on_delete: :delete_all
 
+    # 评论数量
+    field :comment_count, :integer, default: 0
+    # 收藏数量
+    field :collect_count, :integer, default: 0
+    # 点赞数量
+    field :praise_count, :integer, default: 0
+    # 最新一个评论
+    belongs_to :latest_comment, PhoenixChina.Comment, foreign_key: :latest_comment_id
+
     timestamps()
   end
+
+  @required_params [:title, :content, :user_id]
+  @optional_params [:comment_count, :collect_count, :praise_count, :latest_comment_id]
+
+
+  def changeset(action, struct, params \\ %{})
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
+  def changeset(:insert, struct, params) do
     struct
-    |> cast(params, [:title, :content])
-    |> validate_required([:title, :content])
+    |> cast(params, @required_params, @optional_params)
+    |> validate_required(@required_params)
+    |> strip_unsafe_content(params)
+  end
+
+  def changeset(:update, struct, params) do
+    struct
+    |> cast(params, @required_params, @optional_params)
+    |> validate_required(@required_params)
     |> strip_unsafe_content(params)
   end
 

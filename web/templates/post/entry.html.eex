@@ -8,11 +8,19 @@
     </a>
   </div>
   <div class="media-body">
-    <h4 class="media-heading"><%= link @post.title, to: post_path(@conn, :show, @post) %></h4>
+    <h4 class="media-heading">
+      <span class="badge pull-right"> <%= @post.comment_count %> </span>
+      <%= link @post.title, to: post_path(@conn, :show, @post) %>
+    </h4>
     <div class="media-body">
+
       <div class="post-info">
-        <%= link @post.user.nickname, to: user_path(@conn, :show, @post.user.nickname) %> •
-        <%= link "发表于#{@post.inserted_at |> from_now}", to: post_path(@conn, :show, @post) %>
+        由 <%= link @post.user.nickname, to: user_path(@conn, :show, @post.user.nickname) %>
+        于<%= @post.inserted_at |> from_now %>发布
+        <%= if @post.latest_comment do %>
+         • 最后由 <%= link @post.latest_comment.user.nickname, to: user_path(@conn, :show, @post.latest_comment.user.nickname) %>
+         于<%= @post.latest_comment.inserted_at |> from_now %>回复
+        <%= end %>
       </div>
     </div>
   </div>
