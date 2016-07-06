@@ -22,8 +22,9 @@ defmodule PhoenixChina.PostController do
 
   def create(conn, %{"post" => post_params}) do
     current_user = current_user(conn)
+    post_params = post_params
+    |> Dict.put_new("user_id", current_user.id)
     changeset = Post.changeset(:insert, %Post{}, post_params)
-    |> Ecto.Changeset.put_change(:user_id, current_user.id)
 
     case Repo.insert(changeset) do
       {:ok, _post} ->
@@ -31,6 +32,7 @@ defmodule PhoenixChina.PostController do
         |> put_flash(:info, "帖子发布成功.")
         |> redirect(to: page_path(conn, :index))
       {:error, changeset} ->
+        IO.inspect changeset
         render(conn, "new.html", changeset: changeset)
     end
   end
