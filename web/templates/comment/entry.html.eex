@@ -14,7 +14,7 @@
       <%= link "删除", to: post_comment_path(@conn, :delete, @post, @comment), method: :delete, data: [confirm: "确定删除评论吗?"], class: "btn btn-danger btn-xs" %>
     </div>
     <%= end %>
-    <div class="media-heading"><%= @comment.content %></div>
+    <div class="media-heading"><%= markdown @comment.content %></div>
     <div class="media-body">
       <div class="post-info">
         <%= link @comment.user.nickname, to: user_path(@conn, :show, @comment.user.nickname) %> •

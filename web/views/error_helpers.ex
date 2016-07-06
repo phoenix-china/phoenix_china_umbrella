@@ -55,4 +55,10 @@ defmodule PhoenixChina.ErrorHelpers do
     "https://www.gravatar.com/avatar/#{email}?d=wavatar&s=#{size}"
   end
 
+  def markdown(content) do
+    content
+    |> Earmark.to_html
+    |> raw
+  end
+
 end

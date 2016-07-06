@@ -9,6 +9,7 @@
 
     <title>Phoenix中文社区</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
   </head>
 
   <body>

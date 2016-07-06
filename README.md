@@ -26,6 +26,7 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] 用户Gravatar头像显示
 - [x] 邮件发送
 - [x] 用户找回密码
+- [ ] markdown编辑器
 - [ ] 时间本地化
 - [ ] 用户修改头像
 - [ ] 用户积分

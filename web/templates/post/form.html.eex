@@ -13,7 +13,7 @@
 
   <div class="form-group">
     <%= label f, :content, "内容", class: "control-label" %>
-    <%= textarea f, :content, class: "form-control" %>
+    <%= textarea f, :content, class: "form-control", id: "body-editor" %>
     <%= error_tag f, :content %>
   </div>
 

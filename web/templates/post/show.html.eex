@@ -18,7 +18,7 @@
   </div>
 
   <div class="post-content">
-    <%= @post.content %>
+    <%= markdown @post.content %>
   </div>
   <%= if @logged_in && @post.user_id == @current_user.id do %>
   <div class="post-handler clearfix text-right">
