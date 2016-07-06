@@ -20,8 +20,6 @@ defmodule PhoenixChina.Mailer do
     token = User.generate_token(user)
     text = render_to_string(PageView, "reset_password_email.txt", conn: conn, user: user, token: token)
     html = render_to_string(PageView, "reset_password_email.html", conn: conn, user: user, token: token)
-    IO.inspect text
-    IO.inspect html
     send_email to: user.email, from: @from, subject: "重置密码", text: text, html: html
   end
 end

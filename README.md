@@ -24,9 +24,10 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] 用户帖子列表
 - [x] 用户评论列表
 - [x] 用户Gravatar头像显示
+- [x] 邮件发送
+- [x] 用户找回密码
 - [ ] 时间本地化
 - [ ] 用户修改头像
-- [ ] 用户找回密码
 - [ ] 用户积分
 - [ ] 帖子评论数量
 - [ ] 帖子最后回复时间
@@ -36,4 +37,3 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [ ] 点赞评论
 - [ ] 用户收藏的帖子列表
 - [ ] 文件上传
-- [ ] 邮件发送

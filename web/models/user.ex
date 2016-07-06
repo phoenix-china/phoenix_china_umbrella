@@ -60,6 +60,15 @@ defmodule PhoenixChina.User do
     |> validate_format(:email, ~r/@/, message: "请输入正确的邮箱地址")
   end
 
+  def changeset(:password_reset, struct, params) do
+    struct
+    |> cast(params, [:token, :password, :password_confirm])
+    |> validate_required([:token, :password, :password_confirm], message: "不能为空")
+    |> validate_length(:password, min: 6, max: 128)
+    |> validate_equal_to(:password_confirm, :password)
+    |> validate_token(:token, "user_id", 60 * 60 * 24)
+  end
+
   def put_password_hash(changeset) do
     password_hash = changeset.changes.password
     |> Comeonin.Bcrypt.hashpwsalt
@@ -103,12 +112,29 @@ defmodule PhoenixChina.User do
     end
   end
 
+  def validate_token(changeset, field, token_name, max_age) do
+    token = get_field(changeset, field)
+    case Phoenix.Token.verify(PhoenixChina.Endpoint, token_name, token, max_age: max_age) do
+      {:ok, user_id} ->
+        user = (from __MODULE__, where: [id: ^user_id]) |> first |> PhoenixChina.Repo.one!
+        changeset
+        |> Ecto.Changeset.put_change(:user, user)
+      {:error, :invalid} ->
+        changeset
+        |> Ecto.Changeset.add_error(field, "token不正确，请重新申请重置密码！")
+      {:error, :expired} ->
+        changeset
+        |> Ecto.Changeset.add_error(field, "token已过期，请重新申请重置密码！")
+    end
+  end
+
   def new_list do
     query = from __MODULE__, order_by: [desc: :inserted_at], limit: 10
     query |> PhoenixChina.Repo.all
   end
 
-  def generate_token(user) do
-    user.id
+  def generate_token(user, token_name \\ "user_id") do
+    Phoenix.Token.sign(PhoenixChina.Endpoint, token_name, user.id)
   end
+
 end

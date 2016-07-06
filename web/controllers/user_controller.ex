@@ -200,6 +200,48 @@ defmodule PhoenixChina.UserController do
   用户重置密码
   """
   def password_reset(conn, %{"password_reset_token" => token}) do
-      text conn, "password reset"
+    changeset = User.changeset(:password_reset, %User{}, %{"token" => token})
+
+    conn = case changeset.errors[:token] do
+      {msg, _} ->
+        conn
+        |> put_flash(:info, msg)
+        |> redirect(to: user_path(conn, :password_forget))
+      _ ->
+        conn
+        |> put_flash(:info, "您正在重置账号为 #{changeset.changes.user.email} 的密码")
+    end
+
+    changeset = User.changeset(:password_reset, changeset.changes.user, %{"token" => token})
+
+    render conn, "password_reset.html",
+      layout: {LayoutView, "app.html"},
+      changeset: changeset
+  end
+
+  def password_reset(conn, %{}) do
+    conn
+    |> put_flash(:info, "非法访问")
+    |> redirect(to: page_path(conn, :index))
+  end
+
+  @doc """
+  用户重置密码
+  """
+  def put_password_reset(conn, %{"user" => user_params}) do
+    changeset = User.changeset(:password_reset, %User{}, user_params)
+    changeset = User.changeset(:password_reset, changeset.changes.user, user_params)
+    |> User.put_password_hash
+
+    case Repo.update(changeset) do
+      {:ok, _user} ->
+        conn
+        |> put_flash(:info, "密码重置成功，请登陆！")
+        |> redirect(to: session_path(conn, :new))
+      {:error, changeset} ->
+        render conn, "password_reset.html",
+          layout: {LayoutView, "app.html"},
+          changeset: changeset
+    end
   end
 end

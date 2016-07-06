@@ -46,7 +46,9 @@ defmodule PhoenixChina.Router do
 
      get "/password/forget", UserController, :password_forget
      post "/password/forget", UserController, :post_password_forget
+
      get "/password/reset", UserController, :password_reset
+     put "/password/reset", UserController, :put_password_reset
   end
 
   scope "/settings", PhoenixChina do
