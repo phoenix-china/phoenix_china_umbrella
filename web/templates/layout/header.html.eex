@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Phoenix中文社区">
     <meta name="author" content="https://github.com/PhoenixChina/phoenix_china">
-
+    <meta name="baidu-site-verification" content="Q3IId6pqR3" />
+    <meta name="google-site-verification" content="dCc5jPBMaQpfr0W6zgkmlrkE1P2uAgk_wxX3PF-cRGM" />
     <title>Phoenix中文社区</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
