@@ -14,12 +14,15 @@
       <%= link "删除", to: post_comment_path(@conn, :delete, @post, @comment), method: :delete, data: [confirm: "确定删除评论吗?"], class: "btn btn-danger btn-xs" %>
     </div>
     <%= end %>
-    <div class="media-heading"><%= markdown @comment.content %></div>
+    <div class="media-heading" style="font-size: 12px; color: #ABA8A6;">
+      <%= link @comment.user.nickname, to: user_path(@conn, :show, @comment.user.nickname) %>
+      <%= if @index do %>
+        • <i style="color: #7AA87A;">#<%= @index %></i>
+      <%= end %>
+      • <%= @comment.inserted_at |> from_now %>
+    </div>
     <div class="media-body">
-      <div class="post-info">
-        <%= link @comment.user.nickname, to: user_path(@conn, :show, @comment.user.nickname) %> •
-        <%= link "发表于#{@comment.inserted_at |> from_now}", to: "javascript:void(0);" %>
-      </div>
+      <%= markdown @comment.content %>
     </div>
   </div>
 </div>

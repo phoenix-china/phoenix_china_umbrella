@@ -25,12 +25,15 @@
           <%= link "删除", to: post_comment_path(@conn, :delete, comment.post, comment), method: :delete, data: [confirm: "确定删除评论吗?"], class: "btn btn-danger btn-xs" %>
         </div>
         <%= end %>
-        <div class="media-heading"><%= comment.content %></div>
+        <div class="media-heading" style="font-size: 12px; color: #ABA8A6;">
+          <%= link comment.user.nickname, to: user_path(@conn, :show, comment.user.nickname) %>
+          • <%= comment.inserted_at |> from_now %>
+          <div>评论
+            <%= link comment.post.user.nickname, to: user_path(@conn, :show, comment.post.user.nickname) %>
+            的帖子 <%= link comment.post.title, to: post_path(@conn, :show, comment.post) %></div>
+        </div>
         <div class="media-body">
-          <div class="post-info">
-            <%= link comment.user.nickname, to: user_path(@conn, :show, comment.user.nickname) %> •
-            <%= link "发表于#{comment.inserted_at |> from_now}", to: "javascript:void(0);" %>
-          </div>
+          <%= markdown comment.content %>
         </div>
       </div>
     </div>
