@@ -9,11 +9,7 @@
   </p>
 </div>
 
-<ul class="nav nav-pills" style="margin-top: 0;">
-  <li role="presentation" class="active"><a href="javascript:void(0)">全部</a></li>
-</ul>
-
-<div class="posts-info">
+<div class="panel posts-info" style="border-radius: 4px 4px 0 0;">
   <%= link "发布帖子", to: post_path(@conn, :new), class: "btn btn-success btn-xs pull-right" %>
   <span>共有<%= @page.total_entries %>条帖子，当前第<%= @page.page_number %>页</span>
 </div>

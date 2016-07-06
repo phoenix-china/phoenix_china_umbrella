@@ -12,12 +12,12 @@ body {
 }
 .posts-info {
   background: #fff;
-  margin-top: 1em;
   padding: 1em;
 }
 .data-item {
   background: #fff;
   padding: 1em;
+  margin-bottom: 15px;
 }
 .data-item .media-heading a,
 .data-item .media-heading a:visited {

@@ -38,7 +38,7 @@ defmodule PhoenixChina.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    post = (from Post, where: [id: ^id], preload: [:user]) |> first |> Repo.one
+    post = (from Post, where: [id: ^id], preload: [:user, :latest_comment, latest_comment: :user]) |> first |> Repo.one!
     comments = (from Comment, where: [post_id: ^id], order_by: [asc: :inserted_at], preload: [:user])
     |> Repo.all
     changeset = Comment.changeset(%Comment{})

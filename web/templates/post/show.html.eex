@@ -11,8 +11,12 @@
     <div class="post-header pull-left">
       <h1 class="post-title"><%= @post.title %></h1>
       <div class="post-info">
-        <%= link @post.user.nickname, to: user_path(@conn, :show, @post.user.nickname) %> •
-        <%= link "发表于#{@post.inserted_at |> from_now}", to: post_path(@conn, :show, @post) %>
+        由 <%= link @post.user.nickname, to: user_path(@conn, :show, @post.user.nickname) %>
+        于<%= @post.inserted_at |> from_now %>发布
+        <%= if @post.latest_comment do %>
+         • 最后由 <%= link @post.latest_comment.user.nickname, to: user_path(@conn, :show, @post.latest_comment.user.nickname) %>
+         于<%= @post.latest_comment.inserted_at |> from_now %>回复
+        <%= end %>
       </div>
     </div>
   </div>
@@ -26,6 +30,14 @@
     <%= link "删除", to: post_path(@conn, :delete, @post), method: :delete, data: [confirm: "确定要删除帖子吗?"], class: "btn btn-danger btn-xs" %>
   </div>
   <%= end %>
+  <div class="hide">
+    <span><%= @post.praise_count %>赞</span>
+    <span><%= @post.collect_count %>收藏</span>
+  </div>
+</div>
+
+<div class="panel" style="position: relative; top: 20px; padding: .5em; border-radius: 4px 4px 0 0; color: #999;">
+  共收到 <b><%= @post.comment_count %></b> 条回复
 </div>
 
 <%= render PhoenixChina.CommentView, "entries.html",
