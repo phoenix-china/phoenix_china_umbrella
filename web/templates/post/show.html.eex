@@ -31,15 +31,9 @@
 <%= render PhoenixChina.CommentView, "entries.html",
   conn: @conn,
   post: @post,
-  page: @page,
+  comments: @comments,
   logged_in: @logged_in,
   current_user: @current_user
-%>
-
-<%= render PhoenixChina.CommentView, "entries_page.html",
-  conn: @conn,
-  post: @post,
-  page: @page
 %>
 
 <%= render PhoenixChina.CommentView, "form.html",

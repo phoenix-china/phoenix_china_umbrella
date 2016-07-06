@@ -74,7 +74,7 @@ defmodule PhoenixChina.UserController do
     page = (from Post, where: [user_id: ^user.id], order_by: [desc: :inserted_at],
                        preload: [:user, :latest_comment, latest_comment: :user])
     |> Repo.paginate(%{"page" => page})
-
+    
     render conn, "show.html",
       page: page,
       current_page: nil

@@ -37,21 +37,16 @@ defmodule PhoenixChina.PostController do
     end
   end
 
-  def show(conn, %{"id" => id, "page" => page}) do
+  def show(conn, %{"id" => id}) do
     post = (from Post, where: [id: ^id], preload: [:user]) |> first |> Repo.one
-    page = (from Comment, where: [post_id: ^id], order_by: [desc: :inserted_at], preload: [:user])
-    |> Repo.paginate(%{"page": page})
+    comments = (from Comment, where: [post_id: ^id], order_by: [asc: :inserted_at], preload: [:user])
+    |> Repo.all
     changeset = Comment.changeset(%Comment{})
 
     render conn, "show.html",
       post: post,
-      comments: page.entries,
-      changeset: changeset,
-      page: page
-  end
-
-  def show(conn, %{"id" => id}) do
-    show(conn, %{"id" => id, "page" => "1"})
+      comments: comments,
+      changeset: changeset
   end
 
   def edit(conn, %{"id" => id}) do

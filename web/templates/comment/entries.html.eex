@@ -1,4 +1,8 @@
-<%= for comment <- @page.entries do %>
+<%= @comments |> Stream.with_index |> Enum.each fn (a, b) do -> %>
+  <%= a %>
+<%= end %>
+
+<%= for comment <- @comments do %>
   <%= render "entry.html",
     conn: @conn,
     comment: comment,
