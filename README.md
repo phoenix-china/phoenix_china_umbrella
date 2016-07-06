@@ -25,13 +25,14 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] 用户评论列表
 - [x] 用户Gravatar头像显示
 - [x] 邮件发送
-- [x] 用户找回密码
-- [ ] markdown编辑器
+- [x] 用户重置密码
+- [x] markdown编辑器
+- [x] 帖子评论数量
+- [x] 帖子最后回复时间
+- [ ] 站内通知
 - [ ] 时间本地化
 - [ ] 用户修改头像
 - [ ] 用户积分
-- [ ] 帖子评论数量
-- [ ] 帖子最后回复时间
 - [ ] 回复用户的评论
 - [ ] 收藏帖子
 - [ ] 点赞帖子
