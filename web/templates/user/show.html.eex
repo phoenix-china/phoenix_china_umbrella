@@ -6,10 +6,16 @@
   %>
 
   <div class="user-content">
+    <%= if @page.total_entries > 0 do %>
     <%= render PhoenixChina.PostView, "entries.html", conn: @conn, page: @page %>
     <%= pagination_links @conn, @page,
       action: :show,
       path: fn(conn, action, args) -> user_path(conn, action, @user.nickname, args) end
     %>
+    <%= else %>
+    <div class="text-center">
+      <h3>还没有发布过帖子!</h3>
+    </div>
+    <%= end %>
   </div>
 </div>

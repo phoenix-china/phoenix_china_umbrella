@@ -7,7 +7,7 @@
   %>
 
   <div class="user-content">
-
+    <%= if @page.total_entries > 0 do %>
     <%= for comment <- @page.entries do %>
     <div class="media data-item">
       <div class="media-left">
@@ -43,6 +43,11 @@
       action: :comments,
       path: fn(conn, action, args) -> user_path(conn, action, @user.nickname, args) end
     %>
+    <%= else %>
+    <div class="text-center">
+      <h3>还没有回复过帖子!</h3>
+    </div>
+    <%= end %>
   </div>
 
 </div>

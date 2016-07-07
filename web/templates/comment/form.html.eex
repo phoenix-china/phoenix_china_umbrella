@@ -8,7 +8,7 @@
 
     <div class="form-group">
       <%= label f, :content, "回帖", class: "control-label" %>
-      <%= textarea f, :content, class: "form-control" %>
+      <%= textarea f, :content, id: "mde", class: "form-control" %>
       <%= error_tag f, :content %>
     </div>
 

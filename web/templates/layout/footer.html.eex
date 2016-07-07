@@ -1,7 +1,21 @@
     </div> <!-- /container -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <script src="//cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <script>var simplemde = new SimpleMDE();</script>
+    <script>
+      $(function() {
+        if ($('#mde').length > 0) {
+          var simplemde = new SimpleMDE({
+            element: document.getElementById("mde"),
+            autosave: {
+                enabled: true,
+                unique_id: '<%= @conn.request_path %>',
+                delay: 1000,
+            },
+          });
+        }
+      });
+    </script>
     <script>
     (function(){
         var bp = document.createElement('script');
