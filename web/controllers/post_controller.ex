@@ -38,7 +38,6 @@ defmodule PhoenixChina.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    IO.inspect conn
     post = (from Post, where: [id: ^id], preload: [:user, :latest_comment, latest_comment: :user]) |> first |> Repo.one!
     comments = (from Comment, where: [post_id: ^id], order_by: [asc: :inserted_at], preload: [:user])
     |> Repo.all
