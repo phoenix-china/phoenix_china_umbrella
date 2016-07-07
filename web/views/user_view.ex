@@ -1,5 +1,6 @@
 defmodule PhoenixChina.UserView do
   use PhoenixChina.Web, :view
+  import Scrivener.HTML
 
   def subnavs(conn) do
     [

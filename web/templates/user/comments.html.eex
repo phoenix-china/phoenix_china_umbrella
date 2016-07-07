@@ -39,10 +39,9 @@
     </div>
     <% end %>
 
-    <%= render PhoenixChina.CommentView, "page.html",
-      conn: @conn,
-      user: @user,
-      page: @page
+    <%= pagination_links @conn, @page,
+      action: :comments,
+      path: fn(conn, action, args) -> user_path(conn, action, @user.nickname, args) end
     %>
   </div>
 

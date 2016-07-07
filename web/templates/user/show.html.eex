@@ -7,6 +7,9 @@
 
   <div class="user-content">
     <%= render PhoenixChina.PostView, "entries.html", conn: @conn, page: @page %>
-    <%= render PhoenixChina.PostView, "entries_page.html", conn: @conn, page: @page %>
+    <%= pagination_links @conn, @page,
+      action: :show,
+      path: fn(conn, action, args) -> user_path(conn, action, @user.nickname, args) end
+    %>
   </div>
 </div>

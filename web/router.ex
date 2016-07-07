@@ -56,7 +56,7 @@ defmodule PhoenixChina.Router do
 
     get "/profile", UserController, :profile
     get "/account", UserController, :account
-    put "/account", UserController, :account_update
+    put "/account", UserController, :put_account
   end
 
   # Other scopes may use custom stacks.

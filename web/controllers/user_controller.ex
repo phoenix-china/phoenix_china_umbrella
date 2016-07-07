@@ -84,7 +84,7 @@ defmodule PhoenixChina.UserController do
     show(conn, %{"nickname" => nickname, "page" => "1"})
   end
 
-  def edit(conn, %{"id" => id}) do
+  def show(conn, %{"id" => id}) do
     user = Repo.get!(User, id)
     changeset = User.changeset(:edit, user)
     render(conn, "edit.html", user: user, changeset: changeset)
@@ -118,7 +118,7 @@ defmodule PhoenixChina.UserController do
       changeset: changeset
   end
 
-  def account_update(conn, %{"user" => user_params}) do
+  def put_account(conn, %{"user" => user_params}) do
     user = current_user(conn)
     changeset = User.changeset(:account, user, user_params)
     |> User.validate_password(:old_password)
