@@ -41,7 +41,7 @@ defmodule PhoenixChina.ErrorHelpers do
   def from_now(datetime) do
     datetime
     |> Ecto.DateTime.to_erl
-    |> Timex.from_now
+    |> Timex.from_now("zh")
   end
 
   def avatar(user, size \\ 40) do
