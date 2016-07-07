@@ -15,7 +15,7 @@ defmodule PhoenixChina.UserController do
   plug PhoenixChina.GuardianPlug
   plug :put_layout, "user.html"
 
-  plug :load_data when action in [:show, :profile, :account, :account_update, :comments]
+  plug :load_data when action in [:show, :profile, :put_profile, :account, :put_account, :comments]
   defp load_data(conn, _) do
     user = case conn.params do
       %{"nickname" => nickname} ->
@@ -105,8 +105,29 @@ defmodule PhoenixChina.UserController do
   end
 
   def profile(conn, _params) do
+    user = current_user(conn)
+    changeset = User.changeset(:profile, user)
+
     render conn, "profile.html",
-      current_page: :profile
+      current_page: :profile,
+      changeset: changeset
+  end
+
+  def put_profile(conn, %{"user" => user_params}) do
+    user = current_user(conn)
+    changeset = User.changeset(:profile, user, user_params)
+
+    case Repo.update(changeset) do
+      {:ok, _user} ->
+        conn
+        |> put_flash(:info, "个人信息编辑成功！")
+        |> redirect(to: user_path(conn, :profile))
+      {:error, changeset} ->
+        IO.inspect changeset
+        render conn, "profile.html",
+          current_page: :profile,
+          changeset: changeset
+    end
   end
 
   def account(conn, _params) do

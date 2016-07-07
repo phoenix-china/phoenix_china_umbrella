@@ -55,6 +55,8 @@ defmodule PhoenixChina.Router do
     pipe_through [:browser, :browser_session]
 
     get "/profile", UserController, :profile
+    put "/profile", UserController, :put_profile
+
     get "/account", UserController, :account
     put "/account", UserController, :put_account
   end

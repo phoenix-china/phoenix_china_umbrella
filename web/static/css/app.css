@@ -80,3 +80,10 @@ body {
 .user-content {
   min-height: 600px;
 }
+.post-user-bio,
+.comment-user-bio {
+  font-size: 12px;
+  color: #ccc;
+  border-top: 1px solid #eee;
+  padding-top: 5px;
+}

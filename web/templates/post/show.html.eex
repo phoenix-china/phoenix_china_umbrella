@@ -24,6 +24,13 @@
   <div class="post-content">
     <%= markdown @post.content %>
   </div>
+
+  <%= if @post.user.bio |> String.length > 0 do %>
+  <div class="post-user-bio">
+    |> <%= @post.user.bio %>
+  </div>
+  <%= end %>
+
   <%= if @logged_in && @post.user_id == @current_user.id do %>
   <div class="post-handler clearfix text-right">
     <%= link "编辑", to: post_path(@conn, :edit, @post), class: "btn btn-default btn-xs" %>

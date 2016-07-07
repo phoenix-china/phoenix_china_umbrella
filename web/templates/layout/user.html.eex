@@ -23,6 +23,14 @@
               <div class="user-info">第 <%= @user.id %> 位会员 / <%= @user.inserted_at |> from_now %>注册</div>
               <div class="user-info"><%= @post_count %> 篇帖子 • <%= @comment_count %> 条回帖</div>
             </div>
+            <div class="user-info" style="padding-top: 10px;">
+              |>
+              <%= if @user.bio |> String.length > 0 do %>
+                <%= @user.bio %>
+              <%= else %>
+                这个家伙很懒，什么也没有留下
+              <%= end %>
+            </div>
           </div>
 
           <div class="row text-center user-data">

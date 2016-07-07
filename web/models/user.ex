@@ -6,6 +6,7 @@ defmodule PhoenixChina.User do
     field :password_hash, :string
     field :avatar, :string
     field :nickname, :string
+    field :bio, :string
 
     field :password, :string, virtual: true
     field :old_password, :string, virtual: true
@@ -67,6 +68,16 @@ defmodule PhoenixChina.User do
     |> validate_length(:password, min: 6, max: 128)
     |> validate_equal_to(:password_confirm, :password)
     |> validate_token(:token, "user_id", 60 * 60 * 24)
+  end
+
+  def changeset(:profile, struct, params) do
+    struct
+    |> cast(params, [:nickname, :bio])
+    |> validate_required([:nickname], message: "不能为空")
+    |> validate_length(:nickname, min: 1, max: 18)
+    |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许使用的用户名")
+    |> unique_constraint(:nickname, message: "昵称已被注册啦，请更换别的昵称试试")
+    |> validate_length(:bio, max: 140)
   end
 
   def put_password_hash(changeset) do

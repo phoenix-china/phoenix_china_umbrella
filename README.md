@@ -36,7 +36,6 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [ ] 点赞评论
 - [ ] 站内通知
 - [ ] 帖子标签
-- [ ] 时间本地化
 - [ ] 回复用户的评论
 - [ ] 用户修改头像
 - [ ] 用户积分

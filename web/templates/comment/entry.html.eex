@@ -23,6 +23,12 @@
     </div>
     <div class="media-body">
       <%= markdown @comment.content %>
+
+      <%= if @comment.user.bio |> String.length > 0 do %>
+      <div class="comment-user-bio">
+        |> <%= @comment.user.bio %>
+      </div>
+      <%= end %>
     </div>
   </div>
 </div>
