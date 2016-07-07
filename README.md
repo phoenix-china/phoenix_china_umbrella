@@ -29,7 +29,7 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] markdown编辑器
 - [x] 帖子评论数量
 - [x] 帖子最后回复时间
-- [ ] 修改昵称和用户签名
+- [x] 修改昵称和用户签名
 - [ ] 收藏帖子
 - [ ] 用户收藏的帖子列表
 - [ ] 点赞帖子
