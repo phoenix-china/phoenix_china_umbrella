@@ -5,7 +5,9 @@
   <li role="presentation"<%= if @current_page == :user_comments do %> class="active"<%= end %>>
     <%= link "回复", to: user_path(@conn, :comments, @user.nickname) %>
   </li>
-  <!--
-  <li role="presentation"><a href="#">收藏</a></li>
-  -->
+
+  <li role="presentation"<%= if @current_page == :user_collects do %> class="active"<%= end %>>
+    <%= link "收藏", to: user_path(@conn, :collects, @user.nickname) %>
+  </li>
+
 </ul>

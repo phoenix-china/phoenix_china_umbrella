@@ -30,8 +30,9 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] 帖子评论数量
 - [x] 帖子最后回复时间
 - [x] 修改昵称和用户签名
-- [ ] 收藏帖子
-- [ ] 用户收藏的帖子列表
+- [x] 一个简易聊天室
+- [x] 收藏帖子
+- [x] 用户收藏的帖子列表
 - [ ] 点赞帖子
 - [ ] 点赞评论
 - [ ] 站内通知

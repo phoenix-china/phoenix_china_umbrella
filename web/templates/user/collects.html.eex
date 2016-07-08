@@ -1,0 +1,26 @@
+<div class="panel">
+
+  <%= render "tabs.html",
+    current_page: :user_collects,
+    conn: @conn,
+    user: @user
+  %>
+
+  <div class="user-content">
+    <%= if @page.total_entries > 0 do %>
+    <%= for collect <- @page.entries do %>
+    <%= render PhoenixChina.PostView, "entry.html", conn: @conn, post: collect.post %>
+    <% end %>
+
+    <%= pagination_links @conn, @page,
+      action: :collects,
+      path: fn(conn, action, args) -> user_path(conn, action, @user.nickname, args) end
+    %>
+    <%= else %>
+    <div class="text-center">
+      <h3>还没有收藏过帖子!</h3>
+    </div>
+    <%= end %>
+  </div>
+
+</div>

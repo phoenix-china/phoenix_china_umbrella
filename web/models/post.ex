@@ -55,4 +55,9 @@ defmodule PhoenixChina.Post do
   defp strip_unsafe_content(struct, _) do
     struct
   end
+
+  def inc_collect_count(post_id, value) do
+    from(p in __MODULE__, where: p.id == ^post_id, update: [inc: [collect_count: ^value]])
+    |> PhoenixChina.Repo.update_all([])
+  end
 end

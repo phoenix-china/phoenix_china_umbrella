@@ -34,8 +34,11 @@ defmodule PhoenixChina.Router do
 
     resources "/posts", PostController do
        resources "/comments", CommentController, except: [:index, :show]
+       post "/collects", PostCollectController, :create
+       delete "/collects", PostCollectController, :cancel
     end
 
+    resources "/post_collects", PostCollectController
   end
 
   scope "/users", PhoenixChina do
@@ -44,7 +47,7 @@ defmodule PhoenixChina.Router do
      get "/:nickname", UserController, :show
      get "/:nickname/posts", PostController, :user_posts
      get "/:nickname/comments", UserController, :comments
-     get "/:nickname/collects", PostController, :user_collects
+     get "/:nickname/collects", UserController, :collects
 
      get "/password/forget", UserController, :password_forget
      post "/password/forget", UserController, :post_password_forget

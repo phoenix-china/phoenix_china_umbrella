@@ -4,6 +4,7 @@ defmodule PhoenixChina.UserController do
   alias PhoenixChina.User
   alias PhoenixChina.Post
   alias PhoenixChina.Comment
+  alias PhoenixChina.PostCollect
   alias PhoenixChina.LayoutView
 
   import PhoenixChina.Mailer, only: [send_confirmation_email: 2, send_reset_password_email: 2]
@@ -15,7 +16,7 @@ defmodule PhoenixChina.UserController do
   plug PhoenixChina.GuardianPlug
   plug :put_layout, "user.html"
 
-  plug :load_data when action in [:show, :profile, :put_profile, :account, :put_account, :comments]
+  plug :load_data when action in [:show, :profile, :put_profile, :account, :put_account, :comments, :collects]
   defp load_data(conn, _) do
     user = case conn.params do
       %{"nickname" => nickname} ->
@@ -177,6 +178,22 @@ defmodule PhoenixChina.UserController do
 
   def comments(conn, %{"nickname" => nickname}) do
     comments(conn, %{"nickname" => nickname, "page" => "1"})
+  end
+
+  def collects(conn, %{"nickname" => nickname, "page" => page}) do
+    user = User |> where(nickname: ^nickname) |> Repo.one!
+    page = PostCollect
+    |> preload([:post, post: [:user, :latest_comment, latest_comment: :user]])
+    |> where(user_id: ^user.id)
+    |> Repo.paginate(%{"page" => page})
+
+    render conn, "collects.html",
+      page: page,
+      current_page: nil
+  end
+
+  def collects(conn, %{"nickname" => nickname}) do
+    collects(conn, %{"nickname" => nickname, "page" => "1"})
   end
 
   @doc """

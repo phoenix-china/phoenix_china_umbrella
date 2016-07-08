@@ -6,7 +6,7 @@ defmodule PhoenixChina.PostController do
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
-  when action in [:new, :create, :edit, :update, :delete]
+    when action in [:new, :create, :edit, :update, :delete]
   plug PhoenixChina.GuardianPlug
 
   def index(conn, _params) do

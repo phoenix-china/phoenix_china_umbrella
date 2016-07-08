@@ -7,6 +7,7 @@ defmodule PhoenixChina.User do
     field :avatar, :string
     field :nickname, :string
     field :bio, :string
+    field :collect_count, :integer, default: 0
 
     field :password, :string, virtual: true
     field :old_password, :string, virtual: true
@@ -146,6 +147,11 @@ defmodule PhoenixChina.User do
 
   def generate_token(user, token_name \\ "user_id") do
     Phoenix.Token.sign(PhoenixChina.Endpoint, token_name, user.id)
+  end
+
+  def inc_collect_count(user_id, value) do
+    from(u in __MODULE__, where: u.id == ^user_id, update: [inc: [collect_count: ^value]])
+    |> PhoenixChina.Repo.update_all([])
   end
 
 end

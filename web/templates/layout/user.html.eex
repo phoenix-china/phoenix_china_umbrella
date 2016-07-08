@@ -43,7 +43,7 @@
               <div class="n">正在关注</div>
             </div>
             <div class="col-xs-4">
-              <div class="d">0</div>
+              <div class="d"><%= @user.collect_count %></div>
               <div class="n">收藏</div>
             </div>
           </div>

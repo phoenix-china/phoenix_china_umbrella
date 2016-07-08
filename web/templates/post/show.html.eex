@@ -37,6 +37,19 @@
     <%= link "删除", to: post_path(@conn, :delete, @post), method: :delete, data: [confirm: "确定要删除帖子吗?"], class: "btn btn-danger btn-xs" %>
   </div>
   <%= end %>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <%= if @logged_in && @post.user_id != @current_user.id do %>
+        <%= if post_collect? @current_user, @post do %>
+          <%= link raw("<i class=\"fa fa-star-o\"></i> 已收藏"), to: post_post_collect_path(@conn, :cancel, @post), method: :delete, data: [confirm: "确定要取消收藏帖子吗?"] %>
+        <%= else %>
+          <%= link raw("<i class=\"fa fa-star-o\"></i> 收藏"), to: post_post_collect_path(@conn, :create, @post), method: :post %>
+        <%= end %>
+      <%= end %>
+    </div>
+  </div>
+
   <div class="hide">
     <span><%= @post.praise_count %>赞</span>
     <span><%= @post.collect_count %>收藏</span>
