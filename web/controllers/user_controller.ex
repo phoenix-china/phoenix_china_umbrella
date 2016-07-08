@@ -185,6 +185,7 @@ defmodule PhoenixChina.UserController do
     page = PostCollect
     |> preload([:post, post: [:user, :latest_comment, latest_comment: :user]])
     |> where(user_id: ^user.id)
+    |> order_by(desc: :inserted_at)
     |> Repo.paginate(%{"page" => page})
 
     render conn, "collects.html",
