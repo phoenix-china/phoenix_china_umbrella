@@ -30,6 +30,8 @@ defmodule PhoenixChina.Router do
     post "/signin", SessionController, :create
     get "/signout", SessionController, :delete
 
+    get "/room", PageController, :room
+
     resources "/posts", PostController do
        resources "/comments", CommentController, except: [:index, :show]
     end

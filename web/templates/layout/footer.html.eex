@@ -1,6 +1,7 @@
     </div> <!-- /container -->
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
     <script src="//cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js"></script>
+    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+
     <script src="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <script>
       $(function() {

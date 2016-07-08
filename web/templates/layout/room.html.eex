@@ -10,7 +10,6 @@
     <meta name="google-site-verification" content="dCc5jPBMaQpfr0W6zgkmlrkE1P2uAgk_wxX3PF-cRGM" />
     <title>Phoenix中文社区</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
   </head>
 
   <body>
@@ -46,6 +45,11 @@
       </div><!-- /.container-fluid -->
     </nav>
 
-    <div class="container" style="margin-top: 70px;">
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+    <main role="main">
+      <%= render @view_module, @view_template, assigns %>
+    </main>
+  </div> <!-- /container -->
+  <script src="//cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js"></script>
+  <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+  </body>
+</html>

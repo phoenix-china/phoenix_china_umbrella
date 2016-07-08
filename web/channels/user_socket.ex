@@ -2,11 +2,11 @@ defmodule PhoenixChina.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", PhoenixChina.RoomChannel
+  channel "rooms:*", PhoenixChina.RoomChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
-  # transport :longpoll, Phoenix.Transports.LongPoll
+  transport :longpoll, Phoenix.Transports.LongPoll
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
