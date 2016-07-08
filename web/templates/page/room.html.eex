@@ -45,7 +45,7 @@ code {
 
 </style>
 
-<div id="messages" class="container"></div>
+<div id="messages" class="container room"></div>
 <div id="footer">
   <div class="container">
     <div class="row">

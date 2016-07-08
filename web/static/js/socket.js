@@ -48,6 +48,8 @@ class Room {
   }
 }
 
-$(() => Room.init())
+if ($('.room').length > 0) {
+  $(() => Room.init())
+}
 
 export default Room
