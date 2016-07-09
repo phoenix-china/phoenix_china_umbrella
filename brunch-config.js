@@ -34,7 +34,10 @@ exports.config = {
     // This option sets where we should place non-css and non-js assets in.
     // By default, we set this to "/web/static/assets". Files in this directory
     // will be copied to `paths.public`, which is "priv/static" by default.
-    assets: /^(web\/static\/assets)/
+    assets: [
+      /^(web\/static\/assets)/,
+      /^(node_modules\/font-awesome)/
+    ]
   },
 
   // Phoenix paths configuration
@@ -42,7 +45,12 @@ exports.config = {
     // Dependencies and current project directories to watch
     watched: [
       "web/static",
-      "test/static"
+      "test/static",
+      'node_modules/font-awesome/fonts/fontawesome-webfont.eot',
+      'node_modules/font-awesome/fonts/fontawesome-webfont.svg',
+      'node_modules/font-awesome/fonts/fontawesome-webfont.ttf',
+      'node_modules/font-awesome/fonts/fontawesome-webfont.woff',
+      'node_modules/font-awesome/fonts/fontawesome-webfont.woff2'
     ],
 
     // Where to compile files to

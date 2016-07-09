@@ -1,5 +1,6 @@
 import {Socket} from "phoenix"
 
+var $ = require("jquery");
 
 class Room {
   static init(){

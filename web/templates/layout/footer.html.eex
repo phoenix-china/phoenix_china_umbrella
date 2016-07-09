@@ -1,12 +1,12 @@
     </div> <!-- /container -->
-    <script src="//cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js"></script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-
     <script src="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <script>
+      var $ = require("jquery");
       $(function() {
         if ($('#mde').length > 0) {
           var simplemde = new SimpleMDE({
+            autoDownloadFontAwesome: false,
             element: document.getElementById("mde"),
             autosave: {
                 enabled: true,
