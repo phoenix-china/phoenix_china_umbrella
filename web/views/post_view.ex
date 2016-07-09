@@ -8,8 +8,10 @@ defmodule PhoenixChina.PostView do
   alias PhoenixChina.PostCollect
 
   def post_collect?(%User{:id => user_id}, %Post{:id => post_id}) do
-    res = PostCollect |> where(user_id: ^user_id) |> where(post_id: ^post_id) |> Repo.one
-    IO.inspect !!res
-    !!res
+    PostCollect
+    |> where(user_id: ^user_id)
+    |> where(post_id: ^post_id)
+    |> first
+    |> Repo.one
   end
 end
