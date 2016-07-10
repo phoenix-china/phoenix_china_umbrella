@@ -59,6 +59,20 @@ body {
   padding-bottom: 1em;
   margin-bottom: .5em;
 }
+.post-detail-handler {
+  font-size: 12px;
+  color: #666;
+  margin-top: 10px;
+}
+.post-detail-handler a,
+.post-detail-handler a:visited {
+  color: #999;
+  text-decoration: none;
+}
+.post-detail-handler a:hover {
+  text-decoration: none;
+  color: #31708f;
+}
 .user-info {
   color: #999;
 }

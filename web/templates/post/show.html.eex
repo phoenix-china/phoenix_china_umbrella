@@ -38,17 +38,25 @@
   </div>
   <%= end %>
 
-  <div class="row">
-    <div class="col-sm-12">
-      <%= if @logged_in && @post.user_id != @current_user.id do %>
+  <%= if @logged_in && @post.user_id != @current_user.id do %>
+  <div class="row post-detail-handler">
+    <div class="col-xs-12" style="font-size: 12px; color: #666; margin-top: 10px;">
+        <%= if post_praise? @current_user, @post do %>
+          <%= link raw("<i class=\"fa fa-thumbs-o-up text-danger\"></i> #{@post.praise_count}"), to: post_post_praise_path(@conn, :cancel, @post), method: :delete, data: [confirm: "确定要取消赞吗?"] %>
+        <%= else %>
+          <%= link raw("<i class=\"fa fa-thumbs-o-up\"></i> #{@post.praise_count}"), to: post_post_praise_path(@conn, :create, @post), method: :post %>
+        <%= end %>
+
+        <span style="padding: 0 10px; color: #ccc;">|</span>
+
         <%= if post_collect? @current_user, @post do %>
-          <%= link raw("<i class=\"fa fa-star-o\"></i> 已收藏"), to: post_post_collect_path(@conn, :cancel, @post), method: :delete, data: [confirm: "确定要取消收藏帖子吗?"] %>
+          <%= link raw("<i class=\"fa fa-star-o text-danger\"></i> 已收藏"), to: post_post_collect_path(@conn, :cancel, @post), method: :delete, data: [confirm: "确定要取消收藏吗?"] %>
         <%= else %>
           <%= link raw("<i class=\"fa fa-star-o\"></i> 收藏"), to: post_post_collect_path(@conn, :create, @post), method: :post %>
         <%= end %>
-      <%= end %>
     </div>
   </div>
+  <%= end %>
 
   <div class="hide">
     <span><%= @post.praise_count %>赞</span>

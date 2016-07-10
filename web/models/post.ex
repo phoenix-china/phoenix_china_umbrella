@@ -60,4 +60,9 @@ defmodule PhoenixChina.Post do
     from(p in __MODULE__, where: p.id == ^post_id, update: [inc: [collect_count: ^value]])
     |> PhoenixChina.Repo.update_all([])
   end
+
+  def inc_praise_count(post_id, value) do
+    from(p in __MODULE__, where: p.id == ^post_id, update: [inc: [praise_count: ^value]])
+    |> PhoenixChina.Repo.update_all([])
+  end
 end
