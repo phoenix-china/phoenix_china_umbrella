@@ -33,7 +33,7 @@ defmodule PhoenixChina.Router do
     get "/room", PageController, :room
 
     resources "/posts", PostController do
-       resources "/comments", CommentController, except: [:index, :show]
+       resources "/comments", CommentController, except: [:index]
        post "/collects", PostCollectController, :create
        delete "/collects", PostCollectController, :cancel
 

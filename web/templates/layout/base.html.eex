@@ -1,0 +1,9 @@
+<%= render "header.html",
+  conn: @conn,
+  logged_in: @logged_in,
+  current_user: @current_user
+%>
+<main role="main">
+  <%= render @view_module, @view_template, assigns %>
+</main>
+<%= render "footer.html", conn: @conn %>

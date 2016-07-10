@@ -1,13 +1,23 @@
 defmodule PhoenixChina.CommentController do
   use PhoenixChina.Web, :controller
 
+  alias PhoenixChina.LayoutView
   alias PhoenixChina.Comment
   alias PhoenixChina.Post
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
-  when action in [:create, :edit, :update, :delete]
+    when action in [:create, :edit, :update, :delete]
   plug PhoenixChina.GuardianPlug
+
+  def show(conn, %{"post_id" => post_id, "id" => comment_id}) do
+    post = Post |> where(id: ^post_id) |> preload([:user, :latest_comment, latest_comment: :user]) |> Repo.one!
+    comment = Comment |> where(id: ^comment_id) |> preload(:user) |> Repo.one!
+    render conn, "post.html",
+      layout: {LayoutView, "base.html"},
+      post: post,
+      comment: comment
+  end
 
   def create(conn, %{"post_id" => post_id, "comment" => comment_params}) do
     current_user = current_user(conn)

@@ -62,11 +62,6 @@
     </div>
   </div>
   <%= end %>
-
-  <div class="hide">
-    <span><%= @post.praise_count %>赞</span>
-    <span><%= @post.collect_count %>收藏</span>
-  </div>
 </div>
 
 <div class="panel" style="position: relative; top: 20px; padding: .5em; border-radius: 4px 4px 0 0; color: #999;">

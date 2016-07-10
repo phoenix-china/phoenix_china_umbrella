@@ -1,0 +1,122 @@
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+      <div class="post-detail">
+        <div class="clearfix post-top">
+          <div class="post-user pull-right">
+            <a href="<%= user_path(@conn, :show, @post.user.nickname) %>">
+              <img class="media-object"
+              src="<%= avatar @post.user %>"
+              alt="<%= @post.user.nickname %>"
+              width="40">
+            </a>
+          </div>
+          <div class="post-header pull-left">
+            <h1 class="post-title"><%= @post.title %></h1>
+            <div class="post-info">
+              由 <%= link @post.user.nickname, to: user_path(@conn, :show, @post.user.nickname) %>
+              于<%= @post.inserted_at |> from_now %>发布
+              <%= if @post.latest_comment do %>
+               • 最后由 <%= link @post.latest_comment.user.nickname, to: user_path(@conn, :show, @post.latest_comment.user.nickname) %>
+               于<%= @post.latest_comment.inserted_at |> from_now %>回复
+              <%= end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="post-content">
+          <%= markdown @post.content %>
+        </div>
+
+        <%= if @logged_in && @post.user_id == @current_user.id do %>
+        <div class="pull-right" style="position: relative;">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <span class="fa fa-angle-down fa-2x"></span>
+          </a>
+          <ul class="dropdown-menu" style="min-width: 80px;">
+            <li><%= link raw("<i class=\"fa fa-pencil-square-o\"></i> 编辑"), to: post_path(@conn, :edit, @post) %></li>
+            <li><%= link raw("<i class=\"fa fa-trash-o\"></i> 删除"), to: post_path(@conn, :delete, @post), method: :delete, data: [confirm: "确定要删除帖子吗?"] %></li>
+          </ul>
+        </div>
+        <%= end %>
+
+        <%= if @post.user.bio |> String.length > 0 do %>
+        <div class="post-user-bio">
+          |> <%= @post.user.bio %>
+        </div>
+        <%= end %>
+
+        <%= if @logged_in && @post.user_id != @current_user.id do %>
+        <div class="row post-detail-handler">
+          <div class="col-xs-12" style="font-size: 12px; color: #666; margin-top: 10px;">
+              <%= if post_praise? @current_user, @post do %>
+                <%= link raw("<i class=\"fa fa-thumbs-o-up text-danger\"></i> #{@post.praise_count}"), to: post_post_praise_path(@conn, :cancel, @post), method: :delete, data: [confirm: "确定要取消赞吗?"] %>
+              <%= else %>
+                <%= link raw("<i class=\"fa fa-thumbs-o-up\"></i> #{@post.praise_count}"), to: post_post_praise_path(@conn, :create, @post), method: :post %>
+              <%= end %>
+
+              <span style="padding: 0 10px; color: #ccc;">|</span>
+
+              <%= if post_collect? @current_user, @post do %>
+                <%= link raw("<i class=\"fa fa-star-o text-danger\"></i> 已收藏"), to: post_post_collect_path(@conn, :cancel, @post), method: :delete, data: [confirm: "确定要取消收藏吗?"] %>
+              <%= else %>
+                <%= link raw("<i class=\"fa fa-star-o\"></i> 收藏"), to: post_post_collect_path(@conn, :create, @post), method: :post %>
+              <%= end %>
+          </div>
+        </div>
+        <%= end %>
+      </div>
+
+
+      <div class="media data-item" style="overflow: initial;">
+        <div class="media-left">
+          <a href="<%= user_path(@conn, :show, @comment.user.nickname) %>">
+            <img class="media-object"
+            src="<%= avatar @comment.user %>"
+            alt="<%= @comment.user.nickname %>"
+            width="40">
+          </a>
+        </div>
+        <div class="media-body" style="overflow: initial;">
+          <%= if @logged_in && @comment.user_id == @current_user.id do %>
+          <div class="pull-right" style="position: relative;">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              <span class="fa fa-angle-down"></span>
+            </a>
+            <ul class="dropdown-menu" style="min-width: 80px;">
+              <li><%= link raw("<i class=\"fa fa-pencil-square-o\"></i> 编辑"), to: post_comment_path(@conn, :edit, @post, @comment) %></li>
+              <li><%= link raw("<i class=\"fa fa-trash-o\"></i> 删除"), to: post_comment_path(@conn, :delete, @post, @comment), method: :delete, data: [confirm: "确定删除评论吗?"] %></li>
+            </ul>
+          </div>
+          <%= end %>
+          <div class="media-heading" style="font-size: 12px; color: #ABA8A6;">
+            <%= if @logged_in && @comment.user_id != @current_user.id do %>
+              <%= if comment_praise? @current_user, @comment do %>
+                <%= link raw("<i class=\"fa fa-thumbs-o-up text-danger\"></i> #{@comment.praise_count}"), to: comment_comment_praise_path(@conn, :cancel, @comment), method: :delete, data: [confirm: "确定要取消赞吗?"], class: "pull-right" %>
+              <%= else %>
+                <%= link raw("<i class=\"fa fa-thumbs-o-up\"></i> #{@comment.praise_count}"), to: comment_comment_praise_path(@conn, :create, @comment), method: :post, class: "pull-right" %>
+              <%= end %>
+            <%= end %>
+
+            <%= link @comment.user.nickname, to: user_path(@conn, :show, @comment.user.nickname) %>
+            • <%= @comment.inserted_at |> from_now %>
+          </div>
+          <div class="media-body">
+            <%= markdown @comment.content %>
+
+            <%= if @comment.user.bio |> String.length > 0 do %>
+            <div class="comment-user-bio">
+              |> <%= @comment.user.bio %>
+            </div>
+            <%= end %>
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid #eee; margin-top: 10px; padding-top: 10px;">
+          <%= link "查看全部#{@post.comment_count}条评论", to: post_path(@conn, :show, @post) %>
+        </div>
+      </div>
+
+
+
+    </div>
+</div>
