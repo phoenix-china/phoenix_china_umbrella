@@ -52,7 +52,7 @@ defmodule PhoenixChina.ErrorHelpers do
     email = :crypto.hash(:md5, email)
     |> Base.encode16(case: :lower)
 
-    "https://www.gravatar.com/avatar/#{email}?d=wavatar&s=#{size}"
+    "http://gravatar.eqoe.cn/avatar/#{email}?d=wavatar&s=#{size}"
   end
 
   def markdown(content) do
