@@ -32,6 +32,15 @@ config :guardian, Guardian,
 config :scrivener_html,
   routes_helper: PhoenixChina.Router.Helpers
 
+config :ueberauth, Ueberauth,
+  providers: [
+    github: { Ueberauth.Strategy.Github, [] },
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+  client_id: "2d6fd783ed0ff600ceac",
+  client_secret: "213796db804777e0d503369074affcca2ea9b446"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

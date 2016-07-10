@@ -33,7 +33,7 @@
       <%= if @index do %>
         • <i style="color: #7AA87A;">#<%= @index %></i>
       <%= end %>
-      • <%= @comment.inserted_at |> from_now %>
+      • <%= link "#{@comment.inserted_at |> from_now}", to: post_comment_path(@conn, :show, @post, @comment) %>
     </div>
     <div class="media-body">
       <%= markdown @comment.content %>

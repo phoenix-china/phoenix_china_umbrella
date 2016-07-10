@@ -79,6 +79,13 @@ defmodule PhoenixChina.Router do
     put "/account", UserController, :put_account
   end
 
+  scope "/auth", PhoenixChina do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", PhoenixChina do
   #   pipe_through :api
