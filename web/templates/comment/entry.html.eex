@@ -1,4 +1,5 @@
 <div class="media data-item">
+  <a name="comment-#<%= @index %>"></a>
   <div class="media-left">
     <a href="<%= user_path(@conn, :show, @comment.user.nickname) %>">
       <img class="media-object"
@@ -15,6 +16,14 @@
     </div>
     <%= end %>
     <div class="media-heading" style="font-size: 12px; color: #ABA8A6;">
+      <%= if @logged_in && @comment.user_id != @current_user.id do %>
+        <%= if comment_praise? @current_user, @comment do %>
+          <%= link raw("<i class=\"fa fa-thumbs-o-up text-danger\"></i> #{@comment.praise_count}"), to: comment_comment_praise_path(@conn, :cancel, @comment), method: :delete, data: [confirm: "确定要取消赞吗?"], class: "pull-right" %>
+        <%= else %>
+          <%= link raw("<i class=\"fa fa-thumbs-o-up\"></i> #{@comment.praise_count}"), to: comment_comment_praise_path(@conn, :create, @comment), method: :post, class: "pull-right" %>
+        <%= end %>
+      <%= end %>
+
       <%= link @comment.user.nickname, to: user_path(@conn, :show, @comment.user.nickname) %>
       <%= if @index do %>
         • <i style="color: #7AA87A;">#<%= @index %></i>

@@ -3,6 +3,7 @@ defmodule PhoenixChina.Comment do
 
   schema "comments" do
     field :content, :string
+    field :praise_count, :integer, default: 0
     belongs_to :user, PhoenixChina.User
     belongs_to :post, PhoenixChina.Post
 
@@ -30,5 +31,10 @@ defmodule PhoenixChina.Comment do
 
   defp strip_unsafe_content(struct, _) do
     struct
+  end
+
+  def inc_praise_count(comment_id, value) do
+    from(c in __MODULE__, where: c.id == ^comment_id, update: [inc: [praise_count: ^value]])
+    |> PhoenixChina.Repo.update_all([])
   end
 end
