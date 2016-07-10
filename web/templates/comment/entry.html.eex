@@ -1,4 +1,4 @@
-<div class="media data-item">
+<div class="media data-item" style="overflow: initial;">
   <a name="comment-#<%= @index %>"></a>
   <div class="media-left">
     <a href="<%= user_path(@conn, :show, @comment.user.nickname) %>">
@@ -8,11 +8,16 @@
       width="40">
     </a>
   </div>
-  <div class="media-body">
+  <div class="media-body" style="overflow: initial;">
     <%= if @logged_in && @comment.user_id == @current_user.id do %>
-    <div class="comment-handler pull-right">
-      <%= link "编辑", to: post_comment_path(@conn, :edit, @post, @comment), class: "btn btn-default btn-xs" %>
-      <%= link "删除", to: post_comment_path(@conn, :delete, @post, @comment), method: :delete, data: [confirm: "确定删除评论吗?"], class: "btn btn-danger btn-xs" %>
+    <div class="pull-right" style="position: relative;">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+        <span class="fa fa-angle-down"></span>
+      </a>
+      <ul class="dropdown-menu" style="min-width: 80px;">
+        <li><%= link raw("<i class=\"fa fa-pencil-square-o\"></i> 编辑"), to: post_comment_path(@conn, :edit, @post, @comment) %></li>
+        <li><%= link raw("<i class=\"fa fa-trash-o\"></i> 删除"), to: post_comment_path(@conn, :delete, @post, @comment), method: :delete, data: [confirm: "确定删除评论吗?"] %></li>
+      </ul>
     </div>
     <%= end %>
     <div class="media-heading" style="font-size: 12px; color: #ABA8A6;">

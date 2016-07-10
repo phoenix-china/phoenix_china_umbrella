@@ -102,3 +102,23 @@ body {
   border-top: 1px solid #eee;
   padding-top: 5px;
 }
+.dropdown-menu form {
+  display: block;
+  margin: 0;
+}
+.dropdown-menu form a,
+.dropdown-menu form a:visited {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.dropdown-menu form a:hover {
+  color: #262626;
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
