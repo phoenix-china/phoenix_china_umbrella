@@ -33,8 +33,9 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] 一个简易聊天室
 - [x] 收藏帖子
 - [x] 用户收藏的帖子列表
-- [ ] 点赞帖子
-- [ ] 点赞评论
+- [x] 点赞帖子
+- [x] 点赞评论
+- [ ] 用户互相关注
 - [ ] 站内通知
 - [ ] 帖子标签
 - [ ] 回复用户的评论
