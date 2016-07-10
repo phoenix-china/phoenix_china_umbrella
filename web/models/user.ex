@@ -8,6 +8,8 @@ defmodule PhoenixChina.User do
     field :nickname, :string
     field :bio, :string
     field :collect_count, :integer, default: 0
+    field :follower_count, :integer, default: 0
+    field :followed_count, :integer, default: 0
 
     field :password, :string, virtual: true
     field :old_password, :string, virtual: true
@@ -151,6 +153,16 @@ defmodule PhoenixChina.User do
 
   def inc_collect_count(user_id, value) do
     from(u in __MODULE__, where: u.id == ^user_id, update: [inc: [collect_count: ^value]])
+    |> PhoenixChina.Repo.update_all([])
+  end
+
+  def inc_follower_count(user_id, value) do
+    from(u in __MODULE__, where: u.id == ^user_id, update: [inc: [follower_count: ^value]])
+    |> PhoenixChina.Repo.update_all([])
+  end
+
+  def inc_followed_count(user_id, value) do
+    from(u in __MODULE__, where: u.id == ^user_id, update: [inc: [followed_count: ^value]])
     |> PhoenixChina.Repo.update_all([])
   end
 

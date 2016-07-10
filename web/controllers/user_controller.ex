@@ -5,6 +5,7 @@ defmodule PhoenixChina.UserController do
   alias PhoenixChina.Post
   alias PhoenixChina.Comment
   alias PhoenixChina.PostCollect
+  alias PhoenixChina.UserFollow
   alias PhoenixChina.LayoutView
 
   import PhoenixChina.Mailer, only: [send_confirmation_email: 2, send_reset_password_email: 2]
@@ -16,7 +17,9 @@ defmodule PhoenixChina.UserController do
   plug PhoenixChina.GuardianPlug
   plug :put_layout, "user.html"
 
-  plug :load_data when action in [:show, :profile, :put_profile, :account, :put_account, :comments, :collects]
+  plug :load_data when action in [:show, :profile, :put_profile, :account,
+                                  :put_account, :comments, :collects, :follower,
+                                  :followed]
   defp load_data(conn, _) do
     user = case conn.params do
       %{"nickname" => nickname} ->
@@ -284,5 +287,39 @@ defmodule PhoenixChina.UserController do
           layout: {LayoutView, "app.html"},
           changeset: changeset
     end
+  end
+
+  @doc """
+  关注者
+  """
+  def follower(conn, %{"nickname" => nickname, "page" => page}) do
+    user = User |> where(nickname: ^nickname) |> Repo.one!
+    page = UserFollow |> where(to_user_id: ^user.id) |> order_by(desc: :inserted_at)
+    |> preload(:user)
+    |> Repo.paginate(%{"page" => page})
+    render conn, "follower.html",
+      page: page,
+      current_page: nil
+  end
+
+  def follower(conn, %{"nickname" => nickname}) do
+    follower(conn, %{"nickname" => nickname, "page" => "1"})
+  end
+
+  @doc """
+  正在关注
+  """
+  def followed(conn, %{"nickname" => nickname, "page" => page}) do
+    user = User |> where(nickname: ^nickname) |> Repo.one!
+    page = UserFollow |> where(user_id: ^user.id) |> order_by(desc: :inserted_at)
+    |> preload(:to_user)
+    |> Repo.paginate(%{"page" => page})
+    render conn, "followed.html",
+      page: page,
+      current_page: nil
+  end
+
+  def followed(conn, %{"nickname" => nickname}) do
+    followed(conn, %{"nickname" => nickname, "page" => "1"})
   end
 end

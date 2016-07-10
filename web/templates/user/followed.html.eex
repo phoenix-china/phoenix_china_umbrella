@@ -1,0 +1,39 @@
+<div class="panel">
+
+  <%= render "tabs.html",
+    current_page: :user_followed,
+    conn: @conn,
+    user: @user
+  %>
+
+  <div class="user-content">
+    <%= if @page.total_entries > 0 do %>
+    <%= for follow <- @page.entries do %>
+    <div class="media data-item">
+      <div class="media-left">
+        <a href="<%= user_path(@conn, :show, follow.to_user.nickname) %>">
+          <img class="media-object"
+          src="<%= avatar follow.to_user %>"
+          alt="<%= follow.to_user.nickname %>"
+          width="40">
+        </a>
+      </div>
+      <div class="media-body">
+        <div class="media-heading">
+          <%= link follow.to_user.nickname, to: user_path(@conn, :show, follow.to_user.nickname) %>
+        </div>
+      </div>
+    </div>
+    <% end %>
+    <%= pagination_links @conn, @page,
+      action: :followed,
+      path: fn(conn, action, args) -> user_path(conn, action, @user.nickname, args) end
+    %>
+    <%= else %>
+    <div class="text-center">
+      <h3>还没有正在关注!</h3>
+    </div>
+    <%= end %>
+  </div>
+
+</div>

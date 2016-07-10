@@ -56,12 +56,17 @@ defmodule PhoenixChina.Router do
      get "/:nickname/posts", PostController, :user_posts
      get "/:nickname/comments", UserController, :comments
      get "/:nickname/collects", UserController, :collects
+     get "/:nickname/follower", UserController, :follower
+     get "/:nickname/followed", UserController, :followed
 
      get "/password/forget", UserController, :password_forget
      post "/password/forget", UserController, :post_password_forget
 
      get "/password/reset", UserController, :password_reset
      put "/password/reset", UserController, :put_password_reset
+
+     post "/:nickname/follows", UserFollowController, :create
+     delete "/:nickname/follows", UserFollowController, :cancel
   end
 
   scope "/settings", PhoenixChina do
