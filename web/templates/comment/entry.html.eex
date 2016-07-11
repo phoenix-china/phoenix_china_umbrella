@@ -3,7 +3,7 @@
   <div class="media-left">
     <a href="<%= user_path(@conn, :show, @comment.user.nickname) %>">
       <img class="media-object"
-      src="<%= avatar @comment.user %>"
+      src="<%= user_path(@conn, :avatar, @comment.user.nickname) %>"
       alt="<%= @comment.user.nickname %>"
       width="40">
     </a>

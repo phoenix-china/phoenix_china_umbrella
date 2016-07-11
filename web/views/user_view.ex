@@ -1,7 +1,6 @@
 defmodule PhoenixChina.UserView do
   use PhoenixChina.Web, :view
-  import Scrivener.HTML
-
+  
   def subnavs(conn) do
     [
       {:profile, "编辑个人信息", user_path(conn, :profile)},

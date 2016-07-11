@@ -13,7 +13,7 @@
       <div class="media-left">
         <a href="<%= user_path(@conn, :show, follow.to_user.nickname) %>">
           <img class="media-object"
-          src="<%= avatar follow.to_user %>"
+          src="<%= user_path(@conn, :avatar, follow.to_user.nickname) %>"
           alt="<%= follow.to_user.nickname %>"
           width="40">
         </a>

@@ -30,7 +30,7 @@
         <div class="collapse navbar-collapse" id="header-nav">
           <ul class="nav navbar-nav">
             <li><%= link "首页", to: page_path(@conn, :index) %></li>
-            <li><%= link "聊天室", to: page_path(@conn, :room) %></li>
+            <!-- <li><%= link "聊天室", to: page_path(@conn, :room) %></li> -->
           </ul>
 
           <ul class="nav navbar-nav navbar-right">

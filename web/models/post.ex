@@ -30,7 +30,7 @@ defmodule PhoenixChina.Post do
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
-  """
+  """ 
   def changeset(:insert, struct, params) do
     struct
     |> cast(params, @required_params, @optional_params)

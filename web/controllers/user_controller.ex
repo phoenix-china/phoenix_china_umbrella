@@ -323,4 +323,22 @@ defmodule PhoenixChina.UserController do
   def followed(conn, %{"nickname" => nickname}) do
     followed(conn, %{"nickname" => nickname, "page" => "1"})
   end
+
+  def avatar(conn, %{"nickname" => nickname}) do
+    user = User |> where(nickname: ^nickname) |> Repo.one!
+    url = avatar(user)
+    response = HTTPotion.get url
+    text conn, response.body
+  end
+
+  def avatar(user, size \\ 40) do
+    email = user.email
+    |> String.trim
+    |> String.downcase
+
+    email = :crypto.hash(:md5, email)
+    |> Base.encode16(case: :lower)
+
+    "http://gravatar.eqoe.cn/avatar/#{email}?d=wavatar&s=#{size}"
+  end
 end

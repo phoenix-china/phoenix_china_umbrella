@@ -53,6 +53,7 @@ defmodule PhoenixChina.Router do
      pipe_through [:browser, :browser_session]
 
      get "/:nickname", UserController, :show
+     get "/:nickname/avatar", UserController, :avatar
      get "/:nickname/posts", PostController, :user_posts
      get "/:nickname/comments", UserController, :comments
      get "/:nickname/collects", UserController, :collects

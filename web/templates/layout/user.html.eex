@@ -13,7 +13,7 @@
             <div class="media-left">
               <a href="<%= user_path(@conn, :show, @user.nickname)%>">
                 <img class="media-object img-thumbnail"
-                  src="<%= avatar @user, 65 %>"
+                  src="<%= user_path(@conn, :avatar, @user.nickname) %>"
                   alt="<%= @user.nickname %>"
                   style="width: 65px; height: 65px;">
               </a>

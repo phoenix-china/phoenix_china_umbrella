@@ -14,6 +14,8 @@
   "guardian": {:hex, :guardian, "0.12.0", "ab1f0a1ab0cd8f4f9c8cca6e28d61136ca682684cf0f82e55a50e8061be7575a", [:mix], [{:uuid, ">=1.1.1", [hex: :uuid, optional: false]}, {:poison, ">= 1.3.0", [hex: :poison, optional: false]}, {:plug, "~> 1.0", [hex: :plug, optional: false]}, {:jose, "~> 1.6", [hex: :jose, optional: false]}]},
   "hackney": {:hex, :hackney, "1.6.0", "8d1e9440c9edf23bf5e5e2fe0c71de03eb265103b72901337394c840eec679ac", [:rebar3], [{:ssl_verify_fun, "1.1.0", [hex: :ssl_verify_fun, optional: false]}, {:mimerl, "1.0.2", [hex: :mimerl, optional: false]}, {:metrics, "1.0.1", [hex: :metrics, optional: false]}, {:idna, "1.2.0", [hex: :idna, optional: false]}, {:certifi, "0.4.0", [hex: :certifi, optional: false]}]},
   "httpoison": {:hex, :httpoison, "0.9.0", "68187a2daddfabbe7ca8f7d75ef227f89f0e1507f7eecb67e4536b3c516faddb", [:mix], [{:hackney, "~> 1.6.0", [hex: :hackney, optional: false]}]},
+  "httpotion": {:hex, :httpotion, "3.0.0", "4ce0af28f4254bdd0457d0fe065a83787751e0a5b5f5d27030948253be38df5c", [:mix], [{:ibrowse, "~> 4.2", [hex: :ibrowse, optional: false]}]},
+  "ibrowse": {:hex, :ibrowse, "4.2.2", "b32b5bafcc77b7277eff030ed32e1acc3f610c64e9f6aea19822abcadf681b4b", [:rebar3], []},
   "idna": {:hex, :idna, "1.2.0", "ac62ee99da068f43c50dc69acf700e03a62a348360126260e87f2b54eced86b2", [:rebar3], []},
   "jose": {:hex, :jose, "1.7.7", "216bd83512b68aec26c692326c5d0a0267a7d2a29ca4f4dbf22b67b8cceaaa9c", [:mix, :rebar], [{:base64url, "~> 0.0.1", [hex: :base64url, optional: false]}]},
   "mailgun": {:git, "https://github.com/AvaelKross/mailgun.git", "37db643a97994dbc24b68c6e2c19ce332372a895", []},

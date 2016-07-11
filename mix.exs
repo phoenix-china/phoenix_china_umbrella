@@ -19,7 +19,7 @@ defmodule PhoenixChina.Mixfile do
   def application do
     [mod: {PhoenixChina, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :timex, :ueberauth_github]]
+                    :phoenix_ecto, :postgrex, :timex, :ueberauth_github, :httpotion]]
   end
 
   # Specifies which paths to compile per environment.
@@ -47,6 +47,7 @@ defmodule PhoenixChina.Mixfile do
      {:mailgun, github: "AvaelKross/mailgun"},
      {:earmark, "~> 0.2.1"},
      {:ueberauth_github, "~> 0.2"},
+     {:httpotion, "~> 3.0.0"},
    ]
   end
 
