@@ -52,6 +52,8 @@ defmodule PhoenixChina.Web do
       import PhoenixChina.Router.Helpers
       import PhoenixChina.ErrorHelpers
       import PhoenixChina.Gettext
+      import PhoenixChina.ViewHelpers
+      import Scrivener.HTML
     end
   end
 

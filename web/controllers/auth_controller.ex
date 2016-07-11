@@ -16,7 +16,8 @@ defmodule PhoenixChina.AuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-
+    user = auth.extra.raw_info.user
+    # id bio login, html_url
     IO.inspect auth
     text conn, "回调"
 

@@ -37,28 +37,4 @@ defmodule PhoenixChina.ErrorHelpers do
       Gettext.dgettext(PhoenixChina.Gettext, "errors", msg, opts)
     end
   end
-
-  def from_now(datetime) do
-    datetime
-    |> Ecto.DateTime.to_erl
-    |> Timex.from_now("zh")
-  end
-
-  def avatar(user, size \\ 40) do
-    email = user.email
-    |> String.trim
-    |> String.downcase
-
-    email = :crypto.hash(:md5, email)
-    |> Base.encode16(case: :lower)
-
-    "http://gravatar.eqoe.cn/avatar/#{email}?d=wavatar&s=#{size}"
-  end
-
-  def markdown(content) do
-    content
-    |> Earmark.to_html
-    |> raw
-  end
-
 end
