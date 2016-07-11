@@ -9,12 +9,6 @@ defmodule PhoenixChina.PostController do
     when action in [:new, :create, :edit, :update, :delete]
   plug PhoenixChina.GuardianPlug
 
-  def index(conn, _params) do
-    posts = (from Post, order_by: [desc: :inserted_at], preload: [:user])
-    |> Repo.all
-    render(conn, "index.html", posts: posts)
-  end
-
   def new(conn, _params) do
     changeset = Post.changeset(:insert, %Post{})
     render(conn, "new.html", changeset: changeset)
@@ -38,9 +32,17 @@ defmodule PhoenixChina.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    post = (from Post, where: [id: ^id], preload: [:user, :latest_comment, latest_comment: :user]) |> first |> Repo.one!
-    comments = (from Comment, where: [post_id: ^id], order_by: [asc: :inserted_at], preload: [:user])
+    post = Post
+    |> where(id: ^id)
+    |> preload([:user, :latest_comment, latest_comment: :user])
+    |> Repo.one!
+
+    comments = Comment
+    |> where(post_id: ^id)
+    |> order_by(asc: :inserted_at)
+    |> preload([:user])
     |> Repo.all
+
     changeset = Comment.changeset(%Comment{})
 
     render conn, "show.html",

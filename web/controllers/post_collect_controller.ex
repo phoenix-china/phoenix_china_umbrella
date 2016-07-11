@@ -15,13 +15,14 @@ defmodule PhoenixChina.PostCollectController do
   """
   def create(conn, %{"post_id" => post_id}) do
     current_user = current_user(conn)
+    post = Repo.get!(Post, post_id)
     params = %{:post_id => post_id, :user_id => current_user.id}
     changeset = PostCollect.changeset(%PostCollect{}, params)
 
     case Repo.insert(changeset) do
       {:ok, _post_collect} ->
-        User.inc_collect_count(current_user.id, 1)
-        Post.inc_collect_count(post_id, 1)
+        current_user |> User.inc(:collect_count)
+        post |> Post.inc(:collect_count)
 
         conn
         |> put_flash(:info, "收藏成功.")
@@ -38,14 +39,17 @@ defmodule PhoenixChina.PostCollectController do
   """
   def cancel(conn, %{"post_id" => post_id}) do
     current_user = current_user(conn)
+    post = Repo.get!(Post, post_id)
+
     post_collect = PostCollect
     |> where(user_id: ^current_user.id)
     |> where(post_id: ^post_id)
     |> Repo.one!
     Repo.delete!(post_collect)
 
-    User.inc_collect_count(current_user.id, -1)
-    Post.inc_collect_count(post_id, -1)
+    current_user |> User.dsc(:collect_count)
+    post |> Post.dsc(:collect_count)
+    
     conn
     |> put_flash(:info, "取消收藏成功.")
     |> redirect(to: post_path(conn, :show, post_id))

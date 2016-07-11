@@ -12,14 +12,14 @@ defmodule PhoenixChina.CommentPraiseController do
 
   def create(conn, %{"comment_id" => comment_id}) do
     current_user = current_user(conn)
+    comment = Repo.get!(Comment, comment_id)
+
     params = %{:comment_id => comment_id, :user_id => current_user.id}
     changeset = CommentPraise.changeset(%CommentPraise{}, params)
-    comment = Comment |> where(id: ^comment_id) |> Repo.one!
 
     case Repo.insert(changeset) do
       {:ok, _comment_praise} ->
-        Comment.inc_praise_count(comment_id, 1)
-
+        comment |> Comment.inc(:praise_count)
         conn
         |> put_flash(:info, "评论点赞成功.")
         |> redirect(to: post_path(conn, :show, comment.post_id))
@@ -32,14 +32,15 @@ defmodule PhoenixChina.CommentPraiseController do
 
   def cancel(conn, %{"comment_id" => comment_id}) do
     current_user = current_user(conn)
+    comment = Repo.get!(Comment, comment_id)
+    
     comment_praise = CommentPraise
     |> where(user_id: ^current_user.id)
     |> where(comment_id: ^comment_id)
     |> Repo.one!
     Repo.delete!(comment_praise)
 
-    Comment.inc_praise_count(comment_id, -1)
-    comment = Comment |> where(id: ^comment_id) |> Repo.one!
+    comment |> Comment.dsc(:praise_count)
     conn
     |> put_flash(:info, "取消评论点赞成功.")
     |> redirect(to: post_path(conn, :show, comment.post_id))

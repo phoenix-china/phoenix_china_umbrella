@@ -71,12 +71,14 @@ defmodule PhoenixChina.UserController do
   end
 
   def show(conn, %{"nickname" => nickname, "page" => page}) do
-    user = (from User, where: [nickname: ^nickname])
-    |> first
+    user = User
+    |> where(nickname: ^nickname)
     |> Repo.one!
 
-    page = (from Post, where: [user_id: ^user.id], order_by: [desc: :inserted_at],
-                       preload: [:user, :latest_comment, latest_comment: :user])
+    page = Post
+    |> where(user_id: ^user.id)
+    |> order_by(desc: :inserted_at)
+    |> preload([:user, :latest_comment, latest_comment: :user])
     |> Repo.paginate(%{"page" => page})
 
     render conn, "show.html",
@@ -86,26 +88,6 @@ defmodule PhoenixChina.UserController do
 
   def show(conn, %{"nickname" => nickname}) do
     show(conn, %{"nickname" => nickname, "page" => "1"})
-  end
-
-  def show(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
-    changeset = User.changeset(:edit, user)
-    render(conn, "edit.html", user: user, changeset: changeset)
-  end
-
-  def update(conn, %{"id" => id, "user" => user_params}) do
-    user = Repo.get!(User, id)
-    changeset = User.changeset(user, user_params)
-
-    case Repo.update(changeset) do
-      {:ok, user} ->
-        conn
-        |> put_flash(:info, "User updated successfully.")
-        |> redirect(to: user_path(conn, :show, user))
-      {:error, changeset} ->
-        render(conn, "edit.html", user: user, changeset: changeset)
-    end
   end
 
   def profile(conn, _params) do
@@ -127,7 +109,6 @@ defmodule PhoenixChina.UserController do
         |> put_flash(:info, "个人信息编辑成功！")
         |> redirect(to: user_path(conn, :profile))
       {:error, changeset} ->
-        IO.inspect changeset
         render conn, "profile.html",
           current_page: :profile,
           changeset: changeset
@@ -166,12 +147,14 @@ defmodule PhoenixChina.UserController do
   用户评论列表
   """
   def comments(conn, %{"nickname" => nickname, "page" => page}) do
-    user = (from User, where: [nickname: ^nickname])
-    |> first
+    user = User
+    |> where(nickname: ^nickname)
     |> Repo.one!
 
-    page = (from Comment, where: [user_id: ^user.id], order_by: [desc: :inserted_at],
-    preload: [:user, :post, post: :user])
+    page = Comment
+    |> where(user_id: ^user.id)
+    |> order_by(desc: :inserted_at)
+    |> preload([:user, :post, post: :user])
     |> Repo.paginate(%{"page" => page})
 
     render conn, "comments.html",
@@ -184,7 +167,10 @@ defmodule PhoenixChina.UserController do
   end
 
   def collects(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User |> where(nickname: ^nickname) |> Repo.one!
+    user = User
+    |> where(nickname: ^nickname)
+    |> Repo.one!
+
     page = PostCollect
     |> preload([:post, post: [:user, :latest_comment, latest_comment: :user]])
     |> where(user_id: ^user.id)
@@ -229,7 +215,10 @@ defmodule PhoenixChina.UserController do
   end
 
   defp validate_email(changeset) do
-    user = (from User, where: [email: ^changeset.changes.email]) |> first |> Repo.one
+    user = User
+    |> where(email: ^changeset.changes.email)
+    |> Repo.one
+
     case !changeset.errors[:email] && !user do
       true ->
         changeset
@@ -293,10 +282,16 @@ defmodule PhoenixChina.UserController do
   关注者
   """
   def follower(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User |> where(nickname: ^nickname) |> Repo.one!
-    page = UserFollow |> where(to_user_id: ^user.id) |> order_by(desc: :inserted_at)
+    user = User
+    |> where(nickname: ^nickname)
+    |> Repo.one!
+
+    page = UserFollow
+    |> where(to_user_id: ^user.id)
+    |> order_by(desc: :inserted_at)
     |> preload(:user)
     |> Repo.paginate(%{"page" => page})
+
     render conn, "follower.html",
       page: page,
       current_page: nil
@@ -310,10 +305,16 @@ defmodule PhoenixChina.UserController do
   正在关注
   """
   def followed(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User |> where(nickname: ^nickname) |> Repo.one!
-    page = UserFollow |> where(user_id: ^user.id) |> order_by(desc: :inserted_at)
+    user = User
+    |> where(nickname: ^nickname)
+    |> Repo.one!
+
+    page = UserFollow
+    |> where(user_id: ^user.id)
+    |> order_by(desc: :inserted_at)
     |> preload(:to_user)
     |> Repo.paginate(%{"page" => page})
+
     render conn, "followed.html",
       page: page,
       current_page: nil

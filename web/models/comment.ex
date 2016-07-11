@@ -1,6 +1,8 @@
 defmodule PhoenixChina.Comment do
   use PhoenixChina.Web, :model
 
+  alias PhoenixChina.Repo
+
   schema "comments" do
     field :content, :string
     field :praise_count, :integer, default: 0
@@ -33,8 +35,17 @@ defmodule PhoenixChina.Comment do
     struct
   end
 
-  def inc_praise_count(comment_id, value) do
-    from(c in __MODULE__, where: c.id == ^comment_id, update: [inc: [praise_count: ^value]])
-    |> PhoenixChina.Repo.update_all([])
+  def inc(%__MODULE__{:id => comment_id}, :praise_count) do
+    __MODULE__
+    |> where(id: ^comment_id)
+    |> update(inc: [praise_count: 1])
+    |> Repo.update_all([])
+  end
+
+  def dsc(%__MODULE__{:id => comment_id}, :praise_count) do
+    __MODULE__
+    |> where(id: ^comment_id)
+    |> update(inc: [praise_count: -1])
+    |> Repo.update_all([])
   end
 end

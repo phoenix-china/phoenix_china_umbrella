@@ -1,6 +1,8 @@
 defmodule PhoenixChina.User do
   use PhoenixChina.Web, :model
 
+  alias PhoenixChina.Repo
+
   schema "users" do
     field :email, :string
     field :password_hash, :string
@@ -144,26 +146,52 @@ defmodule PhoenixChina.User do
 
   def new_list do
     query = from __MODULE__, order_by: [desc: :inserted_at], limit: 10
-    query |> PhoenixChina.Repo.all
+    query |> Repo.all
   end
 
   def generate_token(user, token_name \\ "user_id") do
     Phoenix.Token.sign(PhoenixChina.Endpoint, token_name, user.id)
   end
 
-  def inc_collect_count(user_id, value) do
-    from(u in __MODULE__, where: u.id == ^user_id, update: [inc: [collect_count: ^value]])
-    |> PhoenixChina.Repo.update_all([])
+  def inc(%__MODULE__{:id => user_id}, :collect_count) do
+    __MODULE__
+    |> where(id: ^user_id)
+    |> update(inc: [collect_count: 1])
+    |> Repo.update_all([])
   end
 
-  def inc_follower_count(user_id, value) do
-    from(u in __MODULE__, where: u.id == ^user_id, update: [inc: [follower_count: ^value]])
-    |> PhoenixChina.Repo.update_all([])
+  def dsc(%__MODULE__{:id => user_id}, :collect_count) do
+    __MODULE__
+    |> where(id: ^user_id)
+    |> update(inc: [collect_count: -1])
+    |> Repo.update_all([])
   end
 
-  def inc_followed_count(user_id, value) do
-    from(u in __MODULE__, where: u.id == ^user_id, update: [inc: [followed_count: ^value]])
-    |> PhoenixChina.Repo.update_all([])
+  def inc(%__MODULE__{:id => user_id}, :follower_count) do
+    __MODULE__
+    |> where(id: ^user_id)
+    |> update(inc: [follower_count: 1])
+    |> Repo.update_all([])
   end
 
+  def dsc(%__MODULE__{:id => user_id}, :follower_count) do
+    __MODULE__
+    |> where(id: ^user_id)
+    |> update(inc: [follower_count: -1])
+    |> Repo.update_all([])
+  end
+
+  def inc(%__MODULE__{:id => user_id}, :followed_count) do
+    __MODULE__
+    |> where(id: ^user_id)
+    |> update(inc: [followed_count: 1])
+    |> Repo.update_all([])
+  end
+
+  def dsc(%__MODULE__{:id => user_id}, :followed_count) do
+    __MODULE__
+    |> where(id: ^user_id)
+    |> update(inc: [followed_count: -1])
+    |> Repo.update_all([])
+  end
 end

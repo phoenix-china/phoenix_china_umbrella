@@ -1,5 +1,7 @@
 defmodule PhoenixChina.Post do
   use PhoenixChina.Web, :model
+
+  alias PhoenixChina.Repo
   alias PhoenixChina.Comment
 
   schema "posts" do
@@ -56,13 +58,52 @@ defmodule PhoenixChina.Post do
     struct
   end
 
-  def inc_collect_count(post_id, value) do
-    from(p in __MODULE__, where: p.id == ^post_id, update: [inc: [collect_count: ^value]])
-    |> PhoenixChina.Repo.update_all([])
+  def set(%__MODULE__{:id => post_id}, :latest_comment_id, value) do
+    __MODULE__
+    |> where(id: ^post_id)
+    |> update(set: [latest_comment_id: ^value])
+    |> Repo.update_all([])
   end
 
-  def inc_praise_count(post_id, value) do
-    from(p in __MODULE__, where: p.id == ^post_id, update: [inc: [praise_count: ^value]])
-    |> PhoenixChina.Repo.update_all([])
+  def inc(%__MODULE__{:id => post_id}, :comment_count) do
+    __MODULE__
+    |> where(id: ^post_id)
+    |> update(inc: [comment_count: 1])
+    |> Repo.update_all([])
+  end
+
+  def dsc(%__MODULE__{:id => post_id}, :comment_count) do
+    __MODULE__
+    |> where(id: ^post_id)
+    |> update(inc: [comment_count: -1])
+    |> Repo.update_all([])
+  end
+
+  def inc(%__MODULE__{:id => post_id}, :collect_count) do
+    __MODULE__
+    |> where(id: ^post_id)
+    |> update(inc: [collect_count: 1])
+    |> Repo.update_all([])
+  end
+
+  def dsc(%__MODULE__{:id => post_id}, :collect_count) do
+    __MODULE__
+    |> where(id: ^post_id)
+    |> update(inc: [collect_count: -1])
+    |> Repo.update_all([])
+  end
+
+  def inc(%__MODULE__{:id => post_id}, :praise_count) do
+    __MODULE__
+    |> where(id: ^post_id)
+    |> update(inc: [praise_count: 1])
+    |> Repo.update_all([])
+  end
+
+  def dsc(%__MODULE__{:id => post_id}, :praise_count) do
+    __MODULE__
+    |> where(id: ^post_id)
+    |> update(inc: [praise_count: -1])
+    |> Repo.update_all([])
   end
 end

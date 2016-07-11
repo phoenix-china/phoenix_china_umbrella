@@ -27,7 +27,10 @@ defmodule PhoenixChina.SessionController do
   end
 
   defp validate_email(changeset) do
-    user = (from User, where: [email: ^changeset.changes.email]) |> first |> Repo.one
+    user = User
+    |> where(email: ^changeset.changes.email)
+    |> Repo.one
+    
     case !changeset.errors[:email] && !user do
       true ->
         changeset

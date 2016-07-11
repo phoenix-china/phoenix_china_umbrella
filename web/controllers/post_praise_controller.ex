@@ -11,12 +11,13 @@ defmodule PhoenixChina.PostPraiseController do
 
   def create(conn, %{"post_id" => post_id}) do
     current_user = current_user(conn)
+    post = Repo.get!(Post, post_id)
     params = %{:post_id => post_id, :user_id => current_user.id}
     changeset = PostPraise.changeset(%PostPraise{}, params)
 
     case Repo.insert(changeset) do
       {:ok, _post_collect} ->
-        Post.inc_praise_count(post_id, 1)
+        post |> Post.inc(:praise_count)
 
         conn
         |> put_flash(:info, "点赞成功.")
@@ -30,13 +31,17 @@ defmodule PhoenixChina.PostPraiseController do
 
   def cancel(conn, %{"post_id" => post_id}) do
     current_user = current_user(conn)
+    post = Repo.get!(Post, post_id)
+
     post_praise = PostPraise
     |> where(user_id: ^current_user.id)
     |> where(post_id: ^post_id)
     |> Repo.one!
+
     Repo.delete!(post_praise)
 
-    Post.inc_praise_count(post_id, -1)
+    post |> Post.dsc(:praise_count)
+    
     conn
     |> put_flash(:info, "取消点赞成功.")
     |> redirect(to: post_path(conn, :show, post_id))
