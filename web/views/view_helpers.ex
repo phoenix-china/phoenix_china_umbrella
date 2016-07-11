@@ -38,7 +38,6 @@ defmodule PhoenixChina.ViewHelpers do
     PostCollect
     |> where(user_id: ^user_id)
     |> where(post_id: ^post_id)
-    |> first
     |> Repo.one
   end
 
@@ -46,7 +45,6 @@ defmodule PhoenixChina.ViewHelpers do
     PostPraise
     |> where(user_id: ^user_id)
     |> where(post_id: ^post_id)
-    |> first
     |> Repo.one
   end
 
@@ -54,7 +52,6 @@ defmodule PhoenixChina.ViewHelpers do
     CommentPraise
     |> where(user_id: ^user_id)
     |> where(comment_id: ^comment_id)
-    |> first
     |> Repo.one
   end
 
