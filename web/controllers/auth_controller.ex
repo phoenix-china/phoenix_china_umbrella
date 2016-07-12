@@ -6,7 +6,7 @@ defmodule PhoenixChina.AuthController do
   use PhoenixChina.Web, :controller
   plug Ueberauth
 
-  alias Ueberauth.Strategy.Helpers
+  # alias Ueberauth.Strategy.Helpers
 
 
   def callback(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do
@@ -16,9 +16,9 @@ defmodule PhoenixChina.AuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    user = auth.extra.raw_info.user
+    # user = auth.extra.raw_info.user
     # id bio login, html_url
-    IO.inspect auth
+    # IO.inspect auth
     text conn, "回调"
 
     # case UserFromAuth.find_or_create(auth) do

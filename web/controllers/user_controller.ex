@@ -326,12 +326,12 @@ defmodule PhoenixChina.UserController do
 
   def avatar(conn, %{"nickname" => nickname}) do
     user = User |> where(nickname: ^nickname) |> Repo.one!
-    url = avatar(user)
+    url = user |> generate_avatar_url
     response = HTTPotion.get url
     text conn, response.body
   end
 
-  def avatar(user, size \\ 40) do
+  defp generate_avatar_url(user, size \\ 40) do
     email = user.email
     |> String.trim
     |> String.downcase

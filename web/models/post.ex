@@ -54,19 +54,12 @@ defmodule PhoenixChina.Post do
     |> Repo.update_all([])
   end
 
-  def inc(module, field)
+  def inc(module \\ %__MODULE__{}, field)
 
   def inc(%__MODULE__{:id => post_id}, :comment_count) do
     __MODULE__
     |> where(id: ^post_id)
     |> update(inc: [comment_count: 1])
-    |> Repo.update_all([])
-  end
-
-  def dsc(%__MODULE__{:id => post_id}, :comment_count) do
-    __MODULE__
-    |> where(id: ^post_id)
-    |> update(inc: [comment_count: -1])
     |> Repo.update_all([])
   end
 
@@ -77,17 +70,26 @@ defmodule PhoenixChina.Post do
     |> Repo.update_all([])
   end
 
-  def dsc(%__MODULE__{:id => post_id}, :collect_count) do
-    __MODULE__
-    |> where(id: ^post_id)
-    |> update(inc: [collect_count: -1])
-    |> Repo.update_all([])
-  end
-
   def inc(%__MODULE__{:id => post_id}, :praise_count) do
     __MODULE__
     |> where(id: ^post_id)
     |> update(inc: [praise_count: 1])
+    |> Repo.update_all([])
+  end
+
+  def dsc(module \\ %__MODULE__{}, field)
+
+  def dsc(%__MODULE__{:id => post_id}, :comment_count) do
+    __MODULE__
+    |> where(id: ^post_id)
+    |> update(inc: [comment_count: -1])
+    |> Repo.update_all([])
+  end
+
+  def dsc(%__MODULE__{:id => post_id}, :collect_count) do
+    __MODULE__
+    |> where(id: ^post_id)
+    |> update(inc: [collect_count: -1])
     |> Repo.update_all([])
   end
 

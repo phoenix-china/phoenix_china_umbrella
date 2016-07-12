@@ -153,17 +153,12 @@ defmodule PhoenixChina.User do
     Phoenix.Token.sign(PhoenixChina.Endpoint, token_name, user.id)
   end
 
+  def inc(module \\ %__MODULE__{}, field)
+
   def inc(%__MODULE__{:id => user_id}, :collect_count) do
     __MODULE__
     |> where(id: ^user_id)
     |> update(inc: [collect_count: 1])
-    |> Repo.update_all([])
-  end
-
-  def dsc(%__MODULE__{:id => user_id}, :collect_count) do
-    __MODULE__
-    |> where(id: ^user_id)
-    |> update(inc: [collect_count: -1])
     |> Repo.update_all([])
   end
 
@@ -174,17 +169,26 @@ defmodule PhoenixChina.User do
     |> Repo.update_all([])
   end
 
-  def dsc(%__MODULE__{:id => user_id}, :follower_count) do
-    __MODULE__
-    |> where(id: ^user_id)
-    |> update(inc: [follower_count: -1])
-    |> Repo.update_all([])
-  end
-
   def inc(%__MODULE__{:id => user_id}, :followed_count) do
     __MODULE__
     |> where(id: ^user_id)
     |> update(inc: [followed_count: 1])
+    |> Repo.update_all([])
+  end
+
+  def dsc(module \\ %__MODULE__{}, field)
+
+  def dsc(%__MODULE__{:id => user_id}, :collect_count) do
+    __MODULE__
+    |> where(id: ^user_id)
+    |> update(inc: [collect_count: -1])
+    |> Repo.update_all([])
+  end
+
+  def dsc(%__MODULE__{:id => user_id}, :follower_count) do
+    __MODULE__
+    |> where(id: ^user_id)
+    |> update(inc: [follower_count: -1])
     |> Repo.update_all([])
   end
 
