@@ -35,7 +35,7 @@ defmodule PhoenixChina.Post do
     struct
     |> cast(params, @required_params, @optional_params)
     |> validate_required(@required_params)
-    |> validate_length(:title, min: 1, max: 26)
+    |> validate_length(:title, min: 1, max: 140)
     |> validate_length(:content, min: 1, max: 20000)
   end
 
@@ -43,7 +43,7 @@ defmodule PhoenixChina.Post do
     struct
     |> cast(params, @required_params, @optional_params)
     |> validate_required(@required_params)
-    |> validate_length(:title, min: 1, max: 26)
+    |> validate_length(:title, min: 1, max: 140)
     |> validate_length(:content, min: 1, max: 20000)
   end
 
@@ -53,6 +53,8 @@ defmodule PhoenixChina.Post do
     |> update(set: [latest_comment_id: ^value])
     |> Repo.update_all([])
   end
+
+  def inc(module, field)
 
   def inc(%__MODULE__{:id => post_id}, :comment_count) do
     __MODULE__
