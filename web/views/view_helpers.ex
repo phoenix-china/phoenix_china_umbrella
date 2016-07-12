@@ -73,7 +73,9 @@ defmodule PhoenixChina.ViewHelpers do
   end
 
   def markdown(content) do
-    content
+    {:safe, clean_body} = Phoenix.HTML.html_escape(content)
+    
+    clean_body
     |> Earmark.to_html
     |> raw
   end

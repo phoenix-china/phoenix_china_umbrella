@@ -19,20 +19,7 @@ defmodule PhoenixChina.Comment do
     struct
     |> cast(params, [:content])
     |> validate_required([:content])
-    |> strip_unsafe_content(params)
-  end
-
-  defp strip_unsafe_content(struct, %{"content" => nil}) do
-    struct
-  end
-
-  defp strip_unsafe_content(struct, %{"content" => body}) do
-    {:safe, clean_body} = Phoenix.HTML.html_escape(body)
-    struct |> put_change(:content, clean_body)
-  end
-
-  defp strip_unsafe_content(struct, _) do
-    struct
+    |> validate_length(:content, min: 1, max: 200)
   end
 
   def inc(%__MODULE__{:id => comment_id}, :praise_count) do

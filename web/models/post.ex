@@ -30,32 +30,21 @@ defmodule PhoenixChina.Post do
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
-  """ 
+  """
   def changeset(:insert, struct, params) do
     struct
     |> cast(params, @required_params, @optional_params)
     |> validate_required(@required_params)
-    |> strip_unsafe_content(params)
+    |> validate_length(:title, min: 1, max: 26)
+    |> validate_length(:content, min: 1, max: 20000)
   end
 
   def changeset(:update, struct, params) do
     struct
     |> cast(params, @required_params, @optional_params)
     |> validate_required(@required_params)
-    |> strip_unsafe_content(params)
-  end
-
-  defp strip_unsafe_content(struct, %{"content" => nil}) do
-    struct
-  end
-
-  defp strip_unsafe_content(struct, %{"content" => body}) do
-    {:safe, clean_body} = Phoenix.HTML.html_escape(body)
-    struct |> put_change(:content, clean_body)
-  end
-
-  defp strip_unsafe_content(struct, _) do
-    struct
+    |> validate_length(:title, min: 1, max: 26)
+    |> validate_length(:content, min: 1, max: 20000)
   end
 
   def set(%__MODULE__{:id => post_id}, :latest_comment_id, value) do
