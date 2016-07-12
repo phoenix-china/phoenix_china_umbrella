@@ -19,3 +19,15 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 import socket from "./socket"
+
+$(function() {
+  var codes = $('code')
+
+  if (codes.length > 0) {
+    $.each(codes, function(index, element) {
+      var $self = $(element)
+
+      $self.text($self.text().replace("&quot;", "\""))
+    })
+  }
+})
