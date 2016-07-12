@@ -8,7 +8,7 @@ defmodule PhoenixChina.PostController do
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
     when action in [:new, :create, :edit, :update, :delete]
   plug PhoenixChina.GuardianPlug
-
+  
   def new(conn, _params) do
     changeset = Post.changeset(:insert, %Post{})
     render(conn, "new.html", changeset: changeset)
@@ -26,7 +26,6 @@ defmodule PhoenixChina.PostController do
         |> put_flash(:info, "帖子发布成功.")
         |> redirect(to: page_path(conn, :index))
       {:error, changeset} ->
-        IO.inspect changeset
         render(conn, "new.html", changeset: changeset)
     end
   end
@@ -102,6 +101,7 @@ defmodule PhoenixChina.PostController do
         |> redirect(to: post_path(conn, :show, id))
 
       true ->
+        post |> Post.set(:latest_comment_id, nil)
         Repo.delete!(post)
 
         conn
