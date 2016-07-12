@@ -27,7 +27,7 @@ $(function() {
     $.each(codes, function(index, element) {
       var $self = $(element)
 
-      $self.text($self.text().replace("&quot;", "\""))
+      $self.text($self.text().replace(new RegExp(/(&quot;)/g), "\""))
     })
   }
 })
