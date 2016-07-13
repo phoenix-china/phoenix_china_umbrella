@@ -11,7 +11,7 @@ defmodule PhoenixChina.UserFollowController do
 
   def create(conn, %{"nickname" => nickname}) do
     current_user = current_user(conn)
-    to_user = User |> where(nickname: ^nickname) |> Repo.one!
+    to_user = User |> Repo.get_by!(nickname: nickname)
 
     params = %{:user_id => current_user.id, :to_user_id => to_user.id}
     changeset = UserFollow.changeset(%UserFollow{}, params)
@@ -33,12 +33,11 @@ defmodule PhoenixChina.UserFollowController do
 
   def cancel(conn, %{"nickname" => nickname}) do
     current_user = current_user(conn)
-    to_user = User |> where(nickname: ^nickname) |> Repo.one!
+    to_user = User |> Repo.get_by!(nickname: nickname)
 
     user_follow = UserFollow
-    |> where(user_id: ^current_user.id)
-    |> where(to_user_id: ^to_user.id)
-    |> Repo.one!
+    |> Repo.get_by!(user_id: current_user.id, to_user_id: to_user.id)
+    
     Repo.delete!(user_follow)
 
     to_user |> User.dsc(:follower_count)

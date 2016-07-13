@@ -14,7 +14,8 @@ defmodule PhoenixChina.SessionController do
 
     case changeset.valid? do
       true ->
-        user = User |> where(email: ^changeset.changes.email) |> Repo.one
+        user = User |> Repo.get_by!(email: changeset.changes.email)
+
         conn
         |> Guardian.Plug.sign_in(user)
         |> put_flash(:info, "登陆成功！")

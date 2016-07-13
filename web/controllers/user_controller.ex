@@ -23,9 +23,7 @@ defmodule PhoenixChina.UserController do
   defp load_data(conn, _) do
     user = case conn.params do
       %{"nickname" => nickname} ->
-        (from User, where: [nickname: ^nickname])
-        |> first
-        |> Repo.one!
+        User |> Repo.get_by!(nickname: nickname)
       _ ->
         current_user(conn)
     end
@@ -55,7 +53,6 @@ defmodule PhoenixChina.UserController do
 
   def create(conn, %{"user" => user_params}) do
     changeset = User.changeset(:signup, %User{}, user_params)
-    |> User.put_password_hash
 
     case Repo.insert(changeset) do
       {:ok, user} ->
@@ -71,9 +68,7 @@ defmodule PhoenixChina.UserController do
   end
 
   def show(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User
-    |> where(nickname: ^nickname)
-    |> Repo.one!
+    user = User |> Repo.get_by!(nickname: nickname)
 
     page = Post
     |> where(user_id: ^user.id)
@@ -145,9 +140,7 @@ defmodule PhoenixChina.UserController do
   用户评论列表
   """
   def comments(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User
-    |> where(nickname: ^nickname)
-    |> Repo.one!
+    user = User |> Repo.get_by!(nickname: nickname)
 
     page = Comment
     |> where(user_id: ^user.id)
@@ -165,9 +158,7 @@ defmodule PhoenixChina.UserController do
   end
 
   def collects(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User
-    |> where(nickname: ^nickname)
-    |> Repo.one!
+    user = User |> Repo.get_by!(nickname: nickname)
 
     page = PostCollect
     |> preload([:post, post: [:user, :latest_comment, latest_comment: :user]])
@@ -200,7 +191,7 @@ defmodule PhoenixChina.UserController do
 
     case changeset.valid? do
       true ->
-        user = User |> where(email: ^changeset.changes.email) |> Repo.one
+        user = User |> Repo.get_by!(email: changeset.changes.email)
         send_reset_password_email(conn, user)
         conn
         |> put_flash(:info, "稍后，您将收到重置密码的电子邮件。")
@@ -265,9 +256,7 @@ defmodule PhoenixChina.UserController do
   关注者
   """
   def follower(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User
-    |> where(nickname: ^nickname)
-    |> Repo.one!
+    user = User |> Repo.get_by!(nickname: nickname)
 
     page = UserFollow
     |> where(to_user_id: ^user.id)
@@ -288,9 +277,7 @@ defmodule PhoenixChina.UserController do
   正在关注
   """
   def followed(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User
-    |> where(nickname: ^nickname)
-    |> Repo.one!
+    user = User |> Repo.get_by!(nickname: nickname)
 
     page = UserFollow
     |> where(user_id: ^user.id)
@@ -308,7 +295,7 @@ defmodule PhoenixChina.UserController do
   end
 
   def avatar(conn, %{"nickname" => nickname}) do
-    user = User |> where(nickname: ^nickname) |> Repo.one!
+    user = User |> Repo.get_by!(nickname: nickname)
     url = user |> generate_avatar_url
     response = HTTPotion.get url
     text conn, response.body

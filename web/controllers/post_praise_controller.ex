@@ -34,14 +34,12 @@ defmodule PhoenixChina.PostPraiseController do
     post = Repo.get!(Post, post_id)
 
     post_praise = PostPraise
-    |> where(user_id: ^current_user.id)
-    |> where(post_id: ^post_id)
-    |> Repo.one!
+    |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
 
     Repo.delete!(post_praise)
 
     post |> Post.dsc(:praise_count)
-    
+
     conn
     |> put_flash(:info, "取消点赞成功.")
     |> redirect(to: post_path(conn, :show, post_id))

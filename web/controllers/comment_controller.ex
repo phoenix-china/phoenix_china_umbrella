@@ -12,14 +12,12 @@ defmodule PhoenixChina.CommentController do
 
   def show(conn, %{"post_id" => post_id, "id" => comment_id}) do
     post = Post
-    |> where(id: ^post_id)
     |> preload([:user, :latest_comment, latest_comment: :user])
-    |> Repo.one!
+    |> Repo.get!(post_id)
 
     comment = Comment
-    |> where(id: ^comment_id)
     |> preload(:user)
-    |> Repo.one!
+    |> Repo.get!(comment_id)
 
     render conn, "post.html",
       layout: {LayoutView, "base.html"},

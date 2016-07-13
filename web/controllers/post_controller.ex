@@ -8,7 +8,7 @@ defmodule PhoenixChina.PostController do
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
     when action in [:new, :create, :edit, :update, :delete]
   plug PhoenixChina.GuardianPlug
-  
+
   def new(conn, _params) do
     changeset = Post.changeset(:insert, %Post{})
     render(conn, "new.html", changeset: changeset)
@@ -32,9 +32,8 @@ defmodule PhoenixChina.PostController do
 
   def show(conn, %{"id" => id}) do
     post = Post
-    |> where(id: ^id)
     |> preload([:user, :latest_comment, latest_comment: :user])
-    |> Repo.one!
+    |> Repo.get!(id)
 
     comments = Comment
     |> where(post_id: ^id)

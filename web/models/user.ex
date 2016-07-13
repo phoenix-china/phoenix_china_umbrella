@@ -42,6 +42,7 @@ defmodule PhoenixChina.User do
     |> validate_length(:nickname, min: 1, max: 18)
     |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许使用的用户名")
     |> unique_constraint(:nickname, message: "昵称已被注册啦！")
+    |> put_password_hash
   end
 
   def changeset(:signin, struct, params) do
@@ -95,9 +96,7 @@ defmodule PhoenixChina.User do
   defp validate_email(changeset) do
     case changeset.changes do
       %{"email": email} ->
-        user = __MODULE__
-        |> where(email: ^email)
-        |> PhoenixChina.Repo.one
+        user = __MODULE__ |> Repo.get_by(email: email)
 
         case !!user do
           true ->
@@ -114,7 +113,7 @@ defmodule PhoenixChina.User do
   def validate_password(changeset, field \\ :password) do
     user = case changeset.changes do
       %{"email": email} ->
-        __MODULE__ |> where(email: ^email) |> Repo.one
+        __MODULE__ |> Repo.get_by!(email: email)
       _ ->
         changeset.data
     end
@@ -149,7 +148,7 @@ defmodule PhoenixChina.User do
     token = get_field(changeset, field)
     case Phoenix.Token.verify(PhoenixChina.Endpoint, token_name, token, max_age: max_age) do
       {:ok, user_id} ->
-        user = (from __MODULE__, where: [id: ^user_id]) |> first |> PhoenixChina.Repo.one!
+        user = __MODULE__ |> Repo.get!(user_id)
         changeset
         |> Ecto.Changeset.put_change(:user, user)
       {:error, :invalid} ->
@@ -177,8 +176,10 @@ defmodule PhoenixChina.User do
   end
 
   def new_list do
-    query = from __MODULE__, order_by: [desc: :inserted_at], limit: 10
-    query |> Repo.all
+    __MODULE__
+    |> order_by(desc: :inserted_at)
+    |> limit(10)
+    |> Repo.all
   end
 
   def generate_token(user, token_name \\ "user_id") do

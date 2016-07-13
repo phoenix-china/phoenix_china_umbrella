@@ -42,14 +42,13 @@ defmodule PhoenixChina.PostCollectController do
     post = Repo.get!(Post, post_id)
 
     post_collect = PostCollect
-    |> where(user_id: ^current_user.id)
-    |> where(post_id: ^post_id)
-    |> Repo.one!
+    |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
+
     Repo.delete!(post_collect)
 
     current_user |> User.dsc(:collect_count)
     post |> Post.dsc(:collect_count)
-    
+
     conn
     |> put_flash(:info, "取消收藏成功.")
     |> redirect(to: post_path(conn, :show, post_id))
