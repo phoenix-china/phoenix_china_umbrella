@@ -18,9 +18,9 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :password_confirm, "确认新密码", class: "control-label" %>
-    <%= password_input f, :password_confirm, class: "form-control" %>
-    <%= error_tag f, :password_confirm %>
+    <%= label f, :password_confirmation, "确认新密码", class: "control-label" %>
+    <%= password_input f, :password_confirmation, class: "form-control" %>
+    <%= error_tag f, :password_confirmation %>
   </div>
 
   <div class="form-group">

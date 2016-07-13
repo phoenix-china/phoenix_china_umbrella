@@ -38,6 +38,7 @@ defmodule PhoenixChina.CommentController do
       {:ok, comment} ->
         post |> Post.set(:latest_comment_id, comment.id)
         post |> Post.inc(:comment_count)
+
         conn
         |> put_flash(:info, "评论创建成功.")
         |> redirect(to: post_path(conn, :show, post_id))
@@ -108,7 +109,7 @@ defmodule PhoenixChina.CommentController do
         Repo.delete!(comment)
 
         post |> Post.dsc(:comment_count)
-        
+
         conn
         |> put_flash(:info, "评论删除成功！")
         |> redirect(to: post_path(conn, :show, post_id))

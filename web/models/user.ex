@@ -14,8 +14,8 @@ defmodule PhoenixChina.User do
     field :followed_count, :integer, default: 0
 
     field :password, :string, virtual: true
+    field :password_confirmation, :string, virtual: true
     field :old_password, :string, virtual: true
-    field :password_confirm, :string, virtual: true
     field :token, :string, virtual: true
 
     timestamps()
@@ -50,13 +50,18 @@ defmodule PhoenixChina.User do
     |> validate_required([:email, :password], message: "不能为空")
     |> validate_format(:email, ~r/@/, message: "请输入正确的邮箱地址")
     |> validate_length(:password, min: 6, max: 128)
+    |> validate_email
+    |> validate_password(:password)
   end
 
   def changeset(:account, struct, params) do
     struct
-    |> cast(params, [:old_password, :password, :password_confirm])
-    |> validate_required([:old_password, :password, :password_confirm], message: "不能为空")
+    |> cast(params, [:old_password, :password, :password_confirmation])
+    |> validate_required([:old_password, :password, :password_confirmation], message: "不能为空")
     |> validate_length(:password, min: 6, max: 128)
+    |> validate_confirmation(:password, message: "两次密码输入不一致")
+    |> validate_password(:old_password)
+    |> put_password_hash
   end
 
   def changeset(:password_forget, struct, params) do
@@ -64,15 +69,17 @@ defmodule PhoenixChina.User do
     |> cast(params, [:email])
     |> validate_required([:email], message: "不能为空")
     |> validate_format(:email, ~r/@/, message: "请输入正确的邮箱地址")
+    |> validate_email
   end
 
   def changeset(:password_reset, struct, params) do
     struct
-    |> cast(params, [:token, :password, :password_confirm])
-    |> validate_required([:token, :password, :password_confirm], message: "不能为空")
+    |> cast(params, [:token, :password, :password_confirmation])
+    |> validate_required([:token, :password, :password_confirmation], message: "不能为空")
     |> validate_length(:password, min: 6, max: 128)
-    |> validate_equal_to(:password_confirm, :password)
+    |> validate_confirmation(:password, message: "两次密码输入不一致")
     |> validate_token(:token, "user_id", 60 * 60 * 24)
+    |> put_password_hash
   end
 
   def changeset(:profile, struct, params) do
@@ -85,45 +92,55 @@ defmodule PhoenixChina.User do
     |> validate_length(:bio, max: 140)
   end
 
-  def put_password_hash(changeset) do
-    password_hash = changeset.changes.password
-    |> Comeonin.Bcrypt.hashpwsalt
+  defp validate_email(changeset) do
+    case changeset.changes do
+      %{"email": email} ->
+        user = __MODULE__
+        |> where(email: ^email)
+        |> PhoenixChina.Repo.one
 
-    changeset
-    |> put_change(:password_hash, password_hash)
-  end
-
-  def check_password(password, password_hash) do
-    password
-    |> Comeonin.Bcrypt.checkpw(password_hash)
-  end
-
-  def check_password?(password, password_hash) do
-    check_password(password, password_hash)
-  end
-
-  def validate_password(changeset, field) do
-    password = get_field(changeset, field)
-    password_hash = get_field(changeset, :password_hash)
-
-    case check_password?(password, password_hash) do
-      false ->
-        changeset
-        |> add_error(field, "密码错误")
-      true ->
+        case !!user do
+          true ->
+            changeset
+          false ->
+            changeset
+            |> Ecto.Changeset.add_error(:email, "用户不存在")
+        end
+      _ ->
         changeset
     end
   end
 
-  def validate_equal_to(changeset, field, to_field) do
-    data1 = get_field(changeset, field)
-    data2 = get_field(changeset, to_field)
+  def validate_password(changeset, field \\ :password) do
+    user = case changeset.changes do
+      %{"email": email} ->
+        __MODULE__ |> where(email: ^email) |> Repo.one
+      _ ->
+        changeset.data
+    end
 
-    case data1 == data2 do
-      false ->
-        changeset
-        |> add_error(field, "两次输入不一致")
-      true ->
+    IO.inspect user
+
+    case user do
+      %{"password_hash": password_hash} ->
+        changeset |> validate_change(field, fn field, password ->
+          if password |> String.length <= 0 do
+            []
+          else
+            case check_password?(password, password_hash) do
+              true ->
+                []
+              false ->
+                case field do
+                  :old_password ->
+                    [old_password: "密码错误"]
+                  _ ->
+                    [password: "密码错误"]
+                end
+            end
+          end
+        end)
+      _ ->
         changeset
     end
   end
@@ -142,6 +159,21 @@ defmodule PhoenixChina.User do
         changeset
         |> Ecto.Changeset.add_error(field, "token已过期，请重新申请重置密码！")
     end
+  end
+
+  def put_password_hash(changeset) do
+    case changeset.changes do
+      %{:password => password} ->
+        changeset
+        |> put_change(:password_hash, Comeonin.Bcrypt.hashpwsalt(password))
+      _ ->
+        changeset
+    end
+  end
+
+  def check_password?(password, password_hash) do
+    password
+    |> Comeonin.Bcrypt.checkpw(password_hash)
   end
 
   def new_list do

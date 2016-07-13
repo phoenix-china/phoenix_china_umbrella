@@ -127,9 +127,6 @@ defmodule PhoenixChina.UserController do
   def put_account(conn, %{"user" => user_params}) do
     user = current_user(conn)
     changeset = User.changeset(:account, user, user_params)
-    |> User.validate_password(:old_password)
-    |> User.validate_equal_to(:password_confirm, :password)
-    |> User.put_password_hash
 
     case Repo.update(changeset) do
       {:ok, _user} ->
@@ -137,6 +134,7 @@ defmodule PhoenixChina.UserController do
         |> put_flash(:info, "密码修改成功！")
         |> redirect(to: user_path(conn, :account))
       {:error, changeset} ->
+        changeset = %{changeset | action: :account}
         render conn, "account.html",
           current_page: :account,
           changeset: changeset
@@ -191,6 +189,7 @@ defmodule PhoenixChina.UserController do
   """
   def password_forget(conn, _params) do
     changeset = User.changeset(:password_forget, %User{})
+
     render conn, "password_forget.html",
       layout: {LayoutView, "app.html"},
       changeset: changeset
@@ -198,11 +197,11 @@ defmodule PhoenixChina.UserController do
 
   def post_password_forget(conn, %{"user" => user_params}) do
     changeset = User.changeset(:password_forget, %User{}, user_params)
-    |> validate_email
 
     case changeset.valid? do
       true ->
-        send_reset_password_email(conn, changeset.changes.user)
+        user = User |> where(email: ^changeset.changes.email) |> Repo.one
+        send_reset_password_email(conn, user)
         conn
         |> put_flash(:info, "稍后，您将收到重置密码的电子邮件。")
         |> redirect(to: user_path(conn, :password_forget))
@@ -211,21 +210,6 @@ defmodule PhoenixChina.UserController do
         render conn, "password_forget.html",
           layout: {LayoutView, "app.html"},
           changeset: changeset
-    end
-  end
-
-  defp validate_email(changeset) do
-    user = User
-    |> where(email: ^changeset.changes.email)
-    |> Repo.one
-
-    case !changeset.errors[:email] && !user do
-      true ->
-        changeset
-        |> Ecto.Changeset.add_error(:email, "邮箱未注册")
-      false ->
-        changeset
-        |> Ecto.Changeset.put_change(:user, user)
     end
   end
 
@@ -264,7 +248,6 @@ defmodule PhoenixChina.UserController do
   def put_password_reset(conn, %{"user" => user_params}) do
     changeset = User.changeset(:password_reset, %User{}, user_params)
     changeset = User.changeset(:password_reset, changeset.changes.user, user_params)
-    |> User.put_password_hash
 
     case Repo.update(changeset) do
       {:ok, _user} ->
