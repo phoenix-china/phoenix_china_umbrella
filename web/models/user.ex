@@ -118,8 +118,6 @@ defmodule PhoenixChina.User do
         changeset.data
     end
 
-    IO.inspect user
-
     case user do
       %{"password_hash": password_hash} ->
         changeset |> validate_change(field, fn field, password ->
