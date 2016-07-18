@@ -243,7 +243,7 @@ defmodule PhoenixChina.UserController do
     case Repo.update(changeset) do
       {:ok, _user} ->
         conn
-        |> put_flash(:info, "密码重置成功，请登陆！")
+        |> put_flash(:info, "密码重置成功，请登录！")
         |> redirect(to: session_path(conn, :new))
       {:error, changeset} ->
         render conn, "password_reset.html",

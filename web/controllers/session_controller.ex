@@ -18,7 +18,7 @@ defmodule PhoenixChina.SessionController do
 
         conn
         |> Guardian.Plug.sign_in(user)
-        |> put_flash(:info, "登陆成功！")
+        |> put_flash(:info, "登录成功！")
         |> redirect(to: page_path(conn, :index))
       false ->
         changeset = %{changeset | action: :signin}
@@ -28,7 +28,7 @@ defmodule PhoenixChina.SessionController do
 
   def delete(conn, _params) do
     Guardian.Plug.sign_out(conn)
-    |> put_flash(:info, "已退出登陆")
+    |> put_flash(:info, "已退出登录")
     |> redirect(to: page_path(conn, :index))
   end
 end

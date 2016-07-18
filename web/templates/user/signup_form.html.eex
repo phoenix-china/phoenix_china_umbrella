@@ -7,7 +7,7 @@
 
   <div class="form-group">
     <%= label f, :email, "邮箱", class: "control-label" %>
-    <%= link "已有账号，我要登陆！", to: session_path(@conn, :new), style: "font-size: 12px; margin-left: 10px;" %>
+    <%= link "已有账号，我要登录！", to: session_path(@conn, :new), style: "font-size: 12px; margin-left: 10px;" %>
     <%= text_input f, :email, class: "form-control" %>
     <%= error_tag f, :email %>
   </div>
