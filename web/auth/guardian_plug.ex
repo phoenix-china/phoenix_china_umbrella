@@ -5,10 +5,14 @@ defmodule PhoenixChina.GuardianPlug do
   def init(opts), do: opts
 
   def call(conn, _opts) do
+    new_users = ConCache.get_or_store(:phoenix_china, "new_users", fn() ->
+      User.new_list()
+    end)
+
     conn
     |> Plug.Conn.assign(:logged_in, logged_in?(conn))
     |> Plug.Conn.assign(:current_user, current_user(conn))
-    |> Plug.Conn.assign(:new_users, User.new_list())
+    |> Plug.Conn.assign(:new_users, new_users)
 
   end
 end

@@ -295,10 +295,14 @@ defmodule PhoenixChina.UserController do
   end
 
   def avatar(conn, %{"nickname" => nickname}) do
-    user = User |> Repo.get_by!(nickname: nickname)
-    url = user |> generate_avatar_url
-    response = HTTPotion.get url
-    text conn, response.body
+    content = ConCache.get_or_store(:phoenix_china, "avatar:#{nickname}", fn() ->
+      user = User |> Repo.get_by!(nickname: nickname)
+      url = user |> generate_avatar_url
+      response = HTTPotion.get url
+      response.body
+    end)
+
+    text conn, content
   end
 
   defp generate_avatar_url(user, size \\ 40) do

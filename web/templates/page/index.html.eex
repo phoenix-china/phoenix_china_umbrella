@@ -14,5 +14,6 @@
   <span>共有<%= @page.total_entries %>条帖子，当前第<%= @page.page_number %>页</span>
 </div>
 
-<%= render PhoenixChina.PostView, "entries.html", conn: @conn, page: @page %>
+<%= raw @post_list_html %>
+
 <%= pagination_links @conn, @page, path: &page_path/3 %>

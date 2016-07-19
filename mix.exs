@@ -18,8 +18,9 @@ defmodule PhoenixChina.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {PhoenixChina, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :timex, :ueberauth_github, :httpotion]]
+     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger,
+      :gettext, :phoenix_ecto, :postgrex, :timex, :ueberauth_github, :httpotion,
+      :con_cache]]
   end
 
   # Specifies which paths to compile per environment.
@@ -30,25 +31,27 @@ defmodule PhoenixChina.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.2.0"},
-     {:phoenix_pubsub, "~> 1.0"},
-     {:phoenix_ecto, "~> 3.0"},
-     {:postgrex, ">= 0.0.0"},
-     {:phoenix_html, "~> 2.6"},
-     {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:gettext, "~> 0.11"},
-     {:cowboy, "~> 1.0"},
-     {:comeonin, "~> 2.5"},
-     {:guardian, "~> 0.12.0"},
-     {:scrivener, "~> 2.0"},
-     {:scrivener_ecto, "~> 1.0"},
-     {:scrivener_html, "~> 1.1"},
-     {:timex, github: "PhoenixChina/timex"},
-     {:mailgun, github: "AvaelKross/mailgun"},
-     {:earmark, "~> 0.2.1"},
-     {:ueberauth_github, "~> 0.2"},
-     {:httpotion, "~> 3.0.0"},
-   ]
+    [
+      {:phoenix, "~> 1.2.0"},
+      {:phoenix_pubsub, "~> 1.0"},
+      {:phoenix_ecto, "~> 3.0"},
+      {:postgrex, ">= 0.0.0"},
+      {:phoenix_html, "~> 2.6"},
+      {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:gettext, "~> 0.11"},
+      {:cowboy, "~> 1.0"},
+      {:comeonin, "~> 2.5"},
+      {:guardian, "~> 0.12.0"},
+      {:scrivener, "~> 2.0"},
+      {:scrivener_ecto, "~> 1.0"},
+      {:scrivener_html, "~> 1.1"},
+      {:timex, github: "PhoenixChina/timex"},
+      {:mailgun, github: "AvaelKross/mailgun"},
+      {:earmark, "~> 0.2.1"},
+      {:ueberauth_github, "~> 0.2"},
+      {:httpotion, "~> 3.0.0"},
+      {:con_cache, "~> 0.11.1"},
+    ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

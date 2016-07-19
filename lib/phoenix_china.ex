@@ -14,6 +14,10 @@ defmodule PhoenixChina do
       supervisor(PhoenixChina.Endpoint, []),
       # Start your own worker by calling: PhoenixChina.Worker.start_link(arg1, arg2, arg3)
       # worker(PhoenixChina.Worker, [arg1, arg2, arg3]),
+      worker(ConCache, [
+        [ttl_check: :timer.seconds(1), ttl: :timer.seconds(5)],
+        [name: :phoenix_china]
+      ])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
