@@ -9,7 +9,9 @@ defmodule PhoenixChina.PageController do
     |> order_by(desc: :inserted_at)
     |> preload([:user, :latest_comment, latest_comment: :user])
     |> Repo.paginate(params)
-    
+
+    IO.inspect Application.get_env(:phoenix_china, PhoenixChina.Luosimao)
+
     render conn, "index.html",
       posts: page.entries,
       page: page

@@ -74,9 +74,13 @@ defmodule PhoenixChina.ViewHelpers do
 
   def markdown(content) do
     {:safe, clean_body} = Phoenix.HTML.html_escape(content)
-    
+
     clean_body
     |> Earmark.to_html
     |> raw
+  end
+
+  def captcha_site_key() do
+    PhoenixChina.Luosimao.captcha_site_key 
   end
 end
