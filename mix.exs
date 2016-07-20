@@ -20,7 +20,7 @@ defmodule PhoenixChina.Mixfile do
     [mod: {PhoenixChina, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger,
       :gettext, :phoenix_ecto, :postgrex, :timex, :ueberauth_github, :httpotion,
-      :con_cache]]
+      :con_cache, :qiniu]]
   end
 
   # Specifies which paths to compile per environment.
@@ -51,6 +51,7 @@ defmodule PhoenixChina.Mixfile do
       {:ueberauth_github, "~> 0.2"},
       {:httpotion, "~> 3.0.0"},
       {:con_cache, "~> 0.11.1"},
+      {:qiniu, "~> 0.3.0"},
     ]
   end
 

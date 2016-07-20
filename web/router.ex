@@ -24,6 +24,7 @@ defmodule PhoenixChina.Router do
     pipe_through [:browser, :browser_session]
 
     get "/", PageController, :index
+    post "/upload", PageController, :upload
     get "/signup", UserController, :new
     post "/signup", UserController, :create
     get "/signin", SessionController, :new
@@ -88,7 +89,9 @@ defmodule PhoenixChina.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", PhoenixChina do
-  #   pipe_through :api
-  # end
+  scope "/api/v1", PhoenixChina do
+    pipe_through :api
+
+    post "/upload", API.V1.UploadController, :create
+  end
 end
