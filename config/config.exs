@@ -40,4 +40,27 @@ config :ueberauth, Ueberauth,
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
+
+# @doc """
+# config.secret.exs content =>
+# """
+#
+# config :phoenix_china,
+#   mailgun_domain: "xxxxxx",
+#   mailgun_key: "xxxxxx"
+#
+# config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+#   client_id: "xxxxxx",
+#   client_secret: "xxxxxx"
+#
+# config :phoenix_china, PhoenixChina.Luosimao,
+#   site_key: "xxxxxx",
+#   api_key: "xxxxxx"
+#
+# config :qiniu, Qiniu,
+#   access_key: "xxxxxx",
+#   secret_key: "xxxxxx",
+#   resource: "xxxxxx",
+#   domain: "xxxxxx"
+
 import_config "config.secret.exs"

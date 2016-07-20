@@ -42,6 +42,7 @@ config :phoenix_china, PhoenixChina.Repo,
   hostname: "localhost",
   pool_size: 10
 
+# 供本地测试使用， 支持localhost, 127.0.0.1
 config :phoenix_china, PhoenixChina.Luosimao,
   site_key: "2563bdb7c87ff384e025d263aa982552",
   api_key: "ab28caeb5aca5a02b7432994650f9665"
