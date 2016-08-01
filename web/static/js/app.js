@@ -26,8 +26,11 @@ $(function() {
   if (codes.length > 0) {
     $.each(codes, function(index, element) {
       var $self = $(element)
-
-      $self.text($self.text().replace(new RegExp(/(&quot;)/g), "\""))
+      var text = $self.text();
+      text = text.replace(new RegExp(/(&quot;)/g), "\"");
+      text = text.replace(new RegExp(/(&lt;)/g), "<");
+      text = text.replace(new RegExp(/(&gt;)/g), ">");
+      $self.text(text);
     })
   }
 })
