@@ -203,6 +203,10 @@ defmodule PhoenixChina.User do
     changeset |> put_change(:avatar, avatar)
   end
 
+  def put_avatar(%Ecto.Changeset{valid?: false} = changeset) do
+    changeset
+  end
+
   def new_list do
     __MODULE__
     |> order_by(desc: :inserted_at)
