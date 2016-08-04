@@ -10,8 +10,19 @@
       <% end %>
 
       <div class="form-group">
-        <%= label f, :avatar, "头像", class: "control-label" %> 
-        <%= file_input f, :avatar, class: "form-control" %>
+        <%= label f, :avatar, "头像", class: "control-label" %>
+        <%= hidden_input f, :avatar, class: "form-control" %>
+        <div id="user-avatar-upload">
+          <img id="user-avatar-img"
+               src="<%= @current_user.avatar %>"
+               alt="<%= @current_user.nickname %>"
+               width="200"
+               height="200" />
+          <file-upload name="file" action="<%= upload_path(@conn, :create) %>">
+            <span id="file-label-text">上传头像</span>
+          </file-upload>
+        </div>
+
        	<%= error_tag f, :avatar %>
       </div>
 
@@ -33,3 +44,46 @@
     <% end %>
   </div>
 </div>
+<style media="screen">
+  #user-avatar-upload button {display: none;}
+  #user-avatar-upload label {
+    display: inline-block;
+    width: 200px;
+    height: 30px;
+    margin-top: 10px;
+    background: #337ab7;
+    color: #fff;
+    overflow: hidden;
+    text-align: center;
+    line-height: 30px;
+  }
+  #user-avatar-upload label input {
+    font-size: 100px;
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+</style>
+<script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
+<script src="https://obdfrf8k0.qnssl.com/vue.file-upload.js"></script>
+<script src="https://obdfrf8k0.qnssl.com/vue.pretty-bytes.js"></script>
+<script>
+  var App = new Vue({
+    el: '#user-avatar-upload',
+    events: {
+      onFileChange: function(file) {
+        $('#user-avatar-upload').find('button').click();
+        $('#file-label-text').text('上传中...');
+      },
+      onFileUpload: function(file, res) {
+        var avatar_url = res.data.url + '?imageView2/1/w/200/h/200';
+        $('input#user_avatar').val(avatar_url);
+        $('#user-avatar-img').attr('src', avatar_url);
+        $('#file-label-text').text('上传头像');
+      },
+      onFileError: function(file, res) {
+        console.error('onFileError', file, res);
+      }
+    }
+  });
+</script>

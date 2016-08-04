@@ -98,13 +98,13 @@ defmodule PhoenixChina.UserController do
     user = current_user(conn)
 
     #upload to qiniu
-    file = user_params["avatar"]
-    unless is_nil(file) do
-      [filename, url] = PhoenixChina.Qiniu.filename_and_url(file)
-      Task.async(fn -> PhoenixChina.Qiniu.upload(file, filename) end)
-      user_params = %{user_params | "avatar" => url}
-    end   
-    
+    # file = user_params["avatar"]
+    # unless is_nil(file) do
+    #   [filename, url] = PhoenixChina.Qiniu.filename_and_url(file)
+    #   Task.async(fn -> PhoenixChina.Qiniu.upload(file, filename) end)
+    #   user_params = %{user_params | "avatar" => url}
+    # end
+
     changeset = User.changeset(:profile, user, user_params)
 
     case Repo.update(changeset) do
@@ -309,7 +309,7 @@ defmodule PhoenixChina.UserController do
       url = cond do
               !is_nil(user.avatar) -> user.avatar
               true -> user |> generate_avatar_url
-            end   
+            end
       response = HTTPotion.get url
       response.body
     end)
