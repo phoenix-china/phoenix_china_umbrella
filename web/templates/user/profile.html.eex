@@ -14,8 +14,8 @@
         <%= hidden_input f, :avatar, class: "form-control" %>
         <div id="user-avatar-upload">
           <img id="user-avatar-img"
-               src="<%= user_path(@conn, :avatar, @user.nickname) %>"
-               alt="<%= @current_user.nickname %>"
+               src="<%= @user.avatar %>"
+               alt="<%= @user.nickname %>"
                width="200"
                height="200" />
           <file-upload name="file" action="<%= upload_path(@conn, :create) %>">

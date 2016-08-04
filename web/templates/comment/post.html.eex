@@ -5,7 +5,7 @@
           <div class="post-user pull-right">
             <a href="<%= user_path(@conn, :show, @post.user.nickname) %>">
               <img class="media-object"
-              src="<%= user_path(@conn, :avatar, @post.user.nickname) %>"
+              src="<%= @post.user.avatar %>"
               alt="<%= @post.user.nickname %>"
               width="40">
             </a>
@@ -71,7 +71,7 @@
         <div class="media-left">
           <a href="<%= user_path(@conn, :show, @comment.user.nickname) %>">
             <img class="media-object"
-            src="<%= user_path(@conn, :avatar, @comment.user.nickname) %>"
+            src="<%= @comment.user.avatar %>"
             alt="<%= @comment.user.nickname %>"
             width="40">
           </a>

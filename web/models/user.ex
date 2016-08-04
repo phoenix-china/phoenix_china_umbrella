@@ -44,6 +44,7 @@ defmodule PhoenixChina.User do
     |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许使用的用户名")
     |> unique_constraint(:nickname, message: "昵称已被注册啦！")
     |> put_password_hash
+    |> put_avatar
   end
 
   def changeset(:signin, struct, params) do
@@ -187,6 +188,19 @@ defmodule PhoenixChina.User do
   def check_password?(password, password_hash) do
     password
     |> Comeonin.Bcrypt.checkpw(password_hash)
+  end
+
+  def put_avatar(%Ecto.Changeset{valid?: true} = changeset) do
+    email = get_field(changeset, :email)
+    |> String.trim
+    |> String.downcase
+
+    email_md5 = :crypto.hash(:md5, email)
+    |> Base.encode16(case: :lower)
+
+    avatar = "https://gravatar.tycdn.net/avatar/#{email_md5}?d=wavatar&s=#200"
+
+    changeset |> put_change(:avatar, avatar)
   end
 
   def new_list do
