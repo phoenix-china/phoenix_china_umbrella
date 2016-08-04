@@ -36,9 +36,12 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] 点赞帖子
 - [x] 点赞评论
 - [x] 用户互相关注
+- [x] 文件上传
+- [x] 用户修改头像
 - [ ] 站内通知
 - [ ] 帖子标签
 - [ ] 回复用户的评论
-- [x] 用户修改头像
 - [ ] 用户积分
-- [ ] 文件上传
+
+## 贡献
+- ![holin](https://avatars0.githubusercontent.com/u/1019?v=3&s=20) [holin](https://github.com/holin)
