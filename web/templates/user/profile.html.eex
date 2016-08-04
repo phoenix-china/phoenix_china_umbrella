@@ -14,7 +14,7 @@
         <%= hidden_input f, :avatar, class: "form-control" %>
         <div id="user-avatar-upload">
           <img id="user-avatar-img"
-               src="<%= @current_user.avatar %>"
+               src="<%= user_path(@conn, :avatar, @user.nickname) %>"
                alt="<%= @current_user.nickname %>"
                width="200"
                height="200" />
@@ -64,7 +64,7 @@
     cursor: pointer;
   }
 </style>
-<script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
 <script src="https://obdfrf8k0.qnssl.com/vue.file-upload.js"></script>
 <script src="https://obdfrf8k0.qnssl.com/vue.pretty-bytes.js"></script>
 <script>
