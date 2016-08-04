@@ -5,6 +5,10 @@ defmodule PhoenixChina.Qiniu do
 
   def upload(file) do
     filename = generate_filename(file)
+    upload(file, filename)
+  end
+
+  def upload(file, filename) do 
     response = Qiniu.Uploader.upload @policy, file.path, key: filename
 
     case response.body |> Poison.Parser.parse! do
@@ -17,6 +21,11 @@ defmodule PhoenixChina.Qiniu do
       errors ->
         {:error, errors}
     end
+  end
+
+  def filename_and_url(file) do
+    filename = generate_filename(file)
+    [filename, "#{@config[:domain]}/#{filename}"]
   end
 
   defp generate_filename(file) do
