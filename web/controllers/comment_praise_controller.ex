@@ -33,14 +33,14 @@ defmodule PhoenixChina.CommentPraiseController do
   def cancel(conn, %{"comment_id" => comment_id}) do
     current_user = current_user(conn)
     comment = Repo.get!(Comment, comment_id)
-    
+
     comment_praise = CommentPraise
     |> where(user_id: ^current_user.id)
     |> where(comment_id: ^comment_id)
     |> Repo.one!
     Repo.delete!(comment_praise)
 
-    comment |> Comment.dsc(:praise_count)
+    comment |> Comment.dec(:praise_count)
     conn
     |> put_flash(:info, "取消评论点赞成功.")
     |> redirect(to: post_path(conn, :show, comment.post_id))

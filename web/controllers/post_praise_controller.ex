@@ -38,7 +38,7 @@ defmodule PhoenixChina.PostPraiseController do
 
     Repo.delete!(post_praise)
 
-    post |> Post.dsc(:praise_count)
+    post |> Post.dec(:praise_count)
 
     conn
     |> put_flash(:info, "取消点赞成功.")

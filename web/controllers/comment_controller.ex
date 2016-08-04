@@ -106,7 +106,7 @@ defmodule PhoenixChina.CommentController do
 
         Repo.delete!(comment)
 
-        post |> Post.dsc(:comment_count)
+        post |> Post.dec(:comment_count)
 
         conn
         |> put_flash(:info, "评论删除成功！")

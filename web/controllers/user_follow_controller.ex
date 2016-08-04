@@ -37,11 +37,11 @@ defmodule PhoenixChina.UserFollowController do
 
     user_follow = UserFollow
     |> Repo.get_by!(user_id: current_user.id, to_user_id: to_user.id)
-    
+
     Repo.delete!(user_follow)
 
-    to_user |> User.dsc(:follower_count)
-    current_user |> User.dsc(:followed_count)
+    to_user |> User.dec(:follower_count)
+    current_user |> User.dec(:followed_count)
 
     conn
     |> put_flash(:info, "取消关注成功.")

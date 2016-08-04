@@ -46,8 +46,8 @@ defmodule PhoenixChina.PostCollectController do
 
     Repo.delete!(post_collect)
 
-    current_user |> User.dsc(:collect_count)
-    post |> Post.dsc(:collect_count)
+    current_user |> User.dec(:collect_count)
+    post |> Post.dec(:collect_count)
 
     conn
     |> put_flash(:info, "取消收藏成功.")

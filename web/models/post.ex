@@ -47,56 +47,41 @@ defmodule PhoenixChina.Post do
     |> validate_length(:content, min: 1, max: 20000)
   end
 
-  def set(%__MODULE__{:id => post_id}, :latest_comment_id, value) do
+  def set(%{:id => post_id}, :latest_comment_id, value) do
     __MODULE__
     |> where(id: ^post_id)
     |> update(set: [latest_comment_id: ^value])
     |> Repo.update_all([])
   end
 
-  def inc(module \\ %__MODULE__{}, field)
+  defp inc_or_dec(query, action, field, step \\ 1) do
+    value = case action do
+      :inc -> step
+      :dec -> -step
+    end
 
-  def inc(%__MODULE__{:id => post_id}, :comment_count) do
-    __MODULE__
-    |> where(id: ^post_id)
-    |> update(inc: [comment_count: 1])
-    |> Repo.update_all([])
+    query = case field do
+      :comment_count ->
+        query |> update(inc: [{:comment_count, ^value}])
+      :collect_count ->
+        query |> update(inc: [{:collect_count, ^value}])
+      :praise_count ->
+        query |> update(inc: [{:praise_count, ^value}])
+    end
+
+    query |> Repo.update_all([])
   end
 
-  def inc(%__MODULE__{:id => post_id}, :collect_count) do
+  def inc(%{:id => post_id}, field) do
     __MODULE__
     |> where(id: ^post_id)
-    |> update(inc: [collect_count: 1])
-    |> Repo.update_all([])
+    |> inc_or_dec(:inc, field)
   end
 
-  def inc(%__MODULE__{:id => post_id}, :praise_count) do
+  def dec(%{:id => post_id}, field) do
     __MODULE__
     |> where(id: ^post_id)
-    |> update(inc: [praise_count: 1])
-    |> Repo.update_all([])
+    |> inc_or_dec(:dec, field)
   end
 
-  def dsc(module \\ %__MODULE__{}, field)
-
-  def dsc(%__MODULE__{:id => post_id}, :comment_count) do
-    __MODULE__
-    |> where(id: ^post_id)
-    |> update(inc: [comment_count: -1])
-    |> Repo.update_all([])
-  end
-
-  def dsc(%__MODULE__{:id => post_id}, :collect_count) do
-    __MODULE__
-    |> where(id: ^post_id)
-    |> update(inc: [collect_count: -1])
-    |> Repo.update_all([])
-  end
-
-  def dsc(%__MODULE__{:id => post_id}, :praise_count) do
-    __MODULE__
-    |> where(id: ^post_id)
-    |> update(inc: [praise_count: -1])
-    |> Repo.update_all([])
-  end
 end

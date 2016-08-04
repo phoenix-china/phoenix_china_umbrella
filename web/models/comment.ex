@@ -22,17 +22,29 @@ defmodule PhoenixChina.Comment do
     |> validate_length(:content, min: 1, max: 200)
   end
 
-  def inc(%__MODULE__{:id => comment_id}, :praise_count) do
-    __MODULE__
-    |> where(id: ^comment_id)
-    |> update(inc: [praise_count: 1])
-    |> Repo.update_all([])
+  defp inc_or_dec(query, action, field, step \\ 1) do
+    value = case action do
+      :inc -> step
+      :dec -> -step
+    end
+
+    query = case field do
+      :praise_count ->
+        query |> update(inc: [{:praise_count, ^value}])
+    end
+
+    query |> Repo.update_all([])
   end
 
-  def dsc(%__MODULE__{:id => comment_id}, :praise_count) do
+  def inc(%{:id => comment_id}, field) do
     __MODULE__
     |> where(id: ^comment_id)
-    |> update(inc: [praise_count: -1])
-    |> Repo.update_all([])
+    |> inc_or_dec(:inc, field)
+  end
+
+  def dec(%{:id => comment_id}, field) do
+    __MODULE__
+    |> where(id: ^comment_id)
+    |> inc_or_dec(:dec, field)
   end
 end
