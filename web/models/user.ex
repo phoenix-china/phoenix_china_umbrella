@@ -88,7 +88,7 @@ defmodule PhoenixChina.User do
 
   def changeset(:profile, struct, params) do
     struct
-    |> cast(params, [:nickname, :bio])
+    |> cast(params, [:nickname, :bio], [:avatar])
     |> validate_required([:nickname], message: "不能为空")
     |> validate_length(:nickname, min: 1, max: 18)
     |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许使用的用户名")

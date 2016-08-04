@@ -96,6 +96,15 @@ defmodule PhoenixChina.UserController do
 
   def put_profile(conn, %{"user" => user_params}) do
     user = current_user(conn)
+
+    #upload to qiniu
+    file = user_params["avatar"]
+    unless is_nil(file) do
+      [filename, url] = PhoenixChina.Qiniu.filename_and_url(file)
+      Task.async(fn -> PhoenixChina.Qiniu.upload(file, filename) end)
+      user_params = %{user_params | "avatar" => url}
+    end   
+    
     changeset = User.changeset(:profile, user, user_params)
 
     case Repo.update(changeset) do
@@ -297,7 +306,10 @@ defmodule PhoenixChina.UserController do
   def avatar(conn, %{"nickname" => nickname}) do
     content = ConCache.get_or_store(:phoenix_china, "avatar:#{nickname}", fn() ->
       user = User |> Repo.get_by!(nickname: nickname)
-      url = user |> generate_avatar_url
+      url = cond do
+              !is_nil(user.avatar) -> user.avatar
+              true -> user |> generate_avatar_url
+            end   
       response = HTTPotion.get url
       response.body
     end)
