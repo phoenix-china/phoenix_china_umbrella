@@ -43,7 +43,6 @@ defmodule PhoenixChina.User do
     |> validate_length(:nickname, min: 1, max: 18)
     |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许使用的用户名")
     |> unique_constraint(:nickname, message: "昵称已被注册啦！")
-    |> validate_luotest_response
     |> put_password_hash
   end
 
@@ -55,7 +54,6 @@ defmodule PhoenixChina.User do
     |> validate_length(:password, min: 6, max: 128)
     |> validate_email
     |> validate_password(:password)
-    |> validate_luotest_response
   end
 
   def changeset(:account, struct, params) do
@@ -96,20 +94,20 @@ defmodule PhoenixChina.User do
     |> validate_length(:bio, max: 140)
   end
 
-  defp validate_luotest_response(changeset) do
-    case changeset.changes do
-      %{"luotest_response": luotest_response} ->
-        case PhoenixChina.Luosimao.captcha_verify?(luotest_response) do
-          true ->
-            changeset
-          false ->
-            changeset
-            |> Ecto.Changeset.add_error(:luotest_response, "人机识别验证失败")
-        end
-      _ ->
-      changeset
-    end
-  end
+  # defp validate_luotest_response(changeset) do
+  #   case changeset.changes do
+  #     %{"luotest_response": luotest_response} ->
+  #       case PhoenixChina.Luosimao.captcha_verify?(luotest_response) do
+  #         true ->
+  #           changeset
+  #         false ->
+  #           changeset
+  #           |> Ecto.Changeset.add_error(:luotest_response, "人机识别验证失败")
+  #       end
+  #     _ ->
+  #     changeset
+  #   end
+  # end
 
   defp validate_email(changeset) do
     case changeset.changes do

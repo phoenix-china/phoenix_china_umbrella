@@ -51,8 +51,8 @@ defmodule PhoenixChina.UserController do
       changeset: changeset
   end
 
-  def create(conn, %{"user" => user_params, "luotest_response" => luotest_response}) do
-    changeset = User.changeset(:signup, %User{}, user_params |> Dict.put_new("luotest_response", luotest_response))
+  def create(conn, %{"user" => user_params}) do
+    changeset = User.changeset(:signup, %User{}, user_params)
 
     case Repo.insert(changeset) do
       {:ok, user} ->

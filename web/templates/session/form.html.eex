@@ -18,11 +18,11 @@
     <%= error_tag f, :password %>
   </div>
 
-  <script src="//captcha.luosimao.com/static/dist/api.js"></script>
+  <!-- <script src="//captcha.luosimao.com/static/dist/api.js"></script>
   <div class="form-group">
     <div class="l-captcha" data-width="100%" data-site-key="<%= captcha_site_key %>"></div>
     <%= error_tag f, :luotest_response %>
-  </div>
+  </div> -->
 
   <div class="form-group">
     <%= submit "登录", class: "btn btn-primary" %>

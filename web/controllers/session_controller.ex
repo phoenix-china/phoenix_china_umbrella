@@ -9,9 +9,9 @@ defmodule PhoenixChina.SessionController do
     render(conn, "new.html", changeset: changeset)
   end
 
-  def create(conn, %{"user" => user_params, "luotest_response" => luotest_response }) do
-    changeset = User.changeset(:signin, %User{}, user_params |> Dict.put_new("luotest_response", luotest_response))
-    
+  def create(conn, %{"user" => user_params}) do
+    changeset = User.changeset(:signin, %User{}, user_params)
+
     case changeset.valid? do
       true ->
         user = User |> Repo.get_by!(email: changeset.changes.email)
