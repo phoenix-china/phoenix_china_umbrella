@@ -60,16 +60,18 @@ defmodule PhoenixChina.Post do
       :dec -> -step
     end
 
-    query = case field do
+    opts = case field do
       :comment_count ->
-        query |> update(inc: [{:comment_count, ^value}])
+        [{:comment_count, value}]
       :collect_count ->
-        query |> update(inc: [{:collect_count, ^value}])
+        [{:collect_count, value}]
       :praise_count ->
-        query |> update(inc: [{:praise_count, ^value}])
+        [{:praise_count, value}]
     end
 
-    query |> Repo.update_all([])
+    query
+    |> update(inc: ^opts)
+    |> Repo.update_all([])
   end
 
   def inc(%{:id => post_id}, field) do

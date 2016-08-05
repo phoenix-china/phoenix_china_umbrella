@@ -209,16 +209,18 @@ defmodule PhoenixChina.User do
       :dec -> -step
     end
 
-    query = case field do
+    opts = case field do
       :collect_count ->
-        query |> update(inc: [{:collect_count, ^value}])
+        [{:collect_count, value}]
       :follower_count ->
-        query |> update(inc: [{:follower_count, ^value}])
+        [{:follower_count, value}]
       :followed_count ->
-        query |> update(inc: [{:followed_count, ^value}])
+        [{:followed_count, value}]
     end
 
-    query |> Repo.update_all([])
+    query
+    |> update(inc: ^opts)
+    |> Repo.update_all([])
   end
 
   def inc(%{:id => user_id}, field) do
