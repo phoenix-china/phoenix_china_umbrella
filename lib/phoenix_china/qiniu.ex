@@ -1,15 +1,14 @@
 defmodule PhoenixChina.Qiniu do
   @config Application.get_env(:qiniu, Qiniu)
 
-  @policy Qiniu.PutPolicy.build(@config[:resource])
-
   def upload(file) do
     filename = generate_filename(file)
     upload(file, filename)
   end
 
-  def upload(file, filename) do 
-    response = Qiniu.Uploader.upload @policy, file.path, key: filename
+  def upload(file, filename) do
+    put_policy = Qiniu.PutPolicy.build(Keyword.get(config, :resource))
+    response = Qiniu.Uploader.upload put_policy, file.path, key: filename
 
     case response.body |> Poison.Parser.parse! do
       %{"hash" => hash, "key" => key} ->
