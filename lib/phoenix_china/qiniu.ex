@@ -7,7 +7,7 @@ defmodule PhoenixChina.Qiniu do
   end
 
   def upload(file, filename) do
-    put_policy = Qiniu.PutPolicy.build(Keyword.get(config, :resource))
+    put_policy = Qiniu.PutPolicy.build(Keyword.get(@config, :resource))
     response = Qiniu.Uploader.upload put_policy, file.path, key: filename
 
     case response.body |> Poison.Parser.parse! do
