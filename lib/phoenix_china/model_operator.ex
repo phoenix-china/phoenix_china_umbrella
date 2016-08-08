@@ -1,4 +1,4 @@
-defmodule PhoenixChina.ModelOperate do
+defmodule PhoenixChina.ModelOperator do
   import Ecto.Query
 
   alias PhoenixChina.Repo

@@ -5,7 +5,7 @@ defmodule PhoenixChina.PostPraiseController do
   alias PhoenixChina.PostPraise
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
-  import PhoenixChina.ModelOperate, only: [inc: 3, dec: 3]
+  import PhoenixChina.ModelOperator, only: [inc: 3, dec: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
     when action in [:create, :cancel]
