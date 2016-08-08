@@ -6,6 +6,7 @@ defmodule PhoenixChina.PostCollectController do
   alias PhoenixChina.PostCollect
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
+  import PhoenixChina.ModelOperate, only: [inc: 3, dec: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
     when action in [:create, :cancel]
@@ -21,8 +22,8 @@ defmodule PhoenixChina.PostCollectController do
 
     case Repo.insert(changeset) do
       {:ok, _post_collect} ->
-        current_user |> User.inc(:collect_count)
-        post |> Post.inc(:collect_count)
+        User |> inc(current_user, :collect_count)
+        Post |> inc(post, :collect_count)
 
         conn
         |> put_flash(:info, "收藏成功.")
@@ -46,8 +47,8 @@ defmodule PhoenixChina.PostCollectController do
 
     Repo.delete!(post_collect)
 
-    current_user |> User.dec(:collect_count)
-    post |> Post.dec(:collect_count)
+    User |> dec(current_user, :collect_count)
+    Post |> dec(post, :collect_count)
 
     conn
     |> put_flash(:info, "取消收藏成功.")

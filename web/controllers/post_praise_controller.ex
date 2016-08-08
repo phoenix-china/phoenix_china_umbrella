@@ -5,6 +5,7 @@ defmodule PhoenixChina.PostPraiseController do
   alias PhoenixChina.PostPraise
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
+  import PhoenixChina.ModelOperate, only: [inc: 3, dec: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
     when action in [:create, :cancel]
@@ -17,7 +18,7 @@ defmodule PhoenixChina.PostPraiseController do
 
     case Repo.insert(changeset) do
       {:ok, _post_collect} ->
-        post |> Post.inc(:praise_count)
+        Post |> inc(post, :praise_count)
 
         conn
         |> put_flash(:info, "点赞成功.")
@@ -38,7 +39,7 @@ defmodule PhoenixChina.PostPraiseController do
 
     Repo.delete!(post_praise)
 
-    post |> Post.dec(:praise_count)
+    Post |> dec(post, :praise_count)
 
     conn
     |> put_flash(:info, "取消点赞成功.")

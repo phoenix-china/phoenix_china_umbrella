@@ -5,6 +5,7 @@ defmodule PhoenixChina.CommentController do
   alias PhoenixChina.Comment
   alias PhoenixChina.Post
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
+  import PhoenixChina.ModelOperate, only: [set: 4, inc: 3, dec: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
     when action in [:create, :edit, :update, :delete]
@@ -34,8 +35,8 @@ defmodule PhoenixChina.CommentController do
 
     case Repo.insert(changeset) do
       {:ok, comment} ->
-        post |> Post.set(:latest_comment_id, comment.id)
-        post |> Post.inc(:comment_count)
+        Post |> set(post, :latest_comment_id, comment.id)
+        Post |> inc(post, :comment_count)
 
         conn
         |> put_flash(:info, "评论创建成功.")
@@ -102,11 +103,11 @@ defmodule PhoenixChina.CommentController do
         |> select([u], max(u.id))
         |> Repo.one
 
-        post |> Post.set(:latest_comment_id, latest_comment_id)
+        Post |> set(post, :latest_comment_id, latest_comment_id)
 
         Repo.delete!(comment)
 
-        post |> Post.dec(:comment_count)
+        Post |> dec(post, :comment_count)
 
         conn
         |> put_flash(:info, "评论删除成功！")

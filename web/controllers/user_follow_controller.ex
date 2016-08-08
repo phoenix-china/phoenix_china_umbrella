@@ -5,6 +5,7 @@ defmodule PhoenixChina.UserFollowController do
   alias PhoenixChina.UserFollow
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
+  import PhoenixChina.ModelOperate, only: [inc: 3, dec: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
     when action in [:create, :cancel]
@@ -18,8 +19,8 @@ defmodule PhoenixChina.UserFollowController do
 
     case Repo.insert(changeset) do
       {:ok, _user_follow} ->
-        to_user |> User.inc(:follower_count)
-        current_user |> User.inc(:followed_count)
+        User |> inc(to_user, :follower_count)
+        User |> inc(current_user, :followed_count)
 
         conn
         |> put_flash(:info, "关注成功.")
@@ -40,8 +41,8 @@ defmodule PhoenixChina.UserFollowController do
 
     Repo.delete!(user_follow)
 
-    to_user |> User.dec(:follower_count)
-    current_user |> User.dec(:followed_count)
+    User |> dec(to_user, :follower_count)
+    User |> dec(current_user, :followed_count)
 
     conn
     |> put_flash(:info, "取消关注成功.")

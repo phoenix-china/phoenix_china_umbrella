@@ -3,7 +3,9 @@ defmodule PhoenixChina.PostController do
 
   alias PhoenixChina.Post
   alias PhoenixChina.Comment
+
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
+  import PhoenixChina.ModelOperate, only: [set: 4]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
     when action in [:new, :create, :edit, :update, :delete]
@@ -100,7 +102,7 @@ defmodule PhoenixChina.PostController do
         |> redirect(to: post_path(conn, :show, id))
 
       true ->
-        post |> Post.set(:latest_comment_id, nil)
+        Post |> set(post, :latest_comment_id, nil)
         Repo.delete!(post)
 
         conn

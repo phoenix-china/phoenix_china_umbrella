@@ -2,7 +2,6 @@ defmodule PhoenixChina.Post do
   use PhoenixChina.Web, :model
 
   alias PhoenixChina.Repo
-  alias PhoenixChina.Comment
 
   schema "posts" do
     field :title, :string
@@ -53,37 +52,4 @@ defmodule PhoenixChina.Post do
     |> update(set: [latest_comment_id: ^value])
     |> Repo.update_all([])
   end
-
-  defp inc_or_dec(query, action, field, step \\ 1) do
-    value = case action do
-      :inc -> step
-      :dec -> -step
-    end
-
-    opts = case field do
-      :comment_count ->
-        [{:comment_count, value}]
-      :collect_count ->
-        [{:collect_count, value}]
-      :praise_count ->
-        [{:praise_count, value}]
-    end
-
-    query
-    |> update(inc: ^opts)
-    |> Repo.update_all([])
-  end
-
-  def inc(%{:id => post_id}, field) do
-    __MODULE__
-    |> where(id: ^post_id)
-    |> inc_or_dec(:inc, field)
-  end
-
-  def dec(%{:id => post_id}, field) do
-    __MODULE__
-    |> where(id: ^post_id)
-    |> inc_or_dec(:dec, field)
-  end
-
 end

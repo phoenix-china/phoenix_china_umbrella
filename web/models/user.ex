@@ -202,36 +202,4 @@ defmodule PhoenixChina.User do
   def generate_token(user, token_name \\ "user_id") do
     Phoenix.Token.sign(PhoenixChina.Endpoint, token_name, user.id)
   end
-
-  defp inc_or_dec(query, action, field, step \\ 1) do
-    value = case action do
-      :inc -> step
-      :dec -> -step
-    end
-
-    opts = case field do
-      :collect_count ->
-        [{:collect_count, value}]
-      :follower_count ->
-        [{:follower_count, value}]
-      :followed_count ->
-        [{:followed_count, value}]
-    end
-
-    query
-    |> update(inc: ^opts)
-    |> Repo.update_all([])
-  end
-
-  def inc(%{:id => user_id}, field) do
-    __MODULE__
-    |> where(id: ^user_id)
-    |> inc_or_dec(:inc, field)
-  end
-
-  def dec(%{:id => user_id}, field) do
-    __MODULE__
-    |> where(id: ^user_id)
-    |> inc_or_dec(:dec, field)
-  end
 end
