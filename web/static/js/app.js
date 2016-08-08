@@ -30,6 +30,7 @@ $(function() {
       text = text.replace(new RegExp(/(&quot;)/g), "\"");
       text = text.replace(new RegExp(/(&lt;)/g), "<");
       text = text.replace(new RegExp(/(&gt;)/g), ">");
+      text = text.replace(new RegExp(/(&#39;)/g), "'");
       $self.text(text);
     })
   }

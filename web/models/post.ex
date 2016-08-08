@@ -2,11 +2,13 @@ defmodule PhoenixChina.Post do
   use PhoenixChina.Web, :model
 
   alias PhoenixChina.Repo
+  alias PhoenixChina.User
+  alias PhoenixChina.Comment
 
   schema "posts" do
     field :title, :string
     field :content, :string
-    belongs_to :user, PhoenixChina.User
+    belongs_to :user, User
     has_many :comments, Comment, on_delete: :delete_all
 
     # 评论数量
@@ -16,7 +18,7 @@ defmodule PhoenixChina.Post do
     # 点赞数量
     field :praise_count, :integer, default: 0
     # 最新一个评论
-    belongs_to :latest_comment, PhoenixChina.Comment, foreign_key: :latest_comment_id
+    belongs_to :latest_comment, Comment, foreign_key: :latest_comment_id
 
     timestamps()
   end
