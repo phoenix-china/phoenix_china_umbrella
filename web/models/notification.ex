@@ -5,7 +5,6 @@ defmodule PhoenixChina.Notification do
     field :action, :string
     field :data_id, :integer
     field :html, :string
-    field :json, :map
     belongs_to :user, PhoenixChina.User
     belongs_to :operator, PhoenixChina.Operator
 
@@ -17,7 +16,7 @@ defmodule PhoenixChina.Notification do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:action, :data_id, :html, :json])
-    |> validate_required([:action, :data_id, :html, :json])
+    |> cast(params, [:action, :data_id, :html])
+    |> validate_required([:action, :data_id, :html])
   end
 end

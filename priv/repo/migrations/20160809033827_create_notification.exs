@@ -6,7 +6,6 @@ defmodule PhoenixChina.Repo.Migrations.CreateNotification do
       add :action, :string
       add :data_id, :integer
       add :html, :text
-      add :json, :map
       add :user_id, references(:users, on_delete: :nothing)
       add :operator_id, references(:users, on_delete: :nothing)
 

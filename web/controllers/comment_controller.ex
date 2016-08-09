@@ -8,7 +8,6 @@ defmodule PhoenixChina.CommentController do
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.ModelOperator, only: [set: 4, inc: 3, dec: 3]
-  import Phoenix.HTML.Link, only: [link: 2]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
     when action in [:create, :edit, :update, :delete]
@@ -56,18 +55,17 @@ defmodule PhoenixChina.CommentController do
             operator_id: current_user.id,
             action: "comment_post",
             data_id: post.id,
-            html: notification_html,
-            json: %{}
+            html: notification_html
           }
 
           case Repo.insert(notification_struct) do
-            {:ok, notification} ->
+            {:ok, _notification} ->
               PhoenixChina.Endpoint.broadcast(
                 "notifications:" <> (post.user_id |> Integer.to_string),
                 ":msg",
                 %{"body" => notification_html}
               )
-            {:error, _} ->
+            {:error, _} -> nil
           end
         end
 
