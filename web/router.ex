@@ -87,10 +87,18 @@ defmodule PhoenixChina.Router do
     get "/:provider/callback", AuthController, :callback
   end
 
+  scope "/notifications", PhoenixChina do
+     pipe_through [:browser, :browser_session]
+
+     get "/default", NotificationController, :default
+  end
+
   # Other scopes may use custom stacks.
   scope "/api/v1", PhoenixChina do
     pipe_through :api
 
     post "/upload", API.V1.UploadController, :create
   end
+
+
 end

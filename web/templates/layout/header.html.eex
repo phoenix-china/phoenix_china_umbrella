@@ -8,6 +8,9 @@
     <meta name="author" content="https://github.com/PhoenixChina/phoenix_china">
     <meta name="baidu-site-verification" content="Q3IId6pqR3" />
     <meta name="google-site-verification" content="dCc5jPBMaQpfr0W6zgkmlrkE1P2uAgk_wxX3PF-cRGM" />
+    <%= if @logged_in do %>
+    <meta name="user-id" content="<%= @current_user.id %>">
+    <%= end %>
     <title>Phoenix中文社区</title>
     <link rel="shortcut icon" href="https://www.phoenix-china.org/favicon.ico" >
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
@@ -39,6 +42,18 @@
 
           <ul class="nav navbar-nav navbar-right">
             <%= if @logged_in do %>
+            <li id="notification">
+              <a href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                消息
+              </a>
+              <div class="dropdown-menu" style="width: 315px; right: -128.5px;">
+                <div class="notification-wraper">
+                  <ul>
+                    <!-- 通知列表 -->
+                  </ul>
+                </div>
+              </div>
+            </li>
             <li><%= link @current_user.nickname, to: user_path(@conn, :show, @current_user.nickname) %></li>
             <li><%= link "退出登录", to: session_path(@conn, :delete) %></li>
             <%= else %>

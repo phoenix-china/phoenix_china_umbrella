@@ -53,4 +53,96 @@ if ($('.room').length > 0) {
   $(() => Room.init())
 }
 
-export default Room
+// export default Room
+
+$.fn.scrollUnique = function() {
+    return $(this).each(function() {
+        var eventType = 'mousewheel';
+        if (document.mozHidden !== undefined) {
+            eventType = 'DOMMouseScroll';
+        }
+        $(this).on(eventType, function(event) {
+            // 一些数据
+            var scrollTop = this.scrollTop,
+                scrollHeight = this.scrollHeight,
+                height = this.clientHeight;
+
+            var delta = (event.originalEvent.wheelDelta) ? event.originalEvent.wheelDelta : -(event.originalEvent.detail || 0);
+
+            if ((delta > 0 && scrollTop <= delta) || (delta < 0 && scrollHeight - height - scrollTop <= -1 * delta)) {
+                // IE浏览器下滚动会跨越边界直接影响父级滚动，因此，临界时候手动边界滚动定位
+                this.scrollTop = delta > 0? 0: scrollHeight;
+                // 向上滚 || 向下滚
+                event.preventDefault();
+            }
+        });
+    });
+};
+
+class Notification {
+  static init() {
+    var that = this;
+    var $user_meta = $("meta[name=user-id]");
+
+    if ($user_meta.length == 0) {
+      return false;
+    }
+
+    let socket = new Socket("/socket", {})
+
+    socket.connect()
+
+    var channel = socket.channel("notifications:" + $user_meta.attr("content"), {})
+
+    channel.join()
+      .receive("ok", resp => { console.log("Notification Joined successfully", resp) })
+      .receive("error", resp => { console.log("Notification Unable to join", resp) })
+
+    channel.on(":msg", msg => {
+      $("#notification ul").prepend(`<li>${msg.body}</li>`);
+    })
+
+    channel.on(":follow", msg => {
+
+    })
+
+    this.loadData($("#notification ul"));
+
+    $(".notification-wraper").scrollUnique();
+
+    $(".notification-wraper").on("scroll", function() {
+      var $child = $(this).find("ul");
+
+      if ($child.height() - $(this).scrollTop() == $(this).height()) {
+        that.loadData($("#notification ul"));
+      }
+    });
+  }
+
+  static loadData(wraper) {
+    var pagination = wraper.data('pagination') || {has_next: true, page_number: 0};
+
+    if (pagination.has_next) {
+      $.ajax({
+        url: "/notifications/default?page=" + (pagination.page_number + 1),
+        success: function(res) {
+          var html = [];
+
+          if (res.data.length > 0) {
+            $.each(res.data, function(_, entry) {
+              html.push(`<li>${entry.html}</li>`);
+            });
+          }
+          else {
+            html.push('<li>还没有任何通知</li>');
+          }
+
+          wraper.data('pagination', res.pagination);
+          wraper.append(html.join(''));
+        }
+      })
+    }
+  }
+}
+
+$(() => Notification.init())

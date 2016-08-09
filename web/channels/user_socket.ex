@@ -3,7 +3,8 @@ defmodule PhoenixChina.UserSocket do
 
   ## Channels
   channel "rooms:*", PhoenixChina.RoomChannel
-
+  channel "notifications:*", PhoenixChina.NotificationChannel
+  
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
   transport :longpoll, Phoenix.Transports.LongPoll

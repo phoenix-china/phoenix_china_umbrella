@@ -4,8 +4,11 @@ defmodule PhoenixChina.CommentController do
   alias PhoenixChina.LayoutView
   alias PhoenixChina.Comment
   alias PhoenixChina.Post
+  alias PhoenixChina.Notification
+
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.ModelOperator, only: [set: 4, inc: 3, dec: 3]
+  import Phoenix.HTML.Link, only: [link: 2]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
     when action in [:create, :edit, :update, :delete]
@@ -37,6 +40,36 @@ defmodule PhoenixChina.CommentController do
       {:ok, comment} ->
         Post |> set(post, :latest_comment_id, comment.id)
         Post |> inc(post, :comment_count)
+
+        if current_user.id != post.user_id do
+          notification_html = Phoenix.View.render_to_string(
+            PhoenixChina.NotificationView,
+            "comment.html",
+            conn: conn,
+            user: current_user,
+            post: post,
+            comment: comment
+          )
+
+          notification_struct = %Notification{
+            user_id: post.user_id,
+            operator_id: current_user.id,
+            action: "comment_post",
+            data_id: post.id,
+            html: notification_html,
+            json: %{}
+          }
+
+          case Repo.insert(notification_struct) do
+            {:ok, notification} ->
+              PhoenixChina.Endpoint.broadcast(
+                "notifications:" <> (post.user_id |> Integer.to_string),
+                ":msg",
+                %{"body" => notification_html}
+              )
+            {:error, _} ->
+          end
+        end
 
         conn
         |> put_flash(:info, "评论创建成功.")

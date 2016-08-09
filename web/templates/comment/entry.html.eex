@@ -1,5 +1,5 @@
 <div class="media data-item" style="overflow: initial;">
-  <a name="comment-#<%= @index %>"></a>
+  <a name="comment-<%= @comment.id %>"></a>
   <div class="media-left">
     <a href="<%= user_path(@conn, :show, @comment.user.nickname) %>">
       <img class="media-object"

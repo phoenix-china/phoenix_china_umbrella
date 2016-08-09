@@ -122,3 +122,23 @@ body {
   text-decoration: none;
   background-color: #f5f5f5;
 }
+
+
+#notification {}
+  #notification .notification-wraper {
+    max-height: 200px;
+    overflow-y: scroll;
+  }
+  #notification ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  #notification li {
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  #notification li span {
+    margin: 0 5px;
+  }
