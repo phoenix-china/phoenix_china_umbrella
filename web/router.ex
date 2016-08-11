@@ -91,6 +91,7 @@ defmodule PhoenixChina.Router do
      pipe_through [:browser, :browser_session]
 
      get "/default", NotificationController, :default
+     put "/readall", NotificationController, :readall
   end
 
   # Other scopes may use custom stacks.

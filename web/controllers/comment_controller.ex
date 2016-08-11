@@ -60,6 +60,8 @@ defmodule PhoenixChina.CommentController do
               comment.id,
               notification_html
             )
+
+            User |> inc(user, :unread_notifications_count)
           end
         end)
 
@@ -77,6 +79,8 @@ defmodule PhoenixChina.CommentController do
             post.id,
             notification_html
           )
+
+          User |> inc(%{id: post.user_id}, :unread_notifications_count)
         end
 
         conn

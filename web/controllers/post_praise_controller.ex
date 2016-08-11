@@ -1,6 +1,7 @@
 defmodule PhoenixChina.PostPraiseController do
   use PhoenixChina.Web, :controller
 
+  alias PhoenixChina.User
   alias PhoenixChina.Post
   alias PhoenixChina.PostPraise
   alias PhoenixChina.Notification
@@ -33,6 +34,8 @@ defmodule PhoenixChina.PostPraiseController do
           post.id,
           notification_html
         )
+
+        User |> inc(%{id: post.user_id}, :unread_notifications_count)
 
         conn
         |> put_flash(:info, "点赞成功.")

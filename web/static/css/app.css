@@ -127,7 +127,7 @@ body {
 #notification {}
   #notification .notification-wraper {
     max-height: 200px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   #notification ul {
     padding: 0;

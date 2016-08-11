@@ -8,6 +8,7 @@
     <meta name="author" content="https://github.com/PhoenixChina/phoenix_china">
     <meta name="baidu-site-verification" content="Q3IId6pqR3" />
     <meta name="google-site-verification" content="dCc5jPBMaQpfr0W6zgkmlrkE1P2uAgk_wxX3PF-cRGM" />
+    <meta name="csrf" content="<%= Plug.CSRFProtection.get_csrf_token() %>">
     <%= if @logged_in do %>
     <meta name="user-id" content="<%= @current_user.id %>">
     <%= end %>
@@ -43,8 +44,9 @@
           <ul class="nav navbar-nav navbar-right">
             <%= if @logged_in do %>
             <li id="notification">
-              <a href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a id="notification-dropdown" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 消息
+                <span id="notifications-count" class="label label-danger" style="display: none;" data-count="<%= @current_user.unread_notifications_count %>"></span>
               </a>
               <div class="dropdown-menu" style="width: 315px; right: -128.5px;">
                 <div class="notification-wraper">

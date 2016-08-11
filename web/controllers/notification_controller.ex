@@ -1,12 +1,14 @@
 defmodule PhoenixChina.NotificationController do
   use PhoenixChina.Web, :controller
 
+  alias PhoenixChina.User
   alias PhoenixChina.Notification
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
+  import PhoenixChina.ModelOperator, only: [set: 4]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
-    when action in [:default]
+    when action in [:default, :readall]
 
 
   def default(conn, params) do
@@ -23,6 +25,12 @@ defmodule PhoenixChina.NotificationController do
 
   def default(conn, %{}) do
     default(conn, %{"page" => 1})
+  end
+
+  def readall(conn, _params) do
+    current_user = current_user(conn)
+    User |> set(current_user, :unread_notifications_count, 0)
+    conn |> json(%{unread_notifications_count: 0})
   end
 
 end

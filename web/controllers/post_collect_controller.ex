@@ -39,6 +39,8 @@ defmodule PhoenixChina.PostCollectController do
           notification_html
         )
 
+        User |> inc(%{id: post.user_id}, :unread_notifications_count)
+
         conn
         |> put_flash(:info, "收藏成功.")
         |> redirect(to: post_path(conn, :show, post_id))

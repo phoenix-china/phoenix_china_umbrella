@@ -100,10 +100,7 @@ class Notification {
 
     channel.on(":msg", msg => {
       $("#notification ul").prepend(`<li>${msg.body}</li>`);
-    })
-
-    channel.on(":follow", msg => {
-
+      this.showCount(1);
     })
 
     this.loadData($("#notification ul"));
@@ -117,6 +114,40 @@ class Notification {
         that.loadData($("#notification ul"));
       }
     });
+
+    this.showCount();
+
+    $("#notification").on("click", function() {
+        that.hideCount();
+    });
+  }
+
+  static hideCount() {
+    $.ajax({
+      headers: {
+        "X-CSRF-TOKEN": $("meta[name=csrf]").attr("content")
+      },
+      type: "put",
+      url: "/notifications/readall",
+      success: function() {
+        var $count = $("#notifications-count");
+        var count = 0;
+        $count.data("count", count);
+        $count.html(count);
+        $count.hide();
+      }
+    })
+  }
+
+  static showCount(inc) {
+    var inc = inc || 0;
+    var $count = $("#notifications-count");
+    var count = parseInt($count.data("count")) + inc;
+    $count.data("count", count);
+    $count.html(count);
+    if (count > 0) {
+      $count.show();
+    }
   }
 
   static loadData(wraper) {

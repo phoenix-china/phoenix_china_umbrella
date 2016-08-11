@@ -7,7 +7,7 @@ defmodule PhoenixChina.PostController do
   alias PhoenixChina.Notification
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
-  import PhoenixChina.ModelOperator, only: [set: 4]
+  import PhoenixChina.ModelOperator, only: [set: 4, inc: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
     when action in [:new, :create, :edit, :update, :delete]
@@ -26,11 +26,11 @@ defmodule PhoenixChina.PostController do
 
     case Repo.insert(changeset) do
       {:ok, post} ->
-        Enum.map(Regex.scan(~r/@(\S+)\s?/, post.content), fn [s, nickname] ->
+        Enum.map(Regex.scan(~r/@(\S+)\s?/, post.content), fn [_, nickname] ->
           user = User |> Repo.get_by(nickname: nickname)
 
           if user && (user != current_user) do
-            
+
             notification_html = Notification.render "at_post.html",
               conn: conn,
               user: current_user,
@@ -43,6 +43,8 @@ defmodule PhoenixChina.PostController do
               post.id,
               notification_html
             )
+
+            User |> inc(user, :unread_notifications_count)
           end
         end)
 

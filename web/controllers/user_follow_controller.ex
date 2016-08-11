@@ -35,6 +35,8 @@ defmodule PhoenixChina.UserFollowController do
           notification_html
         )
 
+        User |> inc(%{id: to_user.id}, :unread_notifications_count)
+
         conn
         |> put_flash(:info, "关注成功.")
         |> redirect(to: user_path(conn, :show, nickname))

@@ -1,6 +1,7 @@
 defmodule PhoenixChina.CommentPraiseController do
   use PhoenixChina.Web, :controller
 
+  alias PhoenixChina.User
   alias PhoenixChina.Post
   alias PhoenixChina.Comment
   alias PhoenixChina.CommentPraise
@@ -38,6 +39,8 @@ defmodule PhoenixChina.CommentPraiseController do
           comment.id,
           notification_html
         )
+
+        User |> inc(%{id: comment.user_id}, :unread_notifications_count)
 
         conn
         |> put_flash(:info, "评论点赞成功.")
