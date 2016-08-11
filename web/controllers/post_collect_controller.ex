@@ -4,6 +4,7 @@ defmodule PhoenixChina.PostCollectController do
   alias PhoenixChina.User
   alias PhoenixChina.Post
   alias PhoenixChina.PostCollect
+  alias PhoenixChina.Notification
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.ModelOperator, only: [inc: 3, dec: 3]
@@ -24,6 +25,19 @@ defmodule PhoenixChina.PostCollectController do
       {:ok, _post_collect} ->
         User |> inc(current_user, :collect_count)
         Post |> inc(post, :collect_count)
+
+        notification_html = Notification.render "post_collect.html",
+          conn: conn,
+          user: current_user,
+          post: post
+
+        Notification.publish(
+          "post_collect",
+          post.user_id,
+          current_user.id,
+          post.id,
+          notification_html
+        )
 
         conn
         |> put_flash(:info, "收藏成功.")

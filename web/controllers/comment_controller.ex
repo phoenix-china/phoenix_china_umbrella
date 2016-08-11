@@ -15,8 +15,6 @@ defmodule PhoenixChina.CommentController do
   plug PhoenixChina.GuardianPlug
 
   def show(conn, %{"post_id" => post_id, "id" => comment_id}) do
-    current_user = current_user(conn)
-
     post = Post
     |> preload([:user, :latest_comment, latest_comment: :user])
     |> Repo.get!(post_id)
@@ -44,66 +42,41 @@ defmodule PhoenixChina.CommentController do
         Post |> set(post, :latest_comment_inserted_at, comment.inserted_at)
         Post |> inc(post, :comment_count)
 
-        Enum.map(Regex.scan(~r/@(\S+)\s?/, comment.content), fn [s, nickname] ->
+        Enum.map(Regex.scan(~r/@(\S+)\s?/, comment.content), fn [_, nickname] ->
           user = User |> Repo.get_by(nickname: nickname)
 
           if user && (user != current_user) do
-            notification_html = Phoenix.View.render_to_string(
-              PhoenixChina.NotificationView,
-              "at_comment.html",
+            notification_html = Notification.render "at_comment.html",
               conn: conn,
               user: current_user,
               post: post,
               comment: comment
+
+
+            Notification.publish(
+              "at_comment",
+              user.id,
+              current_user.id,
+              comment.id,
+              notification_html
             )
-
-            notification_struct = %Notification{
-              user_id: user.id,
-              operator_id: current_user.id,
-              action: "at_comment",
-              data_id: comment.id,
-              html: notification_html
-            }
-
-            case Repo.insert(notification_struct) do
-              {:ok, notification} ->
-                PhoenixChina.Endpoint.broadcast(
-                  "notifications:" <> (notification.user_id |> Integer.to_string),
-                  ":msg",
-                  %{"body" => notification_html}
-                )
-              {:error, struct} -> struct
-            end
           end
         end)
 
         if current_user.id != post.user_id do
-          notification_html = Phoenix.View.render_to_string(
-            PhoenixChina.NotificationView,
-            "comment.html",
+          notification_html = Notification.render "comment.html",
             conn: conn,
             user: current_user,
             post: post,
             comment: comment
+
+          Notification.publish(
+            "comment_post",
+            post.user_id,
+            current_user.id,
+            post.id,
+            notification_html
           )
-
-          notification_struct = %Notification{
-            user_id: post.user_id,
-            operator_id: current_user.id,
-            action: "comment_post",
-            data_id: post.id,
-            html: notification_html
-          }
-
-          case Repo.insert(notification_struct) do
-            {:ok, notification} ->
-              PhoenixChina.Endpoint.broadcast(
-                "notifications:" <> (notification.user_id |> Integer.to_string),
-                ":msg",
-                %{"body" => notification_html}
-              )
-            {:error, _} -> nil
-          end
         end
 
         conn

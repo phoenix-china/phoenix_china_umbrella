@@ -3,6 +3,7 @@ defmodule PhoenixChina.PostPraiseController do
 
   alias PhoenixChina.Post
   alias PhoenixChina.PostPraise
+  alias PhoenixChina.Notification
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.ModelOperator, only: [inc: 3, dec: 3]
@@ -19,6 +20,19 @@ defmodule PhoenixChina.PostPraiseController do
     case Repo.insert(changeset) do
       {:ok, _post_collect} ->
         Post |> inc(post, :praise_count)
+
+        notification_html = Notification.render "post_praise.html",
+          conn: conn,
+          user: current_user,
+          post: post
+
+        Notification.publish(
+          "post_praise",
+          post.user_id,
+          current_user.id,
+          post.id,
+          notification_html
+        )
 
         conn
         |> put_flash(:info, "点赞成功.")

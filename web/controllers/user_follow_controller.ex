@@ -3,6 +3,7 @@ defmodule PhoenixChina.UserFollowController do
 
   alias PhoenixChina.User
   alias PhoenixChina.UserFollow
+  alias PhoenixChina.Notification
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.ModelOperator, only: [inc: 3, dec: 3]
@@ -21,6 +22,18 @@ defmodule PhoenixChina.UserFollowController do
       {:ok, _user_follow} ->
         User |> inc(to_user, :follower_count)
         User |> inc(current_user, :followed_count)
+
+        notification_html = Notification.render "user_follow.html",
+          conn: conn,
+          user: current_user
+
+        Notification.publish(
+          "user_follow",
+          to_user.id,
+          current_user.id,
+          current_user.id,
+          notification_html
+        )
 
         conn
         |> put_flash(:info, "关注成功.")

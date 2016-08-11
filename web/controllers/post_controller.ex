@@ -5,7 +5,7 @@ defmodule PhoenixChina.PostController do
   alias PhoenixChina.Post
   alias PhoenixChina.Comment
   alias PhoenixChina.Notification
-  
+
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.ModelOperator, only: [set: 4]
 
@@ -30,31 +30,19 @@ defmodule PhoenixChina.PostController do
           user = User |> Repo.get_by(nickname: nickname)
 
           if user && (user != current_user) do
-            notification_html = Phoenix.View.render_to_string(
-              PhoenixChina.NotificationView,
-              "at_post.html",
+            
+            notification_html = Notification.render "at_post.html",
               conn: conn,
               user: current_user,
               post: post
+
+            Notification.publish(
+              "at_post",
+              user.id,
+              current_user.id,
+              post.id,
+              notification_html
             )
-
-            notification_struct = %Notification{
-              user_id: user.id,
-              operator_id: current_user.id,
-              action: "at_post",
-              data_id: post.id,
-              html: notification_html
-            }
-
-            case Repo.insert(notification_struct) do
-              {:ok, notification} ->
-                PhoenixChina.Endpoint.broadcast(
-                  "notifications:" <> (notification.user_id |> Integer.to_string),
-                  ":msg",
-                  %{"body" => notification_html}
-                )
-              {:error, struct} -> struct
-            end
           end
         end)
 
