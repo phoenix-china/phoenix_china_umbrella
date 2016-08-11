@@ -38,9 +38,9 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] 用户互相关注
 - [x] 文件上传
 - [x] 用户修改头像
-- [ ] 站内通知
+- [x] 站内通知
+- [x] 回复用户的评论(@功能)
 - [ ] 帖子标签
-- [ ] 回复用户的评论
 - [ ] 用户积分
 
 ## 贡献
