@@ -1,3 +1,4 @@
 <%= link @user.nickname, to: user_path(@conn, :show, @user.nickname) %>
-<span>赞了你的评论</span>
+<span>赞了你在</span>
 <%= link @post.title, to: post_path(@conn, :show, @post) <> "?#comment-#{@comment.id}" %>
+<span>发布的评论</span>
