@@ -2,6 +2,7 @@ defmodule PhoenixChina.CommentController do
   use PhoenixChina.Web, :controller
 
   alias PhoenixChina.LayoutView
+  alias PhoenixChina.User
   alias PhoenixChina.Comment
   alias PhoenixChina.Post
   alias PhoenixChina.Notification
@@ -14,6 +15,8 @@ defmodule PhoenixChina.CommentController do
   plug PhoenixChina.GuardianPlug
 
   def show(conn, %{"post_id" => post_id, "id" => comment_id}) do
+    current_user = current_user(conn)
+
     post = Post
     |> preload([:user, :latest_comment, latest_comment: :user])
     |> Repo.get!(post_id)
@@ -41,6 +44,38 @@ defmodule PhoenixChina.CommentController do
         Post |> set(post, :latest_comment_inserted_at, comment.inserted_at)
         Post |> inc(post, :comment_count)
 
+        Enum.map(Regex.scan(~r/@(\S+)\s?/, comment.content), fn [s, nickname] ->
+          user = User |> Repo.get_by(nickname: nickname)
+
+          if user && (user != current_user) do
+            notification_html = Phoenix.View.render_to_string(
+              PhoenixChina.NotificationView,
+              "at_comment.html",
+              conn: conn,
+              user: current_user,
+              post: post,
+              comment: comment
+            )
+
+            notification_struct = %Notification{
+              user_id: user.id,
+              operator_id: current_user.id,
+              action: "at_comment",
+              data_id: comment.id,
+              html: notification_html
+            }
+
+            case Repo.insert(notification_struct) do
+              {:ok, notification} ->
+                PhoenixChina.Endpoint.broadcast(
+                  "notifications:" <> (notification.user_id |> Integer.to_string),
+                  ":msg",
+                  %{"body" => notification_html}
+                )
+              {:error, struct} -> struct
+            end
+          end
+        end)
 
         if current_user.id != post.user_id do
           notification_html = Phoenix.View.render_to_string(
@@ -61,9 +96,9 @@ defmodule PhoenixChina.CommentController do
           }
 
           case Repo.insert(notification_struct) do
-            {:ok, _notification} ->
+            {:ok, notification} ->
               PhoenixChina.Endpoint.broadcast(
-                "notifications:" <> (post.user_id |> Integer.to_string),
+                "notifications:" <> (notification.user_id |> Integer.to_string),
                 ":msg",
                 %{"body" => notification_html}
               )

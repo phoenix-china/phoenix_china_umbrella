@@ -2,20 +2,32 @@
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
     <script src="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <script>
-      var $ = require("jquery");
-      $(function() {
-        if ($('#mde').length > 0) {
-          var simplemde = new SimpleMDE({
-            autoDownloadFontAwesome: false,
-            element: document.getElementById("mde"),
-            autosave: {
-                enabled: true,
-                unique_id: '<%= @conn.request_path %>',
-                delay: 1000,
-            },
-          });
-        }
-      });
+      (function() {
+        var $ = require("jquery");
+
+        $(function() {
+          if ($('#mde').length > 0) {
+            var simplemde = new SimpleMDE({
+              autoDownloadFontAwesome: false,
+              element: document.getElementById("mde"),
+              autosave: {
+                  enabled: true,
+                  unique_id: '<%= @conn.request_path %>',
+                  delay: 1000,
+              },
+            });
+
+            $('.comment-reply').on('click', function() {
+              var $self = $(this);
+              var value = simplemde.value() ? simplemde.value() + ' ' + $self.data('content') : $self.data('content');
+              simplemde.value(value);
+              $('body').scrollTop($(".phoenix_china-form").offset().top);
+            });
+          }
+        });
+
+      })();
+
     </script>
     <script>
     (function(){

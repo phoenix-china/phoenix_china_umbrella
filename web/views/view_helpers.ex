@@ -72,15 +72,26 @@ defmodule PhoenixChina.ViewHelpers do
     "http://gravatar.eqoe.cn/avatar/#{email}?d=wavatar&s=#{size}"
   end
 
+  def at_user(content) do
+    Regex.replace(~r/@(\S+)\s?/, content, fn s, x ->
+      cond do
+        User |> Repo.get_by(nickname: x) ->
+          "<a href='/users/#{x}'>@#{x}</a> "
+        true -> s
+      end
+    end)
+  end
+
   def markdown(content) do
     {:safe, clean_body} = Phoenix.HTML.html_escape(content)
 
     clean_body
+    |> at_user
     |> Earmark.to_html
     |> raw
   end
 
   def captcha_site_key() do
-    PhoenixChina.Luosimao.captcha_site_key 
+    PhoenixChina.Luosimao.captcha_site_key
   end
 end

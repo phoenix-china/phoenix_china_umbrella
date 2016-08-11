@@ -1,9 +1,11 @@
 defmodule PhoenixChina.PostController do
   use PhoenixChina.Web, :controller
 
+  alias PhoenixChina.User
   alias PhoenixChina.Post
   alias PhoenixChina.Comment
-
+  alias PhoenixChina.Notification
+  
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.ModelOperator, only: [set: 4]
 
@@ -23,7 +25,39 @@ defmodule PhoenixChina.PostController do
     changeset = Post.changeset(:insert, %Post{}, post_params)
 
     case Repo.insert(changeset) do
-      {:ok, _post} ->
+      {:ok, post} ->
+        Enum.map(Regex.scan(~r/@(\S+)\s?/, post.content), fn [s, nickname] ->
+          user = User |> Repo.get_by(nickname: nickname)
+
+          if user && (user != current_user) do
+            notification_html = Phoenix.View.render_to_string(
+              PhoenixChina.NotificationView,
+              "at_post.html",
+              conn: conn,
+              user: current_user,
+              post: post
+            )
+
+            notification_struct = %Notification{
+              user_id: user.id,
+              operator_id: current_user.id,
+              action: "at_post",
+              data_id: post.id,
+              html: notification_html
+            }
+
+            case Repo.insert(notification_struct) do
+              {:ok, notification} ->
+                PhoenixChina.Endpoint.broadcast(
+                  "notifications:" <> (notification.user_id |> Integer.to_string),
+                  ":msg",
+                  %{"body" => notification_html}
+                )
+              {:error, struct} -> struct
+            end
+          end
+        end)
+
         conn
         |> put_flash(:info, "帖子发布成功.")
         |> redirect(to: page_path(conn, :index))

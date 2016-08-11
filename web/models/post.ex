@@ -50,11 +50,4 @@ defmodule PhoenixChina.Post do
     |> validate_length(:title, min: 1, max: 140)
     |> validate_length(:content, min: 1, max: 20000)
   end
-
-  def set(%{:id => post_id}, :latest_comment_id, value) do
-    __MODULE__
-    |> where(id: ^post_id)
-    |> update(set: [latest_comment_id: ^value])
-    |> Repo.update_all([])
-  end
 end
