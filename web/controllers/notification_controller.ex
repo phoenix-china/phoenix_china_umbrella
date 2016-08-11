@@ -11,7 +11,7 @@ defmodule PhoenixChina.NotificationController do
     when action in [:default, :readall]
 
 
-  def default(conn, params) do
+  def default(conn, %{"page" => _page} = params) do
     current_user = current_user(conn)
 
     page = Notification

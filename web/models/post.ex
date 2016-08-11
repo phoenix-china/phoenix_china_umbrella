@@ -1,7 +1,6 @@
 defmodule PhoenixChina.Post do
   use PhoenixChina.Web, :model
 
-  alias PhoenixChina.Repo
   alias PhoenixChina.User
   alias PhoenixChina.Comment
 
