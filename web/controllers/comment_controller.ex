@@ -38,7 +38,9 @@ defmodule PhoenixChina.CommentController do
     case Repo.insert(changeset) do
       {:ok, comment} ->
         Post |> set(post, :latest_comment_id, comment.id)
+        Post |> set(post, :latest_comment_inserted_at, comment.inserted_at)
         Post |> inc(post, :comment_count)
+
 
         if current_user.id != post.user_id do
           notification_html = Phoenix.View.render_to_string(

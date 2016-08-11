@@ -19,6 +19,8 @@ defmodule PhoenixChina.Post do
     field :praise_count, :integer, default: 0
     # 最新一个评论
     belongs_to :latest_comment, Comment, foreign_key: :latest_comment_id
+    # 最新一条评论的创建时间
+    field :latest_comment_inserted_at, Ecto.DateTime;
 
     timestamps()
   end
@@ -38,6 +40,7 @@ defmodule PhoenixChina.Post do
     |> validate_required(@required_params)
     |> validate_length(:title, min: 1, max: 140)
     |> validate_length(:content, min: 1, max: 20000)
+    |> put_change(:latest_comment_inserted_at, Ecto.DateTime.utc)
   end
 
   def changeset(:update, struct, params) do
