@@ -9,7 +9,7 @@ defmodule PhoenixChina.PostPraiseController do
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.ModelOperator, only: [inc: 3, dec: 3]
 
-  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:create, :cancel]
 
   def create(conn, %{"post_id" => post_id}) do

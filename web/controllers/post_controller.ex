@@ -9,7 +9,7 @@ defmodule PhoenixChina.PostController do
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.ModelOperator, only: [set: 4, inc: 3]
 
-  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:new, :create, :edit, :update, :delete]
   plug PhoenixChina.GuardianPlug
 

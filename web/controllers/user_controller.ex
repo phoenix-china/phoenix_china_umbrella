@@ -11,7 +11,7 @@ defmodule PhoenixChina.UserController do
   import PhoenixChina.Mailer, only: [send_confirmation_email: 2, send_reset_password_email: 2]
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
-  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianHandler]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:profile, :account]
 
   plug PhoenixChina.GuardianPlug
