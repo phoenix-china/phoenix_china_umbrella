@@ -1,0 +1,90 @@
+<style>
+    #git-commits {
+        font-family: 'Helvetica', Arial, sans-serif;
+        background: #fff;
+        margin: 0 -15px 0;
+        padding: 15px 20px;
+    }
+    #git-commits a {
+        text-decoration: none;
+        color: #f66;
+    }
+    #git-commits li {
+        line-height: 1.5em;
+        margin-bottom: 20px;
+    }
+    #git-commits .author, #git-commits .date {
+        font-weight: bold;
+    }
+</style>
+
+<div id="git-commits">
+    <h1>Latest PhoenixFramework Commits</h1>
+    <template v-for="branch in branches">
+        <input type="radio"
+               name="branch"
+               :id="branch"
+               :value="branch"
+               v-model="currentBranch">
+        <label :for="branch">{{branch}}</label>
+    </template>
+    <p>phoenixframework/phoenix@{{currentBranch}}</p>
+    <ul>
+        <li v-for="record in commits">
+            <a :href="record.html_url" target="_blank" class="commit">{{record.sha.slice(0, 7)}}</a>
+            - <span class="message">{{record.commit.message | truncate}}</span><br>
+            by <a class="author" v-bind:href="record.author.html_url" target="_blank">
+                <img v-bind:src="record.author.avatar_url + '&s=20'" alt="" width="20" height="20">
+                {{record.commit.author.name}}
+            </a>
+            at <span class="date">{{record.commit.author.date | formatDate}}</span>
+        </li>
+    </ul>
+</div>
+<script src="https://cdn.jsdelivr.net/vue/1.0.26/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/vue.resource/0.9.3/vue-resource.min.js"></script>
+
+<script>
+    Vue.use(VueResource);
+
+    var apiURL = 'https://api.github.com/repos/phoenixframework/phoenix/commits?per_page=20&sha=';
+
+    var demo = new Vue({
+
+        el: '#git-commits',
+
+        data: {
+            branches: ['master', 'v1.2'],
+            currentBranch: 'master',
+            commits: null
+        },
+
+        created: function () {
+            this.fetchData()
+        },
+
+        watch: {
+            currentBranch: 'fetchData'
+        },
+
+        filters: {
+            truncate: function (v) {
+                var newline = v.indexOf('\n');
+                return newline > 0 ? v.slice(0, newline) : v
+            },
+            formatDate: function (v) {
+                return v.replace(/T|Z/g, ' ')
+            }
+        },
+
+        methods: {
+            fetchData: function () {
+                var self = this;
+
+                self.$http.get(apiURL + self.currentBranch).then(function(res) {
+                    self.commits = res.data;
+                });
+            }
+        }
+    })
+</script>

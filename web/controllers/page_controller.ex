@@ -29,4 +29,8 @@ defmodule PhoenixChina.PageController do
     render conn, "room.html",
       layout: {PhoenixChina.LayoutView, "room.html"}
   end
+
+  def commits(conn, _params) do
+    render conn, "commits.html"
+  end
 end

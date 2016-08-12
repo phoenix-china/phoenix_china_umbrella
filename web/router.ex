@@ -31,6 +31,7 @@ defmodule PhoenixChina.Router do
     get "/signout", SessionController, :delete
 
     get "/room", PageController, :room
+    get "/commits", PageController, :commits
 
     resources "/posts", PostController do
        resources "/comments", CommentController, except: [:index]

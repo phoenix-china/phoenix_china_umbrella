@@ -35,6 +35,7 @@
         <div class="collapse navbar-collapse" id="header-nav">
           <ul class="nav navbar-nav">
             <li><%= link "首页", to: page_path(@conn, :index) %></li>
+            <li><%= link "Phoenix框架动态", to: page_path(@conn, :commits) %></li>
             <li><%= link "聊天室", to: page_path(@conn, :room) %></li>
             <li>
               <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=f19e76a20d96c376b69e33ad5fb24c9eb86b817c3ca2133d6df55319b929bcab"><img border="0" src="https://pub.idqqimg.com/wpa/images/group.png" alt="Phoenix开发基础" title="Phoenix开发基础"></a>
