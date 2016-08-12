@@ -1,10 +1,14 @@
 defmodule PhoenixChina.NotificationChannel do
   use Phoenix.Channel
+  import Guardian.Phoenix.Socket
 
-  def join("notifications:" <> _user_id, _params, socket) do
-    {:ok, socket}
-
-    # {:error, %{reason: "unauthorized"}}
+  def join("notifications:" <> _user_id, %{"guardian_token" => token}, socket) do
+    case sign_in(socket, token) do
+      {:ok, authed_socket, _guardian_params} ->
+        {:ok, %{message: "Joined"}, authed_socket}
+      {:error, reason} ->
+        {:error, %{reason: "unauthorized"}}
+    end
   end
 
   def handle_in(event, msg, socket) do

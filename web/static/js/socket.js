@@ -92,7 +92,7 @@ class Notification {
 
     socket.connect()
 
-    var channel = socket.channel("notifications:" + $user_meta.attr("content"), {})
+    var channel = socket.channel("notifications:" + $user_meta.attr("content"), {guardian_token: $('meta[name="guardian_token"]').attr('content')})
 
     channel.join()
       .receive("ok", resp => { console.log("Notification Joined successfully", resp) })

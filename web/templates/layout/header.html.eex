@@ -11,6 +11,7 @@
     <meta name="csrf" content="<%= Plug.CSRFProtection.get_csrf_token() %>">
     <%= if @logged_in do %>
     <meta name="user-id" content="<%= @current_user.id %>">
+    <meta name="guardian_token" content="<%= Guardian.Plug.current_token(@conn) %>">
     <%= end %>
     <title>Phoenix中文社区</title>
     <link rel="shortcut icon" href="https://www.phoenix-china.org/favicon.ico" >
