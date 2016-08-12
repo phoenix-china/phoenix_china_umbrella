@@ -23,6 +23,8 @@ defmodule PhoenixChina.CommentController do
     |> preload(:user)
     |> Repo.get!(comment_id)
 
+    conn = assign(conn, :title, "#{comment.user.nickname}在帖子#{post.title}的评论")
+
     render conn, "post.html",
       layout: {LayoutView, "base.html"},
       post: post,
@@ -94,6 +96,8 @@ defmodule PhoenixChina.CommentController do
   def edit(conn, %{"post_id" => post_id, "id" => id}) do
     current_user = current_user(conn)
     comment = Repo.get!(Comment, id)
+
+    conn = assign(conn, :title, "编辑评论")
 
     case comment.user_id == current_user.id do
       false ->

@@ -9,7 +9,7 @@ defmodule PhoenixChina.UserController do
   alias PhoenixChina.LayoutView
 
   import PhoenixChina.Mailer, only: [send_confirmation_email: 2, send_reset_password_email: 2]
-  import PhoenixChina.ViewHelpers, only: [current_user: 1]
+  import PhoenixChina.ViewHelpers, only: [current_user: 1, logged_in?: 1]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:profile, :account]
@@ -46,6 +46,7 @@ defmodule PhoenixChina.UserController do
 
   def new(conn, _params) do
     changeset = User.changeset(:signup, %User{})
+    conn = assign(conn, :title, "用户注册")
     render conn, "new.html",
       layout: {LayoutView, "app.html"},
       changeset: changeset
@@ -70,6 +71,12 @@ defmodule PhoenixChina.UserController do
   def show(conn, %{"nickname" => nickname, "page" => page}) do
     user = User |> Repo.get_by!(nickname: nickname)
 
+    who = cond do
+      logged_in?(conn) && current_user(conn) == user -> "我"
+      true -> nickname
+    end
+    conn = assign(conn, :title, "#{who}的主页")
+
     page = Post
     |> where(user_id: ^user.id)
     |> order_by(desc: :inserted_at)
@@ -88,6 +95,8 @@ defmodule PhoenixChina.UserController do
   def profile(conn, _params) do
     user = current_user(conn)
     changeset = User.changeset(:profile, user)
+
+    conn = assign(conn, :title, "编辑个人信息")
 
     render conn, "profile.html",
       current_page: :profile,
@@ -123,6 +132,8 @@ defmodule PhoenixChina.UserController do
     user = current_user(conn)
     changeset = User.changeset(:account, user)
 
+    conn = assign(conn, :title, "修改密码")
+
     render conn, "account.html",
       current_page: :account,
       changeset: changeset
@@ -151,6 +162,12 @@ defmodule PhoenixChina.UserController do
   def comments(conn, %{"nickname" => nickname, "page" => page}) do
     user = User |> Repo.get_by!(nickname: nickname)
 
+    who = cond do
+      logged_in?(conn) && current_user(conn) == user -> "我"
+      true -> nickname
+    end
+    conn = assign(conn, :title, "#{who}的评论列表")
+
     page = Comment
     |> where(user_id: ^user.id)
     |> order_by(desc: :inserted_at)
@@ -168,6 +185,12 @@ defmodule PhoenixChina.UserController do
 
   def collects(conn, %{"nickname" => nickname, "page" => page}) do
     user = User |> Repo.get_by!(nickname: nickname)
+
+    who = cond do
+      logged_in?(conn) && current_user(conn) == user -> "我"
+      true -> nickname
+    end
+    conn = assign(conn, :title, "#{who}的收藏")
 
     page = PostCollect
     |> preload([:post, post: [:user, :latest_comment, latest_comment: :user]])
@@ -189,6 +212,8 @@ defmodule PhoenixChina.UserController do
   """
   def password_forget(conn, _params) do
     changeset = User.changeset(:password_forget, %User{})
+
+    conn = assign(conn, :title, "邮箱找回密码")
 
     render conn, "password_forget.html",
       layout: {LayoutView, "app.html"},
@@ -218,6 +243,8 @@ defmodule PhoenixChina.UserController do
   """
   def password_reset(conn, %{"password_reset_token" => token}) do
     changeset = User.changeset(:password_reset, %User{}, %{"token" => token})
+
+    conn = assign(conn, :title, "重置密码")
 
     conn = case changeset.errors[:token] do
       {msg, _} ->
@@ -267,6 +294,12 @@ defmodule PhoenixChina.UserController do
   def follower(conn, %{"nickname" => nickname, "page" => page}) do
     user = User |> Repo.get_by!(nickname: nickname)
 
+    who = cond do
+      logged_in?(conn) && current_user(conn) == user -> "我"
+      true -> nickname
+    end
+    conn = assign(conn, :title, "#{who}的关注者")
+
     page = UserFollow
     |> where(to_user_id: ^user.id)
     |> order_by(desc: :inserted_at)
@@ -287,6 +320,12 @@ defmodule PhoenixChina.UserController do
   """
   def followed(conn, %{"nickname" => nickname, "page" => page}) do
     user = User |> Repo.get_by!(nickname: nickname)
+
+    who = cond do
+      logged_in?(conn) && current_user(conn) == user -> "我"
+      true -> nickname
+    end
+    conn = assign(conn, :title, "#{who}的正在关注")
 
     page = UserFollow
     |> where(user_id: ^user.id)

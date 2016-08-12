@@ -31,6 +31,7 @@ defmodule PhoenixChina.PageController do
   end
 
   def commits(conn, _params) do
+    conn = assign(conn, :title, "Phoenix框架动态")
     render conn, "commits.html"
   end
 end

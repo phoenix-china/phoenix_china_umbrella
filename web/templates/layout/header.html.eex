@@ -13,7 +13,11 @@
     <meta name="user-id" content="<%= @current_user.id %>">
     <meta name="guardian_token" content="<%= Guardian.Plug.current_token(@conn) %>">
     <%= end %>
+    <%= if @conn.assigns[:title] do %>
+    <title><%= @conn.assigns[:title] %> - Phoenix中文社区</title>
+    <%= else %>
     <title>Phoenix中文社区</title>
+    <%= end %>
     <link rel="shortcut icon" href="https://www.phoenix-china.org/favicon.ico" >
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">

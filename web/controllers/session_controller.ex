@@ -6,6 +6,7 @@ defmodule PhoenixChina.SessionController do
 
   def new(conn, _params) do
     changeset = User.changeset(:signin, %User{})
+    conn = assign(conn, :title, "用户登录")
     render(conn, "new.html", changeset: changeset)
   end
 

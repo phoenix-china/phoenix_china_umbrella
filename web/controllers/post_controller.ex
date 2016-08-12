@@ -69,6 +69,8 @@ defmodule PhoenixChina.PostController do
 
     changeset = Comment.changeset(%Comment{})
 
+    conn = assign(conn, :title, post.title)
+
     render conn, "show.html",
       post: post,
       comments: comments,
@@ -78,6 +80,8 @@ defmodule PhoenixChina.PostController do
   def edit(conn, %{"id" => id}) do
     current_user = current_user(conn)
     post = Repo.get!(Post, id)
+
+    conn = assign(conn, :title, "编辑帖子")
 
     case post.user_id == current_user.id do
       false ->
