@@ -139,13 +139,29 @@ defmodule PhoenixChina.PostController do
     end
   end
 
-  def set_top(conn, %{"post_id" => id} = params) do
+  def set_top(conn, %{"post_id" => id}) do
     current_user = current_user(conn)
 
     cond do
       current_user.is_admin ->
         post = Repo.get!(Post, id)
         Post |> set(post, :is_top, true)
+
+        notification_html = Notification.render "post_top.html",
+          conn: conn,
+          user: current_user,
+          post: post
+
+        Notification.publish(
+          "post_top",
+          post.user_id,
+          current_user.id,
+          post.id,
+          notification_html
+        )
+
+        User |> inc(%{id: post.user_id}, :unread_notifications_count)
+
         conn
         |> put_flash(:info, "置顶成功")
         |> redirect(to: post_path(conn, :show, post))
@@ -162,7 +178,7 @@ defmodule PhoenixChina.PostController do
         post = Repo.get!(Post, id)
         Post |> set(post, :is_top, false)
         conn
-        |> put_flash(:info, "取消置顶成功") 
+        |> put_flash(:info, "取消置顶成功")
         |> redirect(to: post_path(conn, :show, post))
       true ->
         conn |> redirect(to: page_path(conn, :index))
