@@ -15,7 +15,7 @@ defmodule PhoenixChina.AuthController do
     |> redirect(to: "/")
   end
 
-  def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
+  def callback(%{assigns: %{ueberauth_auth: _auth}} = conn, _params) do
     # user = auth.extra.raw_info.user
     # id bio login, html_url
     # IO.inspect auth

@@ -1,7 +1,7 @@
 defmodule PhoenixChina.NotificationChannel do
   use Phoenix.Channel
 
-  def join("notifications:" <> user_id, _params, socket) do
+  def join("notifications:" <> _user_id, _params, socket) do
     {:ok, socket}
 
     # {:error, %{reason: "unauthorized"}}
