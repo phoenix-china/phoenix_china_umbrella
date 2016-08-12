@@ -40,6 +40,9 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] 用户修改头像
 - [x] 站内通知
 - [x] 回复用户的评论(@功能)
+- [x] 帖子置顶
+
+## Todo
 - [ ] 帖子标签
 - [ ] 用户积分
 
