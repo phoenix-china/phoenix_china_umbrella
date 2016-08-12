@@ -13,6 +13,7 @@ defmodule PhoenixChina.User do
     field :follower_count, :integer, default: 0
     field :followed_count, :integer, default: 0
     field :unread_notifications_count, :integer, default: 0
+    field :is_admin, :boolean, default: false
 
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true

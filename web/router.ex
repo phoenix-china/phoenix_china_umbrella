@@ -40,8 +40,10 @@ defmodule PhoenixChina.Router do
 
        post "/praises", PostPraiseController, :create
        delete "/praises", PostPraiseController, :cancel
-    end
 
+       put "/set_top", PostController, :set_top
+       put "/cancel_top", PostController, :cancel_top
+    end
 
     resources "/comments", CommentController, only: [] do
       post "/praises", CommentPraiseController, :create

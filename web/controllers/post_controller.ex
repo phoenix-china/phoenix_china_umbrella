@@ -138,4 +138,34 @@ defmodule PhoenixChina.PostController do
         |> redirect(to: page_path(conn, :index))
     end
   end
+
+  def set_top(conn, %{"post_id" => id} = params) do
+    current_user = current_user(conn)
+
+    cond do
+      current_user.is_admin ->
+        post = Repo.get!(Post, id)
+        Post |> set(post, :is_top, true)
+        conn
+        |> put_flash(:info, "置顶成功")
+        |> redirect(to: post_path(conn, :show, post))
+      true ->
+        conn |> redirect(to: page_path(conn, :index))
+    end
+  end
+
+  def cancel_top(conn, %{"post_id" => id}) do
+    current_user = current_user(conn)
+
+    cond do
+      current_user.is_admin ->
+        post = Repo.get!(Post, id)
+        Post |> set(post, :is_top, false)
+        conn
+        |> put_flash(:info, "取消置顶成功") 
+        |> redirect(to: post_path(conn, :show, post))
+      true ->
+        conn |> redirect(to: page_path(conn, :index))
+    end
+  end
 end

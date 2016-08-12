@@ -11,9 +11,11 @@
     <h4 class="media-heading">
       <span class="badge pull-right"> <%= @post.comment_count %> </span>
       <%= link @post.title, to: post_path(@conn, :show, @post) %>
+      <%= if @post.is_top do %>
+      <span class="fa fa-thumb-tack"></span>
+      <%= end %>
     </h4>
     <div class="media-body">
-
       <div class="post-info">
         由 <%= link @post.user.nickname, to: user_path(@conn, :show, @post.user.nickname) %>
         于<%= @post.inserted_at |> from_now %>发布

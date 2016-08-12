@@ -19,7 +19,9 @@ defmodule PhoenixChina.Post do
     # 最新一个评论
     belongs_to :latest_comment, Comment, foreign_key: :latest_comment_id
     # 最新一条评论的创建时间
-    field :latest_comment_inserted_at, Ecto.DateTime;
+    field :latest_comment_inserted_at, Ecto.DateTime
+
+    field :is_top, :boolean, default: false
 
     timestamps()
   end
