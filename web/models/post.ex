@@ -53,15 +53,4 @@ defmodule PhoenixChina.Post do
     |> validate_length(:title, min: 1, max: 140)
     |> validate_length(:content, min: 1, max: 20000)
   end
-
-  def validate_label(%Ecto.Changeset{valid?: true} = changeset, field) do
-    case PostLabel |> Repo.get_by(content: get_field(changeset, field)) do
-      label -> changeset |> put_change(field, label.id)
-      nil -> changeset |> add_error(field, "标签错误")
-    end
-  end
-
-  def validate_label(%Ecto.Changeset{valid?: false} = changeset, _field) do
-    changeset
-  end
 end

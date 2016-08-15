@@ -12,7 +12,7 @@
       <h1 class="post-title"><%= @post.title %></h1>
       <div class="post-info" style="margin-top: 10px;">
         <%= if @post.label do %>
-        <span class="label <%= PhoenixChina.PostLabel.class(@post.label.id) %>"><%= @post.label.content %></span>
+        <%= post_label(@post) %>
         •
         <%= end %>
         由 <%= link @post.user.nickname, to: user_path(@conn, :show, @post.user.nickname) %>

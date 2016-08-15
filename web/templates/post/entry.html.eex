@@ -18,10 +18,9 @@
     <div class="media-body">
       <div class="post-info">
         <%= if @post.label do %>
-        <span class="label <%= PhoenixChina.PostLabel.class(@post.label.id) %>"><%= @post.label.content %></span>
+        <%= post_label(@post) %>
         •
         <%= end %>
-
         由 <%= link @post.user.nickname, to: user_path(@conn, :show, @post.user.nickname) %>
         于<%= @post.inserted_at |> from_now %>发布
         <%= if @post.latest_comment do %>

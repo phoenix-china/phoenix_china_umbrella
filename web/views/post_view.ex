@@ -1,3 +1,15 @@
 defmodule PhoenixChina.PostView do
   use PhoenixChina.Web, :view
+
+  @label_classes %{
+    1 => "label-primary",
+    2 => "label-success",
+    3 => "label-info",
+    4 => "label-warning",
+    5 => "label-danger",
+  }
+
+  def post_label(post) do
+    raw ~s(<span class="label #{Map.get(@label_classes, rem(post.label.id, 5), "label-default")}">#{post.label.content}</span>) 
+  end
 end

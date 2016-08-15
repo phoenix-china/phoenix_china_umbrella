@@ -193,7 +193,7 @@ defmodule PhoenixChina.UserController do
     conn = assign(conn, :title, "#{who}的收藏")
 
     page = PostCollect
-    |> preload([:post, post: [:user, :latest_comment, latest_comment: :user]])
+    |> preload([:post, post: [:label, :user, :latest_comment, latest_comment: :user]])
     |> where(user_id: ^user.id)
     |> order_by(desc: :inserted_at)
     |> Repo.paginate(%{"page" => page})

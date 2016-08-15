@@ -8,6 +8,8 @@
     欢迎fork和提交代码！
   </p>
 </div>
+<%= navs(@conn, @labels) %>
+
 
 <div class="panel posts-info" style="border-radius: 4px 4px 0 0;">
   <%= link "发布帖子", to: post_path(@conn, :new), class: "btn btn-success btn-xs pull-right" %>
@@ -16,4 +18,4 @@
 
 <%= raw @post_list_html %>
 
-<%= pagination_links @conn, @page, path: &page_path/3 %>
+<%= pagination_links @conn, @page, path: &page_path/3, label: Map.get(@conn.params, "label", "全部") %>
