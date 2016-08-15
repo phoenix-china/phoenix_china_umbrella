@@ -8,7 +8,7 @@ defmodule PhoenixChina.PageController do
     page = ConCache.get_or_store(:phoenix_china, "page_index:page:#{page_num}", fn() ->
       Post
       |> order_by(desc: :is_top, desc: :latest_comment_inserted_at)
-      |> preload([:user, :latest_comment, latest_comment: :user])
+      |> preload([:label, :user, :latest_comment, latest_comment: :user])
       |> Repo.paginate(%{"page" => page_num})
     end)
 

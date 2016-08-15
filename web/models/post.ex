@@ -3,11 +3,13 @@ defmodule PhoenixChina.Post do
 
   alias PhoenixChina.User
   alias PhoenixChina.Comment
+  alias PhoenixChina.PostLabel
 
   schema "posts" do
     field :title, :string
     field :content, :string
     belongs_to :user, User
+    belongs_to :label, PostLabel
     has_many :comments, Comment, on_delete: :delete_all
 
     # 评论数量
@@ -26,7 +28,7 @@ defmodule PhoenixChina.Post do
     timestamps()
   end
 
-  @required_params [:title, :content, :user_id]
+  @required_params [:title, :content, :label_id, :user_id]
   @optional_params [:comment_count, :collect_count, :praise_count, :latest_comment_id]
 
 
@@ -50,5 +52,16 @@ defmodule PhoenixChina.Post do
     |> validate_required(@required_params)
     |> validate_length(:title, min: 1, max: 140)
     |> validate_length(:content, min: 1, max: 20000)
+  end
+
+  def validate_label(%Ecto.Changeset{valid?: true} = changeset, field) do
+    case PostLabel |> Repo.get_by(content: get_field(changeset, field)) do
+      label -> changeset |> put_change(field, label.id)
+      nil -> changeset |> add_error(field, "标签错误")
+    end
+  end
+
+  def validate_label(%Ecto.Changeset{valid?: false} = changeset, _field) do
+    changeset
   end
 end

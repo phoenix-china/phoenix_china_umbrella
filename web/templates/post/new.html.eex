@@ -1,5 +1,5 @@
 <div class="phoenix_china-form">
   <h2>发布帖子</h2>
 
-  <%= render "form.html", changeset: @changeset, action: post_path(@conn, :create) %>
+  <%= render "form.html", changeset: @changeset, labels: @labels, action: post_path(@conn, :create) %>
 </div>

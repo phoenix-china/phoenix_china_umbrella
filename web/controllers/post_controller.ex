@@ -3,6 +3,7 @@ defmodule PhoenixChina.PostController do
 
   alias PhoenixChina.User
   alias PhoenixChina.Post
+  alias PhoenixChina.PostLabel
   alias PhoenixChina.Comment
   alias PhoenixChina.Notification
 
@@ -15,7 +16,8 @@ defmodule PhoenixChina.PostController do
 
   def new(conn, _params) do
     changeset = Post.changeset(:insert, %Post{})
-    render(conn, "new.html", changeset: changeset)
+    labels = PostLabel |> Repo.all
+    render(conn, "new.html", changeset: changeset, labels: labels)
   end
 
   def create(conn, %{"post" => post_params}) do
@@ -52,13 +54,14 @@ defmodule PhoenixChina.PostController do
         |> put_flash(:info, "帖子发布成功.")
         |> redirect(to: page_path(conn, :index))
       {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        labels = PostLabel |> Repo.all
+        render(conn, "new.html", changeset: changeset, labels: labels)
     end
   end
 
   def show(conn, %{"id" => id}) do
     post = Post
-    |> preload([:user, :latest_comment, latest_comment: :user])
+    |> preload([:label, :user, :latest_comment, latest_comment: :user])
     |> Repo.get!(id)
 
     comments = Comment
@@ -91,7 +94,8 @@ defmodule PhoenixChina.PostController do
 
       true ->
         changeset = Post.changeset(:update, post)
-        render(conn, "edit.html", post: post, changeset: changeset)
+        labels = PostLabel |> Repo.all
+        render(conn, "edit.html", post: post, changeset: changeset, labels: labels)
     end
   end
 
@@ -114,7 +118,8 @@ defmodule PhoenixChina.PostController do
             |> put_flash(:info, "帖子更新成功.")
             |> redirect(to: post_path(conn, :show, post))
           {:error, changeset} ->
-            render(conn, "edit.html", post: post, changeset: changeset)
+            labels = PostLabel |> Repo.all
+            render(conn, "edit.html", post: post, changeset: changeset, labels: labels)
         end
     end
   end
