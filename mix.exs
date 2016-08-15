@@ -52,6 +52,7 @@ defmodule PhoenixChina.Mixfile do
       {:httpotion, "~> 3.0.0"},
       {:con_cache, "~> 0.11.1"},
       {:qiniu, "~> 0.3.0"},
+      {:hashids, "~> 2.0"},
     ]
   end
 

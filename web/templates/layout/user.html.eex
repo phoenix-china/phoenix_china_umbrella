@@ -56,6 +56,18 @@
               <div class="n">收藏</div>
             </div>
           </div>
+
+          <%= if @user.github do %>
+          <div class="row">
+            <ul class="user-third-party">
+              <li>
+                <%= for github <- @user.github do %>
+                  <%= link raw("<i class=\"fa fa-github\"></i> Github"), to: github.github_url, target: "_blank" %>
+                <%= end %>
+              </li>
+            </ul>
+          </div>
+          <%= end %>
         </div>
       </div>
     </div>

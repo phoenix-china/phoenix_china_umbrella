@@ -2,6 +2,7 @@ defmodule PhoenixChina.User do
   use PhoenixChina.Web, :model
 
   alias PhoenixChina.Repo
+  alias PhoenixChina.UserGithub
 
   schema "users" do
     field :email, :string
@@ -20,6 +21,8 @@ defmodule PhoenixChina.User do
     field :old_password, :string, virtual: true
     field :token, :string, virtual: true
     field :luotest_response, :string, virtual: true
+
+    has_many :github, UserGithub
 
     timestamps()
   end

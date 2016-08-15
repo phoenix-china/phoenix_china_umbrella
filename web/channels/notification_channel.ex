@@ -6,7 +6,7 @@ defmodule PhoenixChina.NotificationChannel do
     case sign_in(socket, token) do
       {:ok, authed_socket, _guardian_params} ->
         {:ok, %{message: "Joined"}, authed_socket}
-      {:error, reason} ->
+      {:error, _reason} ->
         {:error, %{reason: "unauthorized"}}
     end
   end

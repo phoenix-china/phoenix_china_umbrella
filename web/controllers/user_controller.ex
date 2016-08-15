@@ -23,7 +23,7 @@ defmodule PhoenixChina.UserController do
   defp load_data(conn, _) do
     user = case conn.params do
       %{"nickname" => nickname} ->
-        User |> Repo.get_by!(nickname: nickname)
+        User |> preload([:github]) |> Repo.get_by!(nickname: nickname)
       _ ->
         current_user(conn)
     end

@@ -142,3 +142,13 @@ body {
   #notification li span {
     margin: 0 5px;
   }
+
+.user-third-party,
+.user-third-party li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.user-third-party li {
+  padding: 10px 0 0 0;
+}
