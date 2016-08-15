@@ -41,10 +41,10 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 - [x] 站内通知
 - [x] 回复用户的评论(@功能)
 - [x] 帖子置顶
+- [x] 帖子标签
 
 ## Todo
-- [ ] 帖子标签
-- [ ] 用户积分
+
 
 ## 贡献
 - ![holin](https://avatars0.githubusercontent.com/u/1019?v=3&s=20) [holin](https://github.com/holin)
