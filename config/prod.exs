@@ -14,7 +14,8 @@ use Mix.Config
 config :phoenix_china, PhoenixChina.Endpoint,
   http: [port: {:system, "PORT"}],
   url: [host: "www.phoenix-china.org", port: 80],
-  cache_static_manifest: "priv/static/manifest.json"
+  cache_static_manifest: "priv/static/manifest.json",
+  check_origin: ["phoenix-china.org"]
 
 # Do not print debug messages in production
 config :logger, level: :info
