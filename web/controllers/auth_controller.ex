@@ -4,6 +4,8 @@ defmodule PhoenixChina.AuthController do
   alias PhoenixChina.User
   alias PhoenixChina.UserGithub
 
+  import PhoenixChina.ModelOperator, only: [inc: 3]
+
   plug Ueberauth
 
 
@@ -26,21 +28,40 @@ defmodule PhoenixChina.AuthController do
       user
     end
 
+    generate_nickname = fn github_data ->
+      name = github_data.extra.raw_info.user["name"]
+      nickname = github_data.info.nickname
+      
+      tail = Hashids.new(salt: "phoenix-china-nickname")
+      |> Hashids.encode(:os.system_time(:milli_seconds))
+
+      user_by_name = name && User |> Repo.get_by(nickname: name)
+      user_by_nickname = nickname && User |> Repo.get_by(nickname: nickname)
+
+      cond do
+        name && is_nil(user_by_name) -> name
+        nickname && is_nil(user_by_nickname) -> nickname
+        name && user_by_name -> "#{name}-#{tail}"
+        nickname && user_by_nickname -> "#{nickname}-#{tail}"
+        true -> tail
+      end
+    end
+
     create_user = fn github_data ->
       user_data = github_data.extra.raw_info.user
-      s = Hashids.new(salt: "phoenix-china")
+      user_email = github_data.info.email
 
-      changeset = %User{
-        "email": nil,
+      changeset = User.changeset(:github, %User{}, %{
+        "email": user_email,
         "password_hash": nil,
-        "nickname": "#{user_data["name"] || github_data.info.nickname}-#{Hashids.encode(s, :os.system_time(:milli_seconds))}",
+        "nickname": generate_nickname.(github_data),
         "bio": user_data["bio"],
         "avatar": "#{user_data["avatar_url"]}&s=200"
-      }
+      })
+
       case Repo.insert(changeset) do
         {:ok, new_user} ->
           create_github.(new_user, github_data)
-          new_user
         {:error, _} -> nil
       end
     end
@@ -66,7 +87,7 @@ defmodule PhoenixChina.AuthController do
 
       user_email ->
         user = find_user.(user_email)
-        
+
         cond do
           user && Enum.count(user.github) > 0 -> user
           user && Enum.count(user.github) == 0 -> create_github.(user, auth)

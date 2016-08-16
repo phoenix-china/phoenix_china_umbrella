@@ -100,6 +100,13 @@ defmodule PhoenixChina.User do
     |> validate_length(:bio, max: 140)
   end
 
+  def changeset(:github, struct, params) do
+    struct
+    |> cast(params, [:email, :password_hash, :nickname, :avatar, :bio])
+    |> unique_constraint(:email)
+    |> unique_constraint(:nickname)
+  end
+
   # defp validate_luotest_response(changeset) do
   #   case changeset.changes do
   #     %{"luotest_response": luotest_response} ->
