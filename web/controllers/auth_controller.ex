@@ -4,8 +4,6 @@ defmodule PhoenixChina.AuthController do
   alias PhoenixChina.User
   alias PhoenixChina.UserGithub
 
-  import PhoenixChina.ModelOperator, only: [inc: 3]
-
   plug Ueberauth
 
 
@@ -31,7 +29,7 @@ defmodule PhoenixChina.AuthController do
     generate_nickname = fn github_data ->
       name = github_data.extra.raw_info.user["name"]
       nickname = github_data.info.nickname
-      
+
       tail = Hashids.new(salt: "phoenix-china-nickname")
       |> Hashids.encode(:os.system_time(:milli_seconds))
 
