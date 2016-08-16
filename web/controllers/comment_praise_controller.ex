@@ -1,11 +1,7 @@
 defmodule PhoenixChina.CommentPraiseController do
   use PhoenixChina.Web, :controller
 
-  alias PhoenixChina.User
-  alias PhoenixChina.Post
-  alias PhoenixChina.Comment
-  alias PhoenixChina.CommentPraise
-  alias PhoenixChina.Notification
+  alias PhoenixChina.{User, Post, Comment, CommentPraise, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.ModelOperator, only: [inc: 3, dec: 3]

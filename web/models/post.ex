@@ -1,9 +1,7 @@
 defmodule PhoenixChina.Post do
   use PhoenixChina.Web, :model
 
-  alias PhoenixChina.User
-  alias PhoenixChina.Comment
-  alias PhoenixChina.PostLabel
+  alias PhoenixChina.{User, Comment, PostLabel}
 
   schema "posts" do
     field :title, :string

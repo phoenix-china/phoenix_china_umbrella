@@ -1,12 +1,7 @@
 defmodule PhoenixChina.UserController do
   use PhoenixChina.Web, :controller
 
-  alias PhoenixChina.User
-  alias PhoenixChina.Post
-  alias PhoenixChina.Comment
-  alias PhoenixChina.PostCollect
-  alias PhoenixChina.UserFollow
-  alias PhoenixChina.LayoutView
+  alias PhoenixChina.{User, Post, Comment, PostCollect, UserFollow, LayoutView}
 
   import PhoenixChina.Mailer, only: [send_confirmation_email: 2, send_reset_password_email: 2]
   import PhoenixChina.ViewHelpers, only: [current_user: 1, logged_in?: 1]

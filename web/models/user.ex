@@ -1,8 +1,7 @@
 defmodule PhoenixChina.User do
   use PhoenixChina.Web, :model
 
-  alias PhoenixChina.Repo
-  alias PhoenixChina.UserGithub
+  alias PhoenixChina.{Repo, UserGithub}
 
   schema "users" do
     field :email, :string

@@ -2,14 +2,7 @@ defmodule PhoenixChina.ViewHelpers do
   use PhoenixChina.Web, :model
   use Phoenix.HTML
 
-  alias PhoenixChina.Repo
-  alias PhoenixChina.User
-  alias PhoenixChina.UserFollow
-  alias PhoenixChina.Post
-  alias PhoenixChina.PostCollect
-  alias PhoenixChina.PostPraise
-  alias PhoenixChina.Comment
-  alias PhoenixChina.CommentPraise
+  alias PhoenixChina.{Repo, User, UserFollow, Post, PostCollect, PostPraise, Comment, CommentPraise}
 
   def logged_in?(conn) do
     Guardian.Plug.authenticated?(conn)

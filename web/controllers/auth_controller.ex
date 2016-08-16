@@ -1,8 +1,7 @@
 defmodule PhoenixChina.AuthController do
   use PhoenixChina.Web, :controller
 
-  alias PhoenixChina.User
-  alias PhoenixChina.UserGithub
+  alias PhoenixChina.{User, UserGithub}
 
   plug Ueberauth
 
