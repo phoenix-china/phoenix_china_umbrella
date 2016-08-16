@@ -14,36 +14,72 @@ defmodule PhoenixChina.AuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    user_data = auth.extra.raw_info.user
+    create_github = fn user, github_data ->
+      user_data = github_data.extra.raw_info.user
 
-    user = case UserGithub |> preload([:user]) |> Repo.get_by(github_id: Integer.to_string(user_data["id"])) do
-      nil ->
-        s = Hashids.new(salt: "phoenix-china")
+      Repo.insert(%UserGithub{
+        "github_id": Integer.to_string(user_data["id"]),
+        "github_url": user_data["html_url"],
+        "user_id": user.id
+      })
 
-        changeset = %User{
-          "email": nil,
-          "password_hash": nil,
-          "nickname": "#{user_data["name"] || auth.info.nickname}-#{Hashids.encode(s, :os.system_time(:milli_seconds))}",
-          "bio": user_data["bio"],
-          "avatar": "#{user_data["avatar_url"]}&s=200"
-        }
-
-        case Repo.insert(changeset) do
-          {:ok, user} ->
-            Repo.insert(%UserGithub{
-              "github_id": Integer.to_string(user_data["id"]),
-              "github_url": user_data["html_url"],
-              "user_id": user.id
-            })
-            user
-          {:error, _} -> nil
-        end
-      user_github -> user_github.user
+      user
     end
 
-    conn
-    |> Guardian.Plug.sign_in(user)
-    |> put_flash(:info, "登录成功！")
-    |> redirect(to: page_path(conn, :index))
+    create_user = fn github_data ->
+      user_data = github_data.extra.raw_info.user
+      s = Hashids.new(salt: "phoenix-china")
+
+      changeset = %User{
+        "email": nil,
+        "password_hash": nil,
+        "nickname": "#{user_data["name"] || github_data.info.nickname}-#{Hashids.encode(s, :os.system_time(:milli_seconds))}",
+        "bio": user_data["bio"],
+        "avatar": "#{user_data["avatar_url"]}&s=200"
+      }
+      case Repo.insert(changeset) do
+        {:ok, new_user} ->
+          create_github.(new_user, github_data)
+          new_user
+        {:error, _} -> nil
+      end
+    end
+
+    find_user = fn email ->
+      User |> preload([:github]) |> Repo.get_by(email: email)
+    end
+
+    find_user_github = fn github_data ->
+      github_id = Integer.to_string(github_data.extra.raw_info.user["id"])
+      UserGithub |> preload([:user]) |> Repo.get_by(github_id: github_id)
+    end
+
+    user = case auth.info.email do
+      nil ->
+        user_github = find_user_github.(auth)
+
+        cond do
+          user_github -> user_github.user
+          is_nil(user_github) -> create_user.(auth)
+          true -> nil
+        end
+
+      user_email ->
+        user = find_user.(user_email)
+        
+        cond do
+          user && Enum.count(user.github) > 0 -> user
+          user && Enum.count(user.github) == 0 -> create_github.(user, auth)
+          is_nil(user) -> create_user.(auth)
+          true -> nil
+        end
+    end
+
+    conn = cond do
+      user -> conn |> Guardian.Plug.sign_in(user) |> put_flash(:info, "登录成功！")
+      true -> conn |> put_flash(:error, "登录失败！")
+    end
+
+    conn |> redirect(to: page_path(conn, :index))
   end
 end
