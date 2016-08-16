@@ -44,6 +44,13 @@ defmodule PhoenixChina.UserController do
     |> assign(:comment_count, comment_count)
   end
 
+  defp who(conn, user) do
+    cond do
+      logged_in?(conn) && current_user(conn).id == user.id -> "我"
+      true -> user.nickname
+    end
+  end
+
   def new(conn, _params) do
     changeset = User.changeset(:signup, %User{})
     conn = assign(conn, :title, "用户注册")
@@ -71,11 +78,7 @@ defmodule PhoenixChina.UserController do
   def show(conn, %{"nickname" => nickname, "page" => page}) do
     user = User |> Repo.get_by!(nickname: nickname)
 
-    who = cond do
-      logged_in?(conn) && current_user(conn) == user -> "我"
-      true -> nickname
-    end
-    conn = assign(conn, :title, "#{who}的主页")
+    conn = assign(conn, :title, "#{who(conn, user)}的主页")
 
     page = Post
     |> where(user_id: ^user.id)
@@ -162,11 +165,7 @@ defmodule PhoenixChina.UserController do
   def comments(conn, %{"nickname" => nickname, "page" => page}) do
     user = User |> Repo.get_by!(nickname: nickname)
 
-    who = cond do
-      logged_in?(conn) && current_user(conn) == user -> "我"
-      true -> nickname
-    end
-    conn = assign(conn, :title, "#{who}的评论列表")
+    conn = assign(conn, :title, "#{who(conn, user)}的评论列表")
 
     page = Comment
     |> where(user_id: ^user.id)
@@ -186,11 +185,7 @@ defmodule PhoenixChina.UserController do
   def collects(conn, %{"nickname" => nickname, "page" => page}) do
     user = User |> Repo.get_by!(nickname: nickname)
 
-    who = cond do
-      logged_in?(conn) && current_user(conn) == user -> "我"
-      true -> nickname
-    end
-    conn = assign(conn, :title, "#{who}的收藏")
+    conn = assign(conn, :title, "#{who(conn, user)}的收藏")
 
     page = PostCollect
     |> preload([:post, post: [:label, :user, :latest_comment, latest_comment: :user]])
@@ -294,11 +289,7 @@ defmodule PhoenixChina.UserController do
   def follower(conn, %{"nickname" => nickname, "page" => page}) do
     user = User |> Repo.get_by!(nickname: nickname)
 
-    who = cond do
-      logged_in?(conn) && current_user(conn) == user -> "我"
-      true -> nickname
-    end
-    conn = assign(conn, :title, "#{who}的关注者")
+    conn = assign(conn, :title, "#{who(conn, user)}的关注者")
 
     page = UserFollow
     |> where(to_user_id: ^user.id)
@@ -321,11 +312,7 @@ defmodule PhoenixChina.UserController do
   def followed(conn, %{"nickname" => nickname, "page" => page}) do
     user = User |> Repo.get_by!(nickname: nickname)
 
-    who = cond do
-      logged_in?(conn) && current_user(conn) == user -> "我"
-      true -> nickname
-    end
-    conn = assign(conn, :title, "#{who}的正在关注")
+    conn = assign(conn, :title, "#{who(conn, user)}的正在关注")
 
     page = UserFollow
     |> where(user_id: ^user.id)
