@@ -4,8 +4,7 @@ defmodule PhoenixChina.Mailer do
     key: Application.get_env(:phoenix_china, :mailgun_key)
 
   import Phoenix.View, only: [render_to_string: 3]
-  alias PhoenixChina.PageView
-  alias PhoenixChina.User
+  alias PhoenixChina.{PageView, User}
 
   @from "Phoenix中文社区 <mail@phoenix-china.org>"
 

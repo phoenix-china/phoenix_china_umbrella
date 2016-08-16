@@ -10,9 +10,7 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-alias PhoenixChina.Repo
-alias PhoenixChina.PostLabel
-
+alias PhoenixChina.{Repo, PostLabel}
 
 labels = ["问题", "经验", "分享", "灌水", "招聘"]
 

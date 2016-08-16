@@ -29,8 +29,7 @@ end
 defmodule PhoenixChina.GuardianSerializer do
   @behaviour Guardian.Serializer
 
-  alias PhoenixChina.Repo
-  alias PhoenixChina.User
+  alias PhoenixChina.{Repo, User}
 
   require Ecto.Query
 
