@@ -15,7 +15,7 @@ config :phoenix_china, PhoenixChina.Endpoint,
   http: [port: {:system, "PORT"}],
   url: [host: "www.phoenix-china.org", port: 80],
   cache_static_manifest: "priv/static/manifest.json",
-  check_origin: ["phoenix-china.org"]
+  check_origin: false
 
 # Do not print debug messages in production
 config :logger, level: :info
