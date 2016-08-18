@@ -24,8 +24,8 @@ defmodule PhoenixChina.PostController do
 
     case Repo.insert(changeset) do
       {:ok, post} ->
-        Enum.map(Regex.scan(~r/@(\S+)\s?/, post.content), fn [_, nickname] ->
-          user = User |> Repo.get_by(nickname: nickname)
+        Enum.map(Regex.scan(~r/@(\S+)\s?/, post.content), fn [_, username] ->
+          user = User |> Repo.get_by(username: username)
 
           if user && (user != current_user) do
 

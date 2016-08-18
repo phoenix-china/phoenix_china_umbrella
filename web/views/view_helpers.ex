@@ -68,7 +68,7 @@ defmodule PhoenixChina.ViewHelpers do
   def at_user(content) do
     Regex.replace(~r/@(\S+)\s?/, content, fn s, x ->
       cond do
-        User |> Repo.get_by(nickname: x) ->
+        User |> Repo.get_by(username: x) ->
           "<a href='/users/#{x}'>@#{x}</a> "
         true -> s
       end
