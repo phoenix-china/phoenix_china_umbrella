@@ -40,8 +40,8 @@ defmodule PhoenixChina.CommentController do
         Post |> set(post, :latest_comment_inserted_at, comment.inserted_at)
         Post |> inc(post, :comment_count)
 
-        Enum.map(Regex.scan(~r/@(\S+)\s?/, comment.content), fn [_, nickname] ->
-          user = User |> Repo.get_by(nickname: nickname)
+        Enum.map(Regex.scan(~r/@(\S+)\s?/, comment.content), fn [_, username] ->
+          user = User |> Repo.get_by(username: username)
 
           if user && (user != current_user) do
             notification_html = Notification.render "at_comment.html",
