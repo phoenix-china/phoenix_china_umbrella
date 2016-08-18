@@ -65,7 +65,7 @@
             <%= link raw("<i class=\"fa fa-star-o\"></i> 收藏"), to: post_post_collect_path(@conn, :create, @post), method: :post %>
           <%= end %>
         <%= end %>
-        <%= if @logged_in && @current_user.is_admin do %>
+        <%= if admin_logged_in?(@conn) do %>
           <span style="padding: 0 10px; color: #ccc;">|</span>
           <%= if @post.is_top do %>
             <%= link raw("<i class=\"fa fa-thumb-tack\"></i> 取消置顶"), to: post_post_path(@conn, :cancel_top, @post), method: :put %>

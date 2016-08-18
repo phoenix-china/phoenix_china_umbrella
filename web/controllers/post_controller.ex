@@ -3,7 +3,7 @@ defmodule PhoenixChina.PostController do
 
   alias PhoenixChina.{User, Post, PostLabel, Comment, Notification}
 
-  import PhoenixChina.ViewHelpers, only: [current_user: 1]
+  import PhoenixChina.ViewHelpers, only: [current_user: 1, admin_logged_in?: 1]
   import PhoenixChina.ModelOperator, only: [set: 4, inc: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
@@ -143,8 +143,8 @@ defmodule PhoenixChina.PostController do
   def set_top(conn, %{"post_id" => id}) do
     current_user = current_user(conn)
 
-    cond do
-      current_user.is_admin ->
+    case admin_logged_in?(conn) do
+      true ->
         post = Repo.get!(Post, id)
         Post |> set(post, :is_top, true)
 
@@ -166,23 +166,24 @@ defmodule PhoenixChina.PostController do
         conn
         |> put_flash(:info, "置顶成功")
         |> redirect(to: post_path(conn, :show, post))
-      true ->
-        conn |> redirect(to: page_path(conn, :index))
-    end
+
+      false -> conn |> redirect(to: page_path(conn, :index))
+    end 
   end
 
   def cancel_top(conn, %{"post_id" => id}) do
     current_user = current_user(conn)
 
-    cond do
-      current_user.is_admin ->
+    case admin_logged_in?(conn) do
+      true ->
         post = Repo.get!(Post, id)
         Post |> set(post, :is_top, false)
+
         conn
         |> put_flash(:info, "取消置顶成功")
         |> redirect(to: post_path(conn, :show, post))
-      true ->
-        conn |> redirect(to: page_path(conn, :index))
+
+      false -> conn |> redirect(to: page_path(conn, :index))
     end
   end
 end

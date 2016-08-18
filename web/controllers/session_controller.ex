@@ -17,6 +17,11 @@ defmodule PhoenixChina.SessionController do
       true ->
         user = User |> Repo.get_by!(email: changeset.changes.email)
 
+        conn = cond do
+          user.is_admin -> conn |> Guardian.Plug.sign_in(user, :default, key: :admin)
+          true -> conn
+        end
+
         conn
         |> Guardian.Plug.sign_in(user)
         |> put_flash(:info, "登录成功！")

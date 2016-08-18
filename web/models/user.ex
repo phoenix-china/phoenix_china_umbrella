@@ -153,12 +153,16 @@ defmodule PhoenixChina.User do
     user = get_field(changeset, :user) || changeset.data
     password = get_field(changeset, field)
 
-    case check_password?(password, user.password_hash) do
-      true ->
-        changeset
-      false ->
-        changeset
-        |> add_error(field, "密码错误")
+    case user.password_hash do
+      nil -> changeset |> add_error(field, "您未设置密码，请使用第三方登陆")
+      _ ->
+        case check_password?(password, user.password_hash) do
+          true ->
+            changeset
+          false ->
+            changeset
+            |> add_error(field, "密码错误")
+        end
     end
   end
 
@@ -187,8 +191,7 @@ defmodule PhoenixChina.User do
   end
 
   def check_password?(password, password_hash) do
-    password
-    |> Comeonin.Bcrypt.checkpw(password_hash)
+    password |> Comeonin.Bcrypt.checkpw(password_hash)
   end
 
   def put_avatar(%Ecto.Changeset{valid?: true} = changeset) do

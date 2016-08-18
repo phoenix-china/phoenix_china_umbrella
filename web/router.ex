@@ -14,6 +14,10 @@ defmodule PhoenixChina.Router do
     plug Guardian.Plug.LoadResource
   end
 
+  pipeline :admin_browser_session do
+    plug Guardian.Plug.VerifySession, key: :admin
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
     plug Guardian.Plug.VerifyHeader
@@ -21,7 +25,7 @@ defmodule PhoenixChina.Router do
   end
 
   scope "/", PhoenixChina do
-    pipe_through [:browser, :browser_session]
+    pipe_through [:browser, :browser_session, :admin_browser_session]
 
     get "/", PageController, :index
     get "/signup", UserController, :new

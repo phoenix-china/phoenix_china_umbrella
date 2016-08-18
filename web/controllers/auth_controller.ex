@@ -100,7 +100,17 @@ defmodule PhoenixChina.AuthController do
     end
 
     conn = cond do
-      user -> conn |> Guardian.Plug.sign_in(user) |> put_flash(:info, "登录成功！")
+      user && user.is_admin ->
+        conn
+        |> Guardian.Plug.sign_in(user)
+        |> Guardian.Plug.sign_in(user, :default, key: :admin)
+        |> put_flash(:info, "登录成功！")
+
+      user ->
+        conn
+        |> Guardian.Plug.sign_in(user)
+        |> put_flash(:info, "登录成功！")
+        
       true -> conn |> put_flash(:error, "登录失败！")
     end
 
