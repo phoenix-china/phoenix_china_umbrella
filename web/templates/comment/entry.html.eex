@@ -1,7 +1,7 @@
 <div class="media data-item" style="overflow: initial;">
   <a name="comment-<%= @comment.id %>"></a>
   <div class="media-left">
-    <a href="<%= user_path(@conn, :show, @comment.user.nickname) %>">
+    <a href="<%= user_path(@conn, :show, @comment.user.username) %>">
       <img class="media-object"
       src="<%= @comment.user.avatar %>"
       alt="<%= @comment.user.nickname %>"
@@ -22,7 +22,7 @@
       </div>
       <%= else %>
       <div class="pull-right" style="position: relative; top: -2px; margin-left: 10px;">
-        <a class="comment-reply" href="javascript:void(0);" data-content="@<%= @comment.user.nickname %>" title="回复">
+        <a class="comment-reply" href="javascript:void(0);" data-content="@<%= @comment.user.username %>" title="回复">
           <span class="fa fa-reply"></span>
         </a>
       </div>
@@ -37,7 +37,7 @@
         <%= end %>
       <%= end %>
 
-      <%= link @comment.user.nickname, to: user_path(@conn, :show, @comment.user.nickname) %>
+      <%= link fullname(@comment.user), to: user_path(@conn, :show, @comment.user.username) %>
       <%= if @index do %>
         • <i style="color: #7AA87A;">#<%= @index %></i>
       <%= end %>

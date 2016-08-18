@@ -1,2 +1,2 @@
-<%= link @user.nickname, to: user_path(@conn, :show, @user.nickname) %>
+<%= link fullname(@user), to: user_path(@conn, :show, @user.username) %>
 <span>关注了你</span>

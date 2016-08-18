@@ -87,4 +87,8 @@ defmodule PhoenixChina.ViewHelpers do
   def captcha_site_key() do
     PhoenixChina.Luosimao.captcha_site_key
   end
+
+  def fullname(user) do
+    "#{user.nickname}(#{user.username})"
+  end
 end

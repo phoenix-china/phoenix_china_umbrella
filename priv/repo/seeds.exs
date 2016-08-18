@@ -10,7 +10,7 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-alias PhoenixChina.{Repo, PostLabel}
+alias PhoenixChina.{Repo, PostLabel, User, ModelOperator}
 
 labels = ["问题", "经验", "分享", "灌水", "招聘"]
 
@@ -18,5 +18,11 @@ Enum.map(labels, fn label ->
   case PostLabel |> Repo.get_by(content: label) do
     nil -> Repo.insert(%PostLabel{content: label})
     _ -> ""
+  end
+end)
+
+Enum.map(Repo.all(User), fn user ->
+  if is_nil(user.nickname) do
+    User |> ModelOperator.set(user, :nickname, user.username)
   end
 end)

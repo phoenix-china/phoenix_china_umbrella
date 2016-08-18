@@ -17,7 +17,7 @@
         <ul>
           <%= for user <- @new_users do %>
           <li>
-            <%= link user.nickname, to: user_path(@conn, :show, user.nickname) %>
+            <%= link fullname(user), to: user_path(@conn, :show, user.username) %>
           </li>
           <%= end %>
         </ul>

@@ -3,7 +3,7 @@
       <div class="post-detail">
         <div class="clearfix post-top">
           <div class="post-user pull-right">
-            <a href="<%= user_path(@conn, :show, @post.user.nickname) %>">
+            <a href="<%= user_path(@conn, :show, @post.user.username) %>">
               <img class="media-object"
               src="<%= @post.user.avatar %>"
               alt="<%= @post.user.nickname %>"
@@ -13,10 +13,10 @@
           <div class="post-header pull-left">
             <h1 class="post-title"><%= @post.title %></h1>
             <div class="post-info">
-              由 <%= link @post.user.nickname, to: user_path(@conn, :show, @post.user.nickname) %>
+              由 <%= link fullname(@post.user), to: user_path(@conn, :show, @post.user.username) %>
               于<%= @post.inserted_at |> from_now %>发布
               <%= if @post.latest_comment do %>
-               • 最后由 <%= link @post.latest_comment.user.nickname, to: user_path(@conn, :show, @post.latest_comment.user.nickname) %>
+               • 最后由 <%= link fullname(@post.latest_comment.user), to: user_path(@conn, :show, @post.latest_comment.user.username) %>
                于<%= @post.latest_comment.inserted_at |> from_now %>回复
               <%= end %>
             </div>
@@ -69,7 +69,7 @@
 
       <div class="media data-item" style="overflow: initial;">
         <div class="media-left">
-          <a href="<%= user_path(@conn, :show, @comment.user.nickname) %>">
+          <a href="<%= user_path(@conn, :show, @comment.user.username) %>">
             <img class="media-object"
             src="<%= @comment.user.avatar %>"
             alt="<%= @comment.user.nickname %>"
@@ -97,7 +97,7 @@
               <%= end %>
             <%= end %>
 
-            <%= link @comment.user.nickname, to: user_path(@conn, :show, @comment.user.nickname) %>
+            <%= link fullname(@comment.user), to: user_path(@conn, :show, @comment.user.username) %>
             • <%= @comment.inserted_at |> from_now %>
           </div>
           <div class="media-body">

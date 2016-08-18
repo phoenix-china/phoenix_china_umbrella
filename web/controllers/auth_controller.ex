@@ -25,22 +25,27 @@ defmodule PhoenixChina.AuthController do
       user
     end
 
-    generate_nickname = fn github_data ->
-      name = github_data.extra.raw_info.user["name"]
-      nickname = github_data.info.nickname
-
-      tail = Hashids.new(salt: "phoenix-china-nickname")
-      |> Hashids.encode(:os.system_time(:milli_seconds))
-
-      user_by_name = name && User |> Repo.get_by(nickname: name)
-      user_by_nickname = nickname && User |> Repo.get_by(nickname: nickname)
+    generate_username = fn github_data ->
+      username = github_data.info.nickname
 
       cond do
-        name && is_nil(user_by_name) -> name
-        nickname && is_nil(user_by_nickname) -> nickname
-        name && user_by_name -> "#{name}-#{tail}"
-        nickname && user_by_nickname -> "#{nickname}-#{tail}"
-        true -> tail
+        username && is_nil(User |> Repo.get_by(username: username)) -> username
+        true ->
+          Hashids.new(salt: "phoenix-china-username")
+          |> Hashids.encode(:os.system_time(:milli_seconds))
+      end
+    end
+
+    generate_nickname = fn github_data ->
+      username = github_data.info.nickname
+      nickname = github_data.extra.raw_info.user["name"]
+
+      cond do
+        nickname && is_nil(User |> Repo.get_by(nickname: nickname)) -> nickname
+        username && is_nil(User |> Repo.get_by(nickname: username)) -> username
+        true ->
+          Hashids.new(salt: "phoenix-china-nickname")
+          |> Hashids.encode(:os.system_time(:milli_seconds))
       end
     end
 
@@ -51,6 +56,7 @@ defmodule PhoenixChina.AuthController do
       changeset = User.changeset(:github, %User{}, %{
         "email": user_email,
         "password_hash": nil,
+        "username": generate_username.(github_data),
         "nickname": generate_nickname.(github_data),
         "bio": user_data["bio"],
         "avatar": "#{user_data["avatar_url"]}&s=200"

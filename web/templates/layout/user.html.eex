@@ -11,7 +11,7 @@
         <div class="user-panel">
           <div class="media">
             <div class="media-left">
-              <a href="<%= user_path(@conn, :show, @user.nickname)%>">
+              <a href="<%= user_path(@conn, :show, @user.username)%>">
                 <img class="media-object img-thumbnail"
                   src="<%= @user.avatar %>"
                   alt="<%= @user.nickname %>"
@@ -22,12 +22,12 @@
               <div class="media-heading">
                 <%= if @logged_in and @user.id != @current_user.id do %>
                   <%= if user_follow? @current_user, @user do %>
-                    <%= link raw("<i class=\"fa fa-heart-o text-danger\"></i> 已关注"), to: user_follow_path(@conn, :cancel, @user.nickname), method: :delete, data: [confirm: "确定要取消关注吗?"], class: "pull-right" %>
+                    <%= link raw("<i class=\"fa fa-heart-o text-danger\"></i> 已关注"), to: user_follow_path(@conn, :cancel, @user.username), method: :delete, data: [confirm: "确定要取消关注吗?"], class: "pull-right" %>
                   <%= else %>
-                    <%= link raw("<i class=\"fa fa-heart-o\"></i> 关注"), to: user_follow_path(@conn, :create, @user.nickname), method: :post, class: "pull-right" %>
+                    <%= link raw("<i class=\"fa fa-heart-o\"></i> 关注"), to: user_follow_path(@conn, :create, @user.username), method: :post, class: "pull-right" %>
                   <%= end %>
                 <%= end %>
-                <h4><%= @user.nickname %></h4>
+                <h4><%= fullname(@user) %></h4>
               </div>
               <div class="user-info">第 <%= @user.id %> 位会员 / <%= @user.inserted_at |> from_now %>注册</div>
               <div class="user-info"><%= @post_count %> 篇帖子 • <%= @comment_count %> 条回帖</div>

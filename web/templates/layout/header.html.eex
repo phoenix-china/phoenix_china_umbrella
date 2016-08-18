@@ -58,7 +58,7 @@
                 </div>
               </div>
             </li>
-            <li><%= link @current_user.nickname, to: user_path(@conn, :show, @current_user.nickname) %></li>
+            <li><%= link fullname(@current_user), to: user_path(@conn, :show, @current_user.username) %></li>
             <li><%= link "退出登录", to: session_path(@conn, :delete) %></li>
             <%= else %>
             <li><%= link "登录", to: session_path(@conn, :new) %></li>

@@ -6,8 +6,9 @@ defmodule PhoenixChina.User do
   schema "users" do
     field :email, :string
     field :password_hash, :string
-    field :avatar, :string
+    field :username, :string
     field :nickname, :string
+    field :avatar, :string
     field :bio, :string
     field :collect_count, :integer, default: 0
     field :follower_count, :integer, default: 0
@@ -39,13 +40,16 @@ defmodule PhoenixChina.User do
 
   def changeset(:signup, struct, params) do
     struct
-    |> cast(params, [:email, :password, :nickname, :luotest_response])
-    |> validate_required([:email, :password, :nickname], message: "不能为空")
+    |> cast(params, [:email, :password, :username, :nickname, :luotest_response])
+    |> validate_required([:email, :password, :username, :nickname], message: "不能为空")
     |> validate_format(:email, ~r/@/, message: "请输入正确的邮箱地址")
     |> unique_constraint(:email, message: "邮箱已被注册啦！")
     |> validate_length(:password, min: 6, max: 128)
     |> validate_length(:nickname, min: 1, max: 18)
+    |> validate_exclusion(:username, ~w(admin, superadmin), message: "不允许使用的用户名")
     |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许使用的用户名")
+    |> validate_format(:username, ~r/^[a-zA-Z][\w\.\-]{3,17}$/, message: "只允许字母开头，由字母、数字、\"_\"、\".\"、\"-\"组成，4-18位。")
+    |> unique_constraint(:username, message: "用户名已被注册啦！")
     |> unique_constraint(:nickname, message: "昵称已被注册啦！")
     |> put_password_hash(:password)
     |> put_avatar
@@ -101,8 +105,9 @@ defmodule PhoenixChina.User do
 
   def changeset(:github, struct, params) do
     struct
-    |> cast(params, [:email, :password_hash, :nickname, :avatar, :bio])
+    |> cast(params, [:email, :password_hash, :username, :nickname, :avatar, :bio])
     |> unique_constraint(:email)
+    |> unique_constraint(:username)
     |> unique_constraint(:nickname)
   end
 

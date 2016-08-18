@@ -11,7 +11,7 @@
     <%= for follow <- @page.entries do %>
     <div class="media data-item">
       <div class="media-left">
-        <a href="<%= user_path(@conn, :show, follow.to_user.nickname) %>">
+        <a href="<%= user_path(@conn, :show, follow.to_user.username) %>">
           <img class="media-object"
           src="<%= follow.to_user.avatar %>"
           alt="<%= follow.to_user.nickname %>"
@@ -20,14 +20,14 @@
       </div>
       <div class="media-body">
         <div class="media-heading">
-          <%= link follow.to_user.nickname, to: user_path(@conn, :show, follow.to_user.nickname) %>
+          <%= link fullname(follow.to_user), to: user_path(@conn, :show, follow.to_user.username) %>
         </div>
       </div>
     </div>
     <% end %>
     <%= pagination_links @conn, @page,
       action: :followed,
-      path: fn(conn, action, args) -> user_path(conn, action, @user.nickname, args) end
+      path: fn(conn, action, args) -> user_path(conn, action, @user.username, args) end
     %>
     <%= else %>
     <div class="text-center">

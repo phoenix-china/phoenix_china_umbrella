@@ -17,8 +17,8 @@ defmodule PhoenixChina.UserController do
                                   :followed]
   defp load_data(conn, _) do
     user = case conn.params do
-      %{"nickname" => nickname} ->
-        User |> preload([:github]) |> Repo.get_by!(nickname: nickname)
+      %{"username" => username} ->
+        User |> preload([:github]) |> Repo.get_by!(username: username)
       _ ->
         current_user(conn)
     end
@@ -70,8 +70,8 @@ defmodule PhoenixChina.UserController do
     end
   end
 
-  def show(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User |> Repo.get_by!(nickname: nickname)
+  def show(conn, %{"username" => username, "page" => page}) do
+    user = User |> Repo.get_by!(username: username)
 
     conn = assign(conn, :title, "#{who(conn, user)}的主页")
 
@@ -86,8 +86,8 @@ defmodule PhoenixChina.UserController do
       current_page: nil
   end
 
-  def show(conn, %{"nickname" => nickname}) do
-    show(conn, %{"nickname" => nickname, "page" => "1"})
+  def show(conn, %{"username" => username}) do
+    show(conn, %{"username" => username, "page" => "1"})
   end
 
   def profile(conn, _params) do
@@ -157,8 +157,8 @@ defmodule PhoenixChina.UserController do
   @doc """
   用户评论列表
   """
-  def comments(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User |> Repo.get_by!(nickname: nickname)
+  def comments(conn, %{"username" => username, "page" => page}) do
+    user = User |> Repo.get_by!(username: username)
 
     conn = assign(conn, :title, "#{who(conn, user)}的评论列表")
 
@@ -173,12 +173,12 @@ defmodule PhoenixChina.UserController do
       current_page: nil
   end
 
-  def comments(conn, %{"nickname" => nickname}) do
-    comments(conn, %{"nickname" => nickname, "page" => "1"})
+  def comments(conn, %{"username" => username}) do
+    comments(conn, %{"username" => username, "page" => "1"})
   end
 
-  def collects(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User |> Repo.get_by!(nickname: nickname)
+  def collects(conn, %{"username" => username, "page" => page}) do
+    user = User |> Repo.get_by!(username: username)
 
     conn = assign(conn, :title, "#{who(conn, user)}的收藏")
 
@@ -193,8 +193,8 @@ defmodule PhoenixChina.UserController do
       current_page: nil
   end
 
-  def collects(conn, %{"nickname" => nickname}) do
-    collects(conn, %{"nickname" => nickname, "page" => "1"})
+  def collects(conn, %{"username" => username}) do
+    collects(conn, %{"username" => username, "page" => "1"})
   end
 
   @doc """
@@ -281,8 +281,8 @@ defmodule PhoenixChina.UserController do
   @doc """
   关注者
   """
-  def follower(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User |> Repo.get_by!(nickname: nickname)
+  def follower(conn, %{"username" => username, "page" => page}) do
+    user = User |> Repo.get_by!(username: username)
 
     conn = assign(conn, :title, "#{who(conn, user)}的关注者")
 
@@ -297,15 +297,15 @@ defmodule PhoenixChina.UserController do
       current_page: nil
   end
 
-  def follower(conn, %{"nickname" => nickname}) do
-    follower(conn, %{"nickname" => nickname, "page" => "1"})
+  def follower(conn, %{"username" => username}) do
+    follower(conn, %{"username" => username, "page" => "1"})
   end
 
   @doc """
   正在关注
   """
-  def followed(conn, %{"nickname" => nickname, "page" => page}) do
-    user = User |> Repo.get_by!(nickname: nickname)
+  def followed(conn, %{"username" => username, "page" => page}) do
+    user = User |> Repo.get_by!(username: username)
 
     conn = assign(conn, :title, "#{who(conn, user)}的正在关注")
 
@@ -320,13 +320,13 @@ defmodule PhoenixChina.UserController do
       current_page: nil
   end
 
-  def followed(conn, %{"nickname" => nickname}) do
-    followed(conn, %{"nickname" => nickname, "page" => "1"})
+  def followed(conn, %{"username" => username}) do
+    followed(conn, %{"username" => username, "page" => "1"})
   end
 
-  def avatar(conn, %{"nickname" => nickname}) do
-    content = ConCache.get_or_store(:phoenix_china, "avatar:#{nickname}", fn() ->
-      user = User |> Repo.get_by!(nickname: nickname)
+  def avatar(conn, %{"username" => username}) do
+    content = ConCache.get_or_store(:phoenix_china, "avatar:#{username}", fn() ->
+      user = User |> Repo.get_by!(username: username)
       url = cond do
               !is_nil(user.avatar) -> user.avatar
               true -> user |> generate_avatar_url

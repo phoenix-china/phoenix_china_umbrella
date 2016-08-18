@@ -10,7 +10,7 @@
     <%= render PhoenixChina.PostView, "entries.html", conn: @conn, page: @page %>
     <%= pagination_links @conn, @page,
       action: :show,
-      path: fn(conn, action, args) -> user_path(conn, action, @user.nickname, args) end
+      path: fn(conn, action, args) -> user_path(conn, action, @user.username, args) end
     %>
     <%= else %>
     <div class="text-center">

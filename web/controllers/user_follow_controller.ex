@@ -9,9 +9,9 @@ defmodule PhoenixChina.UserFollowController do
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:create, :cancel]
 
-  def create(conn, %{"nickname" => nickname}) do
+  def create(conn, %{"username" => username}) do
     current_user = current_user(conn)
-    to_user = User |> Repo.get_by!(nickname: nickname)
+    to_user = User |> Repo.get_by!(username: username)
 
     params = %{:user_id => current_user.id, :to_user_id => to_user.id}
     changeset = UserFollow.changeset(%UserFollow{}, params)
@@ -37,17 +37,17 @@ defmodule PhoenixChina.UserFollowController do
 
         conn
         |> put_flash(:info, "关注成功.")
-        |> redirect(to: user_path(conn, :show, nickname))
+        |> redirect(to: user_path(conn, :show, username))
       {:error, _changeset} ->
         conn
         |> put_flash(:info, "关注失败.")
-        |> redirect(to: user_path(conn, :show, nickname))
+        |> redirect(to: user_path(conn, :show, username))
     end
   end
 
-  def cancel(conn, %{"nickname" => nickname}) do
+  def cancel(conn, %{"username" => username}) do
     current_user = current_user(conn)
-    to_user = User |> Repo.get_by!(nickname: nickname)
+    to_user = User |> Repo.get_by!(username: username)
 
     user_follow = UserFollow
     |> Repo.get_by!(user_id: current_user.id, to_user_id: to_user.id)
@@ -59,6 +59,6 @@ defmodule PhoenixChina.UserFollowController do
 
     conn
     |> put_flash(:info, "取消关注成功.")
-    |> redirect(to: user_path(conn, :show, nickname))
+    |> redirect(to: user_path(conn, :show, username))
   end
 end

@@ -1,22 +1,22 @@
 <ul class="nav nav-tabs" style="margin-top: 20px;">
   <li role="presentation"<%= if @current_page == :user_posts do %> class="active"<%= end %>>
-    <%= link "帖子", to: user_path(@conn, :show, @user.nickname) %>
+    <%= link "帖子", to: user_path(@conn, :show, @user.username) %>
   </li>
 
   <li role="presentation"<%= if @current_page == :user_comments do %> class="active"<%= end %>>
-    <%= link "回复", to: user_path(@conn, :comments, @user.nickname) %>
+    <%= link "回复", to: user_path(@conn, :comments, @user.username) %>
   </li>
 
   <li role="presentation"<%= if @current_page == :user_collects do %> class="active"<%= end %>>
-    <%= link "收藏", to: user_path(@conn, :collects, @user.nickname) %>
+    <%= link "收藏", to: user_path(@conn, :collects, @user.username) %>
   </li>
 
   <li role="presentation"<%= if @current_page == :user_follower do %> class="active"<%= end %>>
-    <%= link "关注者", to: user_path(@conn, :follower, @user.nickname) %>
+    <%= link "关注者", to: user_path(@conn, :follower, @user.username) %>
   </li>
 
   <li role="presentation"<%= if @current_page == :user_followed do %> class="active"<%= end %>>
-    <%= link "正在关注", to: user_path(@conn, :followed, @user.nickname) %>
+    <%= link "正在关注", to: user_path(@conn, :followed, @user.username) %>
   </li>
 
 </ul>

@@ -55,13 +55,13 @@ defmodule PhoenixChina.Router do
   scope "/users", PhoenixChina do
      pipe_through [:browser, :browser_session]
 
-     get "/:nickname", UserController, :show
-     get "/:nickname/avatar", UserController, :avatar
-     get "/:nickname/posts", PostController, :user_posts
-     get "/:nickname/comments", UserController, :comments
-     get "/:nickname/collects", UserController, :collects
-     get "/:nickname/follower", UserController, :follower
-     get "/:nickname/followed", UserController, :followed
+     get "/:username", UserController, :show
+     get "/:username/avatar", UserController, :avatar
+     get "/:username/posts", PostController, :user_posts
+     get "/:username/comments", UserController, :comments
+     get "/:username/collects", UserController, :collects
+     get "/:username/follower", UserController, :follower
+     get "/:username/followed", UserController, :followed
 
      get "/password/forget", UserController, :password_forget
      post "/password/forget", UserController, :post_password_forget
@@ -69,8 +69,8 @@ defmodule PhoenixChina.Router do
      get "/password/reset", UserController, :password_reset
      put "/password/reset", UserController, :put_password_reset
 
-     post "/:nickname/follows", UserFollowController, :create
-     delete "/:nickname/follows", UserFollowController, :cancel
+     post "/:username/follows", UserFollowController, :create
+     delete "/:username/follows", UserFollowController, :cancel
   end
 
   scope "/settings", PhoenixChina do
