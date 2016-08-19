@@ -30,9 +30,12 @@ defmodule PhoenixChina.CommentController do
   def create(conn, %{"post_id" => post_id, "comment" => comment_params}) do
     current_user = current_user(conn)
     post = Repo.get!(Post, post_id)
+
+    comment_params = comment_params
+    |> Map.put_new("post_id", String.to_integer(post_id))
+    |> Map.put_new("user_id", current_user.id)
+
     changeset = Comment.changeset(%Comment{}, comment_params)
-    |> Ecto.Changeset.put_change(:post_id, String.to_integer(post_id))
-    |> Ecto.Changeset.put_change(:user_id, current_user.id)
 
     case Repo.insert(changeset) do
       {:ok, comment} ->
