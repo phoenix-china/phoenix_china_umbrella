@@ -44,7 +44,7 @@ defmodule PhoenixChina.AuthController do
         "email": user_email,
         "password_hash": nil,
         "username": generate_username.(github_data),
-        "nickname": github_data.extra.raw_info.user["name"],
+        "nickname": user_data["name"],
         "bio": user_data["bio"],
         "avatar": "#{user_data["avatar_url"]}&s=200"
       })
