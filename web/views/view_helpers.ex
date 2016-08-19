@@ -88,7 +88,15 @@ defmodule PhoenixChina.ViewHelpers do
     PhoenixChina.Luosimao.captcha_site_key
   end
 
+  defp nickname(user) do
+    cond do
+      is_nil(user.nickname) -> user.username
+      user.nickname == "" -> user.username
+      true -> user.nickname
+    end
+  end
+
   def fullname(user) do
-    "#{user.nickname}(#{user.username})"
+    "#{nickname(user)}(#{user.username})"
   end
 end

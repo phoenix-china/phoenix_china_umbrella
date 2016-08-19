@@ -36,19 +36,6 @@ defmodule PhoenixChina.AuthController do
       end
     end
 
-    generate_nickname = fn github_data ->
-      username = github_data.info.nickname
-      nickname = github_data.extra.raw_info.user["name"]
-
-      cond do
-        nickname && is_nil(User |> Repo.get_by(nickname: nickname)) -> nickname
-        username && is_nil(User |> Repo.get_by(nickname: username)) -> username
-        true ->
-          Hashids.new(salt: "phoenix-china-nickname")
-          |> Hashids.encode(:os.system_time(:milli_seconds))
-      end
-    end
-
     create_user = fn github_data ->
       user_data = github_data.extra.raw_info.user
       user_email = github_data.info.email
@@ -57,7 +44,7 @@ defmodule PhoenixChina.AuthController do
         "email": user_email,
         "password_hash": nil,
         "username": generate_username.(github_data),
-        "nickname": generate_nickname.(github_data),
+        "nickname": github_data.extra.raw_info.user["name"],
         "bio": user_data["bio"],
         "avatar": "#{user_data["avatar_url"]}&s=200"
       })
@@ -110,7 +97,7 @@ defmodule PhoenixChina.AuthController do
         conn
         |> Guardian.Plug.sign_in(user)
         |> put_flash(:info, "登录成功！")
-        
+
       true -> conn |> put_flash(:error, "登录失败！")
     end
 

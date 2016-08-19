@@ -35,22 +35,18 @@ defmodule PhoenixChina.User do
     |> validate_required([:avatar, :nickname], message: "不能为空")
     |> validate_length(:nickname, min: 1, max: 18)
     |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许使用的用户名")
-    |> unique_constraint(:nickname, message: "昵称已被注册啦！")
   end
 
   def changeset(:signup, struct, params) do
     struct
-    |> cast(params, [:email, :password, :username, :nickname, :luotest_response])
-    |> validate_required([:email, :password, :username, :nickname], message: "不能为空")
+    |> cast(params, [:email, :password, :username, :luotest_response])
+    |> validate_required([:email, :password, :username], message: "不能为空")
     |> validate_format(:email, ~r/@/, message: "请输入正确的邮箱地址")
     |> unique_constraint(:email, message: "邮箱已被注册啦！")
     |> validate_length(:password, min: 6, max: 128)
-    |> validate_length(:nickname, min: 1, max: 18)
     |> validate_exclusion(:username, ~w(admin, superadmin), message: "不允许使用的用户名")
-    |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许使用的用户名")
     |> validate_format(:username, ~r/^[a-zA-Z][\w\.\-]{3,17}$/, message: "只允许字母开头，由字母、数字、\"_\"、\".\"、\"-\"组成，4-18位。")
     |> unique_constraint(:username, message: "用户名已被注册啦！")
-    |> unique_constraint(:nickname, message: "昵称已被注册啦！")
     |> put_password_hash(:password)
     |> put_avatar
   end
@@ -96,10 +92,8 @@ defmodule PhoenixChina.User do
   def changeset(:profile, struct, params) do
     struct
     |> cast(params, [:nickname, :bio], [:avatar])
-    |> validate_required([:nickname], message: "不能为空")
-    |> validate_length(:nickname, min: 1, max: 18)
+    |> validate_length(:nickname, max: 18)
     |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许使用的用户名")
-    |> unique_constraint(:nickname, message: "昵称已被注册啦，请更换别的昵称试试")
     |> validate_length(:bio, max: 140)
   end
 

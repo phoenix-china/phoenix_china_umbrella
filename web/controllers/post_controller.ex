@@ -168,12 +168,10 @@ defmodule PhoenixChina.PostController do
         |> redirect(to: post_path(conn, :show, post))
 
       false -> conn |> redirect(to: page_path(conn, :index))
-    end 
+    end
   end
 
   def cancel_top(conn, %{"post_id" => id}) do
-    current_user = current_user(conn)
-
     case admin_logged_in?(conn) do
       true ->
         post = Repo.get!(Post, id)
