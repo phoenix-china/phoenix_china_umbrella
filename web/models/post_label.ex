@@ -3,7 +3,8 @@ defmodule PhoenixChina.PostLabel do
 
   schema "post_labels" do
     field :content, :string
-
+    field :order, :integer
+    field :is_hide, :boolean, default: false
     timestamps()
   end
 

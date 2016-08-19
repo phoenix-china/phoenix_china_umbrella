@@ -26,7 +26,7 @@ defmodule PhoenixChina.PageController do
       Phoenix.View.render_to_string(PhoenixChina.PostView, "entries.html", %{conn: conn, page: page})
     end)
 
-    labels = PostLabel |> Repo.all
+    labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
 
     render conn, "index.html",
       post_list_html: post_list_html,
@@ -43,7 +43,7 @@ defmodule PhoenixChina.PageController do
     params = case Map.has_key?(params, "label") do
       true -> params
       false -> Map.put_new(params, "label", "全部")
-    end 
+    end
 
     index(conn, params)
   end

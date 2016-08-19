@@ -12,7 +12,7 @@ defmodule PhoenixChina.PostController do
 
   def new(conn, _params) do
     changeset = Post.changeset(:insert, %Post{})
-    labels = PostLabel |> Repo.all
+    labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
     render(conn, "new.html", changeset: changeset, labels: labels)
   end
 
@@ -50,7 +50,7 @@ defmodule PhoenixChina.PostController do
         |> put_flash(:info, "帖子发布成功.")
         |> redirect(to: page_path(conn, :index))
       {:error, changeset} ->
-        labels = PostLabel |> Repo.all
+        labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
         render(conn, "new.html", changeset: changeset, labels: labels)
     end
   end
@@ -90,7 +90,7 @@ defmodule PhoenixChina.PostController do
 
       true ->
         changeset = Post.changeset(:update, post)
-        labels = PostLabel |> Repo.all
+        labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
         render(conn, "edit.html", post: post, changeset: changeset, labels: labels)
     end
   end
@@ -114,7 +114,7 @@ defmodule PhoenixChina.PostController do
             |> put_flash(:info, "帖子更新成功.")
             |> redirect(to: post_path(conn, :show, post))
           {:error, changeset} ->
-            labels = PostLabel |> Repo.all
+            labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
             render(conn, "edit.html", post: post, changeset: changeset, labels: labels)
         end
     end

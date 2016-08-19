@@ -12,12 +12,19 @@
 
 alias PhoenixChina.{Repo, PostLabel, User, ModelOperator}
 
-labels = ["问题", "经验", "分享", "灌水", "招聘"]
+labels = ["公告", "问题", "经验", "分享", "灌水", "招聘"]
 
-Enum.map(labels, fn label ->
-  case PostLabel |> Repo.get_by(content: label) do
-    nil -> Repo.insert(%PostLabel{content: label})
-    _ -> ""
+Enum.map(Enum.with_index(labels), fn {name, index} ->
+  label = PostLabel |> Repo.get_by(content: name)
+  
+  cond do
+    is_nil(label) -> Repo.insert(%PostLabel{content: name, order: index})
+    label.order != index and is_nil(label.is_hide) ->
+      PostLabel |> ModelOperator.set(label, :order, index)
+      PostLabel |> ModelOperator.set(label, :is_hide, false)
+    label.order != index -> PostLabel |> ModelOperator.set(label, :order, index)
+    is_nil(label.is_hide) -> PostLabel |> ModelOperator.set(label, :is_hide, false)
+    true -> ""
   end
 end)
 
