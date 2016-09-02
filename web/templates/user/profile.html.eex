@@ -58,7 +58,7 @@
     line-height: 30px;
   }
   #user-avatar-upload label input {
-    font-size: 100px;
+    font-size: 30px;
     position: absolute;
     opacity: 0;
     cursor: pointer;

@@ -152,3 +152,6 @@ body {
 .user-third-party li {
   padding: 10px 0 0 0;
 }
+.post-content img {
+  max-width: 100%;
+}
