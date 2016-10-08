@@ -33,6 +33,7 @@
           <li><%= link "Python中文社区", to: "https://python-china.org/", target: "_blank" %></li>
           <li><%= link "Rust中文社区", to: "https://rust-china.org/", target: "_blank" %></li>
           <li><%= link "掏抠客－为您省钱", to: "http://www.taokouke.com/", target: "_blank" %></li>
+          <li><%= link "自制系－手工玩家聚集地", to: "http://www.zizhixi.com/", target: "_blank" %></li>
         </ul>
       </div>
     </div>
