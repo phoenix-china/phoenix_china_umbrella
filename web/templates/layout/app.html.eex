@@ -12,11 +12,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="自制系：手工玩家的聚集地">
-    <meta name="keywords" content="手工，手作，原创手工，手工制作，手工教程，手工社区，手工diy，diy教程，手工制作，艺术创意，小众，文艺，小清新，陶瓷，折纸，插画，刺绣，皮革具，木工"/>
-    <meta name="author" content="自制系团队">
+    <meta name="description" content="PhoenixChina">
+    <meta name="keywords" content="phoenix中文社区, elixir, phoenix, phoenixframework, ecto, postgresql"/>
+    <meta name="author" content="https://github.com/nanlong/">
     <meta name="csrf" content="<%= Plug.CSRFProtection.get_csrf_token() %>">
-    <title><%= @conn.assigns[:title] && @conn.assigns[:title] <>  " - " %>自制系：手工玩家的聚集地</title>
+    <title><%= @conn.assigns[:title] && @conn.assigns[:title] <>  " - " %>PhoenixChina</title>
     <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
