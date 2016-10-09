@@ -26,9 +26,8 @@ defmodule PhoenixChina.Post do
     timestamps()
   end
 
-  @required_params [:title, :content, :label_id, :user_id]
-  @optional_params [:comment_count, :collect_count, :praise_count, :latest_comment_id]
-
+  @required_params [:title, :content, :user_id]
+  @optional_params [:label_id, :comment_count, :collect_count, :praise_count, :latest_comment_id]
 
   def changeset(action, struct, params \\ %{})
 
