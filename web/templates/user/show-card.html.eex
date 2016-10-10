@@ -17,5 +17,20 @@
       <br>
       <small>Joined on <%= @user.inserted_at |> strftime %></small>
     </div>
+    <%= if logged_in?(@conn) and current_user(@conn).id != @user.id do %>
+    <div class="content">
+      <%= if PhoenixChina.UserFollowView.follow?(@conn, @user) do %>
+        <%= link to: user_follow_path(@conn, :delete, @user.username), class: "button is-primary is-fullwidth", method: :delete do %>
+          <span class="icon is-small is-danger"><i class="fa fa-heart"></i></span>
+          <span>取消关注</span>
+        <%= end %>
+      <%= else %>
+        <%= link to: user_follow_path(@conn, :create, @user.username), class: "button is-primary is-fullwidth", method: :post do %>
+          <span class="icon is-small"><i class="fa fa-heart"></i></span>
+          <span>关注</span>
+        <%= end %>
+      <%= end %>
+    </div>
+    <%= end %>
   </div>
 </div>

@@ -48,19 +48,22 @@ defmodule PhoenixChina.Router do
       resources "/praise", CommentPraiseController, as: :praise, only: [:create, :delete], singleton: true
     end
 
-    resources "/users", UserController, param: "username", only: [:show]
+    resources "/users", UserController, param: "username", only: [:show] do
+      resources "/follow", UserFollowController, as: :follow, only: [:create, :delete], singleton: true
+
+    end
   end
 
   scope "/users", PhoenixChina do
      pipe_through [:browser, :browser_session]
 
     #  get "/:username", UserController, :show
-     get "/:username/avatar", UserController, :avatar
-     get "/:username/posts", PostController, :user_posts
-     get "/:username/comments", UserController, :comments
-     get "/:username/collects", UserController, :collects
-     get "/:username/follower", UserController, :follower
-     get "/:username/followed", UserController, :followed
+    #  get "/:username/avatar", UserController, :avatar
+    #  get "/:username/posts", PostController, :user_posts
+    #  get "/:username/comments", UserController, :comments
+    #  get "/:username/collects", UserController, :collects
+    #  get "/:username/follower", UserController, :follower
+    #  get "/:username/followed", UserController, :followed
 
      get "/password/forget", UserController, :password_forget
      post "/password/forget", UserController, :post_password_forget
@@ -68,8 +71,8 @@ defmodule PhoenixChina.Router do
      get "/password/reset", UserController, :password_reset
      put "/password/reset", UserController, :put_password_reset
 
-     post "/:username/follows", UserFollowController, :create
-     delete "/:username/follows", UserFollowController, :cancel
+    #  post "/:username/follows", UserFollowController, :create
+    #  delete "/:username/follows", UserFollowController, :cancel
   end
 
   scope "/settings", PhoenixChina do

@@ -43,7 +43,7 @@ defmodule PhoenixChina.UserController do
     user = Repo.get_by(User, %{username: username})
 
     conn
-    |> assign(:title, user.nickname <> " 的主页")
+    |> assign(:title, user.username <> " 的主页")
     |> assign(:user, user)
     |> assign(:current_tab, "index")
     |> render("show-index.html")
@@ -62,7 +62,7 @@ defmodule PhoenixChina.UserController do
     |> Repo.paginate(params)
 
     conn
-    |> assign(:title, user.nickname <> " 的帖子")
+    |> assign(:title, user.username <> " 的帖子")
     |> assign(:user, user)
     |> assign(:current_tab, "post")
     |> assign(:pagination, pagination)
@@ -82,7 +82,7 @@ defmodule PhoenixChina.UserController do
     |> Repo.paginate(params)
 
     conn
-    |> assign(:title, user.nickname <> " 的回复")
+    |> assign(:title, user.username <> " 的回复")
     |> assign(:user, user)
     |> assign(:current_tab, "comment")
     |> assign(:pagination, pagination)
@@ -102,7 +102,7 @@ defmodule PhoenixChina.UserController do
     |> Repo.paginate(params)
 
     conn
-    |> assign(:title, user.nickname <> " 的收藏")
+    |> assign(:title, user.username <> " 的收藏")
     |> assign(:user, user)
     |> assign(:current_tab, "collect")
     |> assign(:pagination, pagination)

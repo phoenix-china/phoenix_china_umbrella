@@ -7,9 +7,8 @@ defmodule PhoenixChina.UserFollowController do
   import PhoenixChina.ModelOperator, only: [inc: 3, dec: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
-    when action in [:create, :cancel]
 
-  def create(conn, %{"username" => username}) do
+  def create(conn, %{"user_username" => username}) do
     current_user = current_user(conn)
     to_user = User |> Repo.get_by!(username: username)
 
@@ -45,7 +44,7 @@ defmodule PhoenixChina.UserFollowController do
     end
   end
 
-  def cancel(conn, %{"username" => username}) do
+  def delete(conn, %{"user_username" => username}) do
     current_user = current_user(conn)
     to_user = User |> Repo.get_by!(username: username)
 
