@@ -131,8 +131,20 @@ defmodule PhoenixChina.UserController do
   @doc """
   正在关注
   """
-  def show(conn, %{"username" => username, "tab" => "following"}) do
+  def show(conn, %{"username" => username, "tab" => "following"} = params) do
+    user = Repo.get_by(User, %{username: username})
 
+    pagination = User
+    |> join(:inner, [u], f in UserFollow, f.user_id == ^user.id and f.to_user_id == u.id)
+    |> order_by([:inserted_at])
+    |> Repo.paginate(params)
+
+    conn
+    |> assign(:title, user.username <> " 的正在关注")
+    |> assign(:user, user)
+    |> assign(:current_tab, "following")
+    |> assign(:pagination, pagination)
+    |> render("show-following.html")
   end
 
   def show(conn, %{"username" => username}) do
