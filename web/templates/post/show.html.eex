@@ -1,43 +1,24 @@
+<!-- <div class="columns">
+  <div class="column">
+    <section class="hero is-primary has-text-centered">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Primary title
+          </h1>
+          <h2 class="subtitle">
+            Primary subtitle
+          </h2>
+        </div>
+      </div>
+    </section>
+  </div>
+</div> -->
+
+
 <div class="columns">
   <div class="column">
     <div class="post-show">
-      <nav class="level">
-        <small class="level-left">
-          <%= if not is_nil(@post.label) do %>
-            <%= link to: page_path(@conn, :index, label: @post.label.content), class: "level-item" do %>
-              <%= @post.label.content %>
-            <%= end %>
-            <span class="level-item">•</span>
-          <%= end %>
-          <%= link to: user_path(@conn, :show, @post.user.username), class: "level-item" do %>
-            <%= @post.user.username %>
-          <%= end %>
-          <span class="level-item">•</span>
-          <div class="level-item">
-            发布于
-            <span class="phoenix-moment" data-timestamp="<%= @post.inserted_at %>"></span>
-          </div>
-          <%= if not is_nil(@post.latest_comment) do %>
-          <span class="level-item">•</span>
-          <div class="level-item">
-            最后由
-            <%= link to: user_path(@conn, :show, @post.latest_comment.user.username) do %>
-              <%= @post.latest_comment.user.username %>
-            <%= end %>
-            回复于
-            <span class="phoenix-moment" data-timestamp="<%= @post.latest_comment.inserted_at %>"></span>
-          </div>
-          <%= end %>
-        </small>
-        <div class="level-right">
-          <article class="image is-32x32">
-            <%= link to: user_path(@conn, :show, @post.user.username) do %>
-              <img src="<%= @post.user.avatar %>" alt="<%= @post.user.nickname %>" />
-            <%= end %>
-          </article>
-        </div>
-      </nav>
-      <hr>
       <div class="content">
         <%= raw @post.content %>
       </div>
@@ -188,6 +169,58 @@
     <%= end %>
   </div>
   <div class="column is-3">
-
+    <div class="">
+      <ul>
+        <li>
+          <article class="media">
+            <figure class="media-left">
+              <p class="image is-48x48">
+                <img src="<%= @post.user.avatar %>">
+              </p>
+            </figure>
+            <div class="media-content">
+              <div class="content">
+                <div class="">
+                  <%= link to: user_path(@conn, :show, @post.user.username) do %>
+                    <%= @post.user.username %>
+                  <%= end %>
+                </div>
+                <div class="">
+                  <small>
+                    <%= link to: user_path(@conn, :show, @post.user.username, tab: "followers") do %>
+                      <span>关注者</span>
+                      <span><%= @post.user.follower_count%></span>
+                    <%= end %>
+                  </small> /
+                  <small>
+                    <%= link to: user_path(@conn, :show, @post.user.username, tab: "following") do %>
+                      <span>正在关注</span>
+                      <span><%= @post.user.followed_count%></span>
+                    <%= end %>
+                  </small>
+                </div>
+              </div>
+            </div>
+          </article>
+        </li>
+        <li><hr></li>
+        <li>
+          <strong>发布时间</strong>
+          <small class="phoenix-moment" data-timestamp="<%= @post.inserted_at %>"></small>
+        </li>
+        <%= if not is_nil(@post.latest_comment) do %>
+        <li>
+          <strong>最后回复</strong>
+          <%= link to: user_path(@conn, :show, @post.latest_comment.user.username) do %>
+            <%= @post.latest_comment.user.username %>
+          <%= end %>
+        </li>
+        <li>
+          <strong>最后活跃</strong>
+          <small class="phoenix-moment" data-timestamp="<%= @post.latest_comment.inserted_at %>"></small>
+        </li>
+        <%= end %>
+      </ul>
+    </div>
   </div>
 </div>
