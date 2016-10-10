@@ -4,3 +4,8 @@ body {
 .icon.is-danger {
   color: #ff3860;
 }
+.help-block {
+  display: block;
+  font-size: 12px;
+  color: #ff3860;
+}
