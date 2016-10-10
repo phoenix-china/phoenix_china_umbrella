@@ -115,13 +115,25 @@
           <nav class="level">
             <div class="level-left">
               <%= if logged_in?(@conn) and current_user(@conn).id == comment.user_id do %>
-                <%= link to: post_comment_path(@conn, :edit, @post, comment), class: "level-item" do %>
+                <%= link to: post_comment_path(@conn, :edit, @post, comment), class: "level-item button is-small is-link" do %>
                   <span class="icon is-small"><i class="fa fa-pencil"></i></span>
+                  <span>编辑</span>
                 <%= end %>
               <%= end %>
-              <%= link to: "", class: "level-item" do %>
-                <span class="icon is-small"><i class="fa fa-heart"></i></span>
-              <%= end %>
+
+              <div class="level-item">
+                <%= if PhoenixChina.CommentPraiseView.praise?(@conn, comment) do %>
+                  <%= link to: comment_praise_path(@conn, :delete, comment), class: "button is-small is-link", method: :delete do %>
+                    <span class="icon is-small is-danger"><i class="fa fa-heart"></i></span>
+                    <span><%= PhoenixChina.CommentPraiseView.praise_count(comment) %></span>
+                  <%= end %>
+                <%= else %>
+                  <%= link to: comment_praise_path(@conn, :create, comment), class: "button is-small is-link", method: :post do %>
+                    <span class="icon is-small"><i class="fa fa-heart-o"></i></span>
+                    <span><%= PhoenixChina.CommentPraiseView.praise_count(comment) %></span>
+                  <%= end %>
+                <%= end %>
+              </div>
             </div>
           </nav>
 
