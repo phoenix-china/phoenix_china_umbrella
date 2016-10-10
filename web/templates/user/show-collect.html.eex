@@ -16,8 +16,10 @@
           </div>
           <nav class="level">
             <small class="level-left">
-              <%= link to: page_path(@conn, :index, label: post.label.content), class: "level-item" do %>
-                <%= post.label.content %>
+              <%= if not is_nil(post.label) do %>
+                <%= link to: page_path(@conn, :index, label: post.label.content), class: "level-item" do %>
+                  <%= post.label.content %>
+                <%= end %>
               <%= end %>
               <span class="level-item">•</span>
               <%= link to: user_path(@conn, :show, post.user.username), class: "level-item" do %>
