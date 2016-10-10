@@ -13,7 +13,7 @@
           <span class="level-item">•</span>
           <div class="level-item">
             发布于
-            <span><%= @post.inserted_at |> from_now %></span>
+            <span><%= @post.inserted_at %></span>
           </div>
           <%= if not is_nil(@post.latest_comment) do %>
           <span class="level-item">•</span>
@@ -23,7 +23,7 @@
               <%= @post.latest_comment.user.nickname %>
             <%= end %>
             回复于
-            <span><%= @post.latest_comment.inserted_at |> from_now %></span>
+            <span><%= @post.latest_comment.inserted_at %></span>
           </div>
           <%= end %>
         </small>
@@ -105,7 +105,7 @@
               <%= link to: "" do %>
                 #<%= index %>
               <%= end %>
-              <small><%= comment.inserted_at |> from_now %></small>
+              <small><%= comment.inserted_at %></small>
               <br>
               <%= comment.content %>
             </p>

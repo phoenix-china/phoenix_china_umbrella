@@ -1,0 +1,41 @@
+<div class="columns">
+  <div class="column is-4">
+    <%= render "show-card.html", conn: @conn, user: @user %>
+  </div>
+  <div class="column">
+    <%= render "show-tabs.html", conn: @conn, user: @user, current_tab: @current_tab %>
+
+    <%= for post <- @pagination do %>
+    <article class="media">
+      <div class="media-content">
+        <div class="content">
+          <%= link to: post_path(@conn, :show, post) do %>
+            <%= post.title %>
+          <%= end %>
+        </div>
+        <nav class="level">
+          <small class="level-left">
+            <div class="level-item">
+              发布于
+              <span><%= post.inserted_at %></span>
+            </div>
+            <%= if not is_nil(post.latest_comment) do %>
+            <span class="level-item">•</span>
+            <div class="level-item">
+              最后由
+              <%= link to: user_path(@conn, :show, post.latest_comment.user.username) do %>
+                <%= post.latest_comment.user.nickname %>
+              <%= end %>
+              回复于
+              <span><%= post.latest_comment.inserted_at %></span>
+            </div>
+            <%= end %>
+          </small>
+        </nav>
+      </div>
+      </article>
+    <%= end %>
+
+    <%= pagination_links @conn, @pagination, [@user.username], action: :show, path: &user_path/4, tab: "post" %>
+  </div>
+</div>

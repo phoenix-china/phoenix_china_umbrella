@@ -22,10 +22,10 @@
         •
         <%= end %>
         由 <%= link fullname(@post.user), to: user_path(@conn, :show, @post.user.username) %>
-        于<%= @post.inserted_at |> from_now %>发布
+        于<%= @post.inserted_at %>发布
         <%= if @post.latest_comment do %>
          • 最后由 <%= link fullname(@post.latest_comment.user), to: user_path(@conn, :show, @post.latest_comment.user.username) %>
-         于<%= @post.latest_comment.inserted_at |> from_now %>回复
+         于<%= @post.latest_comment.inserted_at %>回复
         <%= end %>
       </div>
     </div>

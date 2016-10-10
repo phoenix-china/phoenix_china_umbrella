@@ -83,8 +83,21 @@ defmodule PhoenixChina.UserController do
   @doc """
   帖子
   """
-  def show(conn, %{"username" => username, "tab" => "post"}) do
+  def show(conn, %{"username" => username, "tab" => "post"} = params) do
+    user = Repo.get_by(User, %{username: username})
 
+    pagination = Post
+    |> where(user_id: ^user.id)
+    |> order_by([:inserted_at])
+    |> preload([:latest_comment, latest_comment: :user])
+    |> Repo.paginate(params)
+
+    conn
+    |> assign(:title, "用户的帖子")
+    |> assign(:user, user)
+    |> assign(:current_tab, "post")
+    |> assign(:pagination, pagination)
+    |> render("show-post.html")
   end
 
   @doc """

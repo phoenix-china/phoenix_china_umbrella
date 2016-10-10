@@ -56,7 +56,7 @@
                 <%= post.latest_comment.user.nickname %>
               <%= end %>
               回复于
-              <span><%= post.latest_comment.inserted_at |> from_now %></span>
+              <span><%= post.latest_comment.inserted_at %></span>
             </div>
             <%= end %>
           </small>
@@ -72,7 +72,7 @@
       </div>
     </article>
     <%= end %>
-    
+
     <%= pagination_links @conn, @pagination, path: &page_path/3, label: Map.get(@conn.params, "label", "全部") %>
     <%= else %>
     <section class="hero is-medium is-primary is-bold has-text-centered">
@@ -139,16 +139,39 @@
       <div class="panel-heading">
         <span>友情链接</span>
       </div>
-      <div class="panel-block">
-        <ul>
-          <li><%= link "Elixir中文社区", to: "http://www.elixir-cn.com/", target: "_blank" %></li>
-          <li><%= link "Ruby中文社区", to: "https://ruby-china.org/", target: "_blank" %></li>
-          <li><%= link "Python中文社区", to: "https://python-china.org/", target: "_blank" %></li>
-          <li><%= link "Rust中文社区", to: "https://rust-china.org/", target: "_blank" %></li>
-          <li><%= link "掏抠客－为您省钱", to: "http://www.taokouke.com/", target: "_blank" %></li>
-          <li><%= link "自制系－手工玩家聚集地", to: "http://www.zizhixi.com/", target: "_blank" %></li>
-        </ul>
-      </div>
+      <%= link to: "http://www.elixir-cn.com/", target: "_blank", class: "panel-block" do %>
+        <article class="icon image is-16x16">
+          <img src="http://www.elixir-cn.com/img/favicon.ico" alt="Elixir中文社区" />
+        </article>
+        <span>Elixir中文社区</span>
+      <%= end %>
+      <%= link to: "https://ruby-china.org/", target: "_blank", class: "panel-block" do %>
+        <article class="icon image is-16x16">
+          <img src="https://ruby-china.org/favicon.ico" alt="Ruby中文社区" />
+        </article>
+        <span>Ruby中文社区</span>
+      <%= end %>
+      <%= link to: "https://python-china.org/", target: "_blank", class: "panel-block" do %>
+        <article class="icon image is-16x16">
+          <img src="https://python-china.org/favicon.ico" alt="Python中文社区" />
+        </article>
+        <span>Python中文社区</span>
+      <%= end %>
+      <%= link to: "https://rust-china.org/", target: "_blank", class: "panel-block" do %>
+        <article class="icon image is-16x16">
+          <img src="https://rust-china.org/favicon.ico" alt="Rust中文社区" />
+        </article>
+        <span>Rust中文社区</span>
+      <%= end %>
+      <%= link to: "https://www.taokouke.com/", target: "_blank", class: "panel-block" do %>
+        <article class="icon image is-16x16">
+          <img src="https://www.taokouke.com/static/images/favicon.ico" alt="掏抠客－为您省钱" />
+        </article>
+        <span>掏抠客－为您省钱</span>
+      <%= end %>
+      <%= link to: "http://www.zizhixi.com/", target: "_blank", class: "panel-block" do %>
+        <span>自制系－手工玩家聚集地</span>
+      <%= end %>
     </div>
   </div>
 </div>
