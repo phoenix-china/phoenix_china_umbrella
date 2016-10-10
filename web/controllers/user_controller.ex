@@ -6,37 +6,6 @@ defmodule PhoenixChina.UserController do
   import PhoenixChina.Mailer, only: [send_confirmation_email: 2, send_reset_password_email: 2]
   import PhoenixChina.ViewHelpers, only: [current_user: 1, logged_in?: 1]
 
-  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
-    when action in [:profile, :account]
-
-  plug PhoenixChina.GuardianPlug
-
-  plug :load_data when action in [:show, :profile, :put_profile, :account,
-                                  :put_account, :comments, :collects, :follower,
-                                  :followed]
-  defp load_data(conn, _) do
-    user = case conn.params do
-      %{"username" => username} ->
-        User |> preload([:github]) |> Repo.get_by!(username: username)
-      _ ->
-        current_user(conn)
-    end
-
-    post_count = Post
-    |> where([p], p.user_id == ^user.id)
-    |> select([p], count(p.id))
-    |> Repo.one
-
-    comment_count = Comment
-    |> where([c], c.user_id == ^user.id)
-    |> select([c], count(c.id))
-    |> Repo.one
-
-    conn
-    |> assign(:user, user)
-    |> assign(:post_count, post_count)
-    |> assign(:comment_count, comment_count)
-  end
 
   defp who(conn, user) do
     cond do
@@ -74,7 +43,7 @@ defmodule PhoenixChina.UserController do
     user = Repo.get_by(User, %{username: username})
 
     conn
-    |> assign(:title, "用户主页")
+    |> assign(:title, user.nickname <> " 的主页")
     |> assign(:user, user)
     |> assign(:current_tab, "index")
     |> render("show-index.html")
@@ -93,7 +62,7 @@ defmodule PhoenixChina.UserController do
     |> Repo.paginate(params)
 
     conn
-    |> assign(:title, "用户的帖子")
+    |> assign(:title, user.nickname <> " 的帖子")
     |> assign(:user, user)
     |> assign(:current_tab, "post")
     |> assign(:pagination, pagination)
@@ -103,8 +72,21 @@ defmodule PhoenixChina.UserController do
   @doc """
   回复
   """
-  def show(conn, %{"username" => username, "tab" => "comment"}) do
+  def show(conn, %{"username" => username, "tab" => "comment"} = params) do
+    user = Repo.get_by(User, %{username: username})
 
+    pagination = Comment
+    |> where(user_id: ^user.id)
+    |> order_by([:inserted_at])
+    |> preload([:post])
+    |> Repo.paginate(params)
+
+    conn
+    |> assign(:title, user.nickname <> " 的回复")
+    |> assign(:user, user)
+    |> assign(:current_tab, "comment")
+    |> assign(:pagination, pagination)
+    |> render("show-comment.html")
   end
 
   @doc """

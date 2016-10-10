@@ -1,0 +1,33 @@
+<div class="columns">
+  <div class="column is-4">
+    <%= render "show-card.html", conn: @conn, user: @user %>
+  </div>
+  <div class="column">
+    <%= render "show-tabs.html", conn: @conn, user: @user, current_tab: @current_tab %>
+
+    <%= if @pagination.total_entries > 0 do %>
+      <%= for comment <- @pagination do %>
+      <article class="media">
+        <div class="media-content">
+          <div class="content">
+            <span><%= comment.inserted_at %></span>
+            回复：
+            <%= link to: post_path(@conn, :show, comment.post) do %>
+              <%= comment.post.title %>
+            <%= end %>
+            <div class="">
+              <%= raw comment.content %>
+            </div>
+          </div>
+        </div>
+        </article>
+      <%= end %>
+      <%= pagination_links @conn, @pagination, [@user.username], action: :show, path: &user_path/4, tab: "comment" %>
+    <%= else %>
+      <hr>
+      <div class="has-text-centered">
+        还没有任何回复
+      </div>
+    <%= end %>
+  </div>
+</div>
