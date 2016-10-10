@@ -1,6 +1,10 @@
 body {
   background: #fff;
 }
+.content a,
+.content a:not(.button):visited {
+  color: #333;
+}
 .icon.is-danger {
   color: #ff3860;
 }
