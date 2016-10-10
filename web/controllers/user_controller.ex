@@ -112,8 +112,20 @@ defmodule PhoenixChina.UserController do
   @doc """
   关注者
   """
-  def show(conn, %{"username" => username, "tab" => "followers"}) do
+  def show(conn, %{"username" => username, "tab" => "followers"} = params) do
+    user = Repo.get_by(User, %{username: username})
 
+    pagination = User
+    |> join(:inner, [u], f in UserFollow, f.user_id == u.id and f.to_user_id == ^user.id)
+    |> order_by([:inserted_at])
+    |> Repo.paginate(params)
+
+    conn
+    |> assign(:title, user.username <> " 的关注者")
+    |> assign(:user, user)
+    |> assign(:current_tab, "followers")
+    |> assign(:pagination, pagination)
+    |> render("show-followers.html")
   end
 
   @doc """
