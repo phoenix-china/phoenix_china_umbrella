@@ -47,11 +47,30 @@
             </span>
 
             <div class="nav-right nav-menu">
+              <%= if logged_in?(@conn) do %>
+                <!-- <%= link to: "", class: "nav-item" do %>
+                  <span class="icon is-small">
+                    <i class="fa fa-bell"></i>
+                  </span>
 
-              <span class="nav-item">
-                <%= link "注册", to: user_path(@conn, :new), class: "button" %>
-                <%= link "登录", to: session_path(@conn, :new), class: "button is-info" %>
-              </span>
+                  <span class="tag is-danger is-small">
+                    0
+                  </span>
+                <%= end %> -->
+
+                <%= link to: user_path(@conn, :show, current_user(@conn).nickname), class: "nav-item" do %>
+                  <figure>
+                    <img src="<%= current_user(@conn).avatar %>" alt="<%= current_user(@conn).username %>" />
+                  </figure>
+                  <span style="margin-left: 5px;"><%= current_user(@conn).username %></span>
+                <%= end %>
+                <%= link "退出", to: session_path(@conn, :delete), class: "nav-item" %>
+                <%= else %>
+                <span class="nav-item">
+                  <%= link "注册", to: user_path(@conn, :new), class: "button" %>
+                  <%= link "登录", to: session_path(@conn, :new), class: "button is-info" %>
+                </span>
+              <%= end %>
             </div>
           </div>
         </nav>

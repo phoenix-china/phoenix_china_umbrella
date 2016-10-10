@@ -1,10 +1,7 @@
-<div class="phoenix_china-form">
-  <h2>欢迎注册Phoenix中文社区</h2>
-
-  <%= render "signup_form.html",
-    changeset: @changeset,
-    action: user_path(@conn, :create),
-    conn: @conn
-  %>
-
+<div class="columns">
+  <div class="column is-4 is-offset-4">
+    <div class="box">
+      <%= render "form.html", changeset: @changeset, action: user_path(@conn, :create) %>
+    </div>
+  </div>
 </div>

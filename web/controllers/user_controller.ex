@@ -10,7 +10,6 @@ defmodule PhoenixChina.UserController do
     when action in [:profile, :account]
 
   plug PhoenixChina.GuardianPlug
-  plug :put_layout, "user.html"
 
   plug :load_data when action in [:show, :profile, :put_profile, :account,
                                   :put_account, :comments, :collects, :follower,
@@ -50,7 +49,6 @@ defmodule PhoenixChina.UserController do
     changeset = User.changeset(:signup, %User{})
     conn = assign(conn, :title, "用户注册")
     render conn, "new.html",
-      layout: {LayoutView, "app.html"},
       changeset: changeset
   end
 
@@ -65,10 +63,12 @@ defmodule PhoenixChina.UserController do
         |> redirect(to: session_path(conn, :new))
       {:error, changeset} ->
         render conn, "new.html",
-          layout: {LayoutView, "app.html"},
           changeset: changeset
     end
   end
+
+  # index post comment collect followers following
+  # 用户首页 帖子 回复 收藏 关注者 正在关注
 
   def show(conn, %{"username" => username, "page" => page}) do
     user = User |> Repo.get_by!(username: username)

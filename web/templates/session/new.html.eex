@@ -1,25 +1,14 @@
-<div class="phoenix_china-form">
-
-  <div class="row">
-
-    <div class="col-sm-8">
-      <h2>欢迎登录Phoenix中文社区</h2>
-      <%= render "form.html",
-        changeset: @changeset,
-        action: session_path(@conn, :create),
-        conn: @conn
-      %>
+<div class="columns">
+  <div class="column is-4 is-offset-4">
+    <div class="box">
+      <%= render "form.html", changeset: @changeset, action: session_path(@conn, :create) %>
+      <hr>
+      <div class="">
+        第三方登录：
+        <%= link to: auth_path(@conn, :request, "github") do %>
+          <span class="icon"><i class="fa fa-github"></i></span>
+        <%= end %>
+      </div>
     </div>
-
-    <div class="col-sm-4">
-      <h2>第三方登录</h2>
-      <ul>
-        <li><%= link raw("<i class=\"fa fa-github fa-2x\"></i> Github"), to: auth_path(@conn, :request, "github") %></li>
-      </ul>
-    </div>
-
-
   </div>
-
-
 </div>

@@ -34,9 +34,6 @@ defmodule PhoenixChina.Router do
     post "/signin", SessionController, :create
     get "/signout", SessionController, :delete
 
-    get "/room", PageController, :room
-    get "/commits", PageController, :commits
-
     resources "/posts", PostController do
        resources "/comments", CommentController, except: [:index]
 
@@ -51,12 +48,13 @@ defmodule PhoenixChina.Router do
       resources "/praise", CommentPraiseController, as: :praise, only: [:create, :delete], singleton: true
     end
 
+    resources "/users", UserController, param: "username", only: [:show]
   end
 
   scope "/users", PhoenixChina do
      pipe_through [:browser, :browser_session]
 
-     get "/:username", UserController, :show
+    #  get "/:username", UserController, :show
      get "/:username/avatar", UserController, :avatar
      get "/:username/posts", PostController, :user_posts
      get "/:username/comments", UserController, :comments
