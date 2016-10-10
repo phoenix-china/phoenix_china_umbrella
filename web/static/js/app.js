@@ -20,6 +20,35 @@ import "phoenix_html"
 
 import socket from "./socket"
 
+
+import moment from "moment";
+import "moment/locale/zh-cn";
+
+(function() {
+  function phoenix_moment_render(elem) {
+    let from_now = moment($(elem).data('timestamp'), $(elem).data('format')).fromNow();
+    $(elem).text(from_now);
+    $(elem).removeClass('phoenix-moment').show();
+  }
+
+  function phoenix_moment_render_all() {
+    $('.phoenix-moment').each(function() {
+      phoenix_moment_render(this);
+      if ($(this).data('refresh')) {
+        (function(elem, interval) {
+          setInterval(function() {
+            phoenix_moment_render(elem)
+          }, interval);
+        })(this, $(this).data('refresh'));
+      }
+    })
+  }
+
+  $(document).ready(function() {
+      phoenix_moment_render_all();
+  });
+})();
+
 $(function() {
   var codes = $('code')
 

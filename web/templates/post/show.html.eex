@@ -8,22 +8,22 @@
           <%= end %>
           <span class="level-item">•</span>
           <%= link to: user_path(@conn, :show, @post.user.username), class: "level-item" do %>
-            <%= @post.user.nickname %>
+            <%= @post.user.username %>
           <%= end %>
           <span class="level-item">•</span>
           <div class="level-item">
             发布于
-            <span><%= @post.inserted_at %></span>
+            <span class="phoenix-moment" data-timestamp="<%= @post.inserted_at %>"></span>
           </div>
           <%= if not is_nil(@post.latest_comment) do %>
           <span class="level-item">•</span>
           <div class="level-item">
             最后由
             <%= link to: user_path(@conn, :show, @post.latest_comment.user.username) do %>
-              <%= @post.latest_comment.user.nickname %>
+              <%= @post.latest_comment.user.username %>
             <%= end %>
             回复于
-            <span><%= @post.latest_comment.inserted_at %></span>
+            <span class="phoenix-moment" data-timestamp="<%= @post.latest_comment.inserted_at %>"></span>
           </div>
           <%= end %>
         </small>
@@ -99,13 +99,13 @@
           <div class="content">
             <p>
               <%= link to: user_path(@conn, :show, comment.user.username) do %>
-                <%= comment.user.nickname %>
+                <%= comment.user.username %>
               <%= end %>
               <small>@<%= comment.user.username %></small>
               <%= link to: "" do %>
                 #<%= index %>
               <%= end %>
-              <small><%= comment.inserted_at %></small>
+              <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
               <br>
               <%= comment.content %>
             </p>

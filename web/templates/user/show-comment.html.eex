@@ -10,7 +10,7 @@
       <article class="media">
         <div class="media-content">
           <div class="content">
-            <span><%= comment.inserted_at %></span>
+            <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
             回复：
             <%= link to: post_path(@conn, :show, comment.post) do %>
               <%= comment.post.title %>
