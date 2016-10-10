@@ -40,13 +40,14 @@ defmodule PhoenixChina.UserController do
   主页
   """
   def show(conn, %{"username" => username, "tab" => "index"}) do
-    user = Repo.get_by(User, %{username: username})
-
-    conn
-    |> assign(:title, user.username <> " 的主页")
-    |> assign(:user, user)
-    |> assign(:current_tab, "index")
-    |> render("show-index.html")
+    # user = Repo.get_by(User, %{username: username})
+    #
+    # conn
+    # |> assign(:title, user.username <> " 的主页")
+    # |> assign(:user, user)
+    # |> assign(:current_tab, "index")
+    # |> render("show-index.html")
+    show(conn, %{"username" => username, "tab" => "post"})
   end
 
   @doc """
@@ -237,49 +238,6 @@ defmodule PhoenixChina.UserController do
   end
 
   @doc """
-  用户评论列表
-  """
-  def comments(conn, %{"username" => username, "page" => page}) do
-    user = User |> Repo.get_by!(username: username)
-
-    conn = assign(conn, :title, "#{who(conn, user)}的评论列表")
-
-    page = Comment
-    |> where(user_id: ^user.id)
-    |> order_by(desc: :inserted_at)
-    |> preload([:user, :post, post: :user])
-    |> Repo.paginate(%{"page" => page})
-
-    render conn, "comments.html",
-      page: page,
-      current_page: nil
-  end
-
-  def comments(conn, %{"username" => username}) do
-    comments(conn, %{"username" => username, "page" => "1"})
-  end
-
-  def collects(conn, %{"username" => username, "page" => page}) do
-    user = User |> Repo.get_by!(username: username)
-
-    conn = assign(conn, :title, "#{who(conn, user)}的收藏")
-
-    page = PostCollect
-    |> preload([:post, post: [:label, :user, :latest_comment, latest_comment: :user]])
-    |> where(user_id: ^user.id)
-    |> order_by(desc: :inserted_at)
-    |> Repo.paginate(%{"page" => page})
-
-    render conn, "collects.html",
-      page: page,
-      current_page: nil
-  end
-
-  def collects(conn, %{"username" => username}) do
-    collects(conn, %{"username" => username, "page" => "1"})
-  end
-
-  @doc """
   用户请求通过邮件地址重置密码
   """
   def password_forget(conn, _params) do
@@ -358,76 +316,5 @@ defmodule PhoenixChina.UserController do
           layout: {LayoutView, "app.html"},
           changeset: changeset
     end
-  end
-
-  @doc """
-  关注者
-  """
-  def follower(conn, %{"username" => username, "page" => page}) do
-    user = User |> Repo.get_by!(username: username)
-
-    conn = assign(conn, :title, "#{who(conn, user)}的关注者")
-
-    page = UserFollow
-    |> where(to_user_id: ^user.id)
-    |> order_by(desc: :inserted_at)
-    |> preload(:user)
-    |> Repo.paginate(%{"page" => page})
-
-    render conn, "follower.html",
-      page: page,
-      current_page: nil
-  end
-
-  def follower(conn, %{"username" => username}) do
-    follower(conn, %{"username" => username, "page" => "1"})
-  end
-
-  @doc """
-  正在关注
-  """
-  def followed(conn, %{"username" => username, "page" => page}) do
-    user = User |> Repo.get_by!(username: username)
-
-    conn = assign(conn, :title, "#{who(conn, user)}的正在关注")
-
-    page = UserFollow
-    |> where(user_id: ^user.id)
-    |> order_by(desc: :inserted_at)
-    |> preload(:to_user)
-    |> Repo.paginate(%{"page" => page})
-
-    render conn, "followed.html",
-      page: page,
-      current_page: nil
-  end
-
-  def followed(conn, %{"username" => username}) do
-    followed(conn, %{"username" => username, "page" => "1"})
-  end
-
-  def avatar(conn, %{"username" => username}) do
-    content = ConCache.get_or_store(:phoenix_china, "avatar:#{username}", fn() ->
-      user = User |> Repo.get_by!(username: username)
-      url = cond do
-              !is_nil(user.avatar) -> user.avatar
-              true -> user |> generate_avatar_url
-            end
-      response = HTTPotion.get url
-      response.body
-    end)
-
-    text conn, content
-  end
-
-  defp generate_avatar_url(user, size \\ 40) do
-    email = user.email
-    |> String.trim
-    |> String.downcase
-
-    email = :crypto.hash(:md5, email)
-    |> Base.encode16(case: :lower)
-
-    "http://gravatar.eqoe.cn/avatar/#{email}?d=wavatar&s=#{size}"
   end
 end

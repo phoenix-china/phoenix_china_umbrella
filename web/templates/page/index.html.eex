@@ -122,13 +122,13 @@
 
       </div>
       <footer class="card-footer">
-        <%= link to: user_path(@conn, :show, current_user(@conn).username), class: "card-footer-item" do %>
+        <%= link to: user_path(@conn, :show, current_user(@conn).username, tab: "followers"), class: "card-footer-item" do %>
           关注者 <%= current_user(@conn).follower_count %>
         <%= end %>
-        <%= link to: user_path(@conn, :show, current_user(@conn).username), class: "card-footer-item" do %>
+        <%= link to: user_path(@conn, :show, current_user(@conn).username, tab: "following"), class: "card-footer-item" do %>
           正在关注 <%= current_user(@conn).followed_count %>
         <%= end %>
-        <%= link to: user_path(@conn, :show, current_user(@conn).username), class: "card-footer-item" do %>
+        <%= link to: user_path(@conn, :show, current_user(@conn).username, tab: "collect"), class: "card-footer-item" do %>
           收藏 <%= current_user(@conn).collect_count %>
         <%= end %>
       </footer>

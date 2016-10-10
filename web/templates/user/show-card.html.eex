@@ -32,5 +32,17 @@
       <%= end %>
     </div>
     <%= end %>
+
   </div>
+  <footer class="card-footer">
+    <%= link to: user_path(@conn, :show, @user.username, tab: "followers"), class: "card-footer-item" do %>
+      关注者 <%= @user.follower_count %>
+    <%= end %>
+    <%= link to: user_path(@conn, :show, @user.username, tab: "following"), class: "card-footer-item" do %>
+      正在关注 <%= @user.followed_count %>
+    <%= end %>
+    <%= link to: user_path(@conn, :show, @user.username, tab: "collect"), class: "card-footer-item" do %>
+      收藏 <%= @user.collect_count %>
+    <%= end %>
+  </footer>
 </div>
