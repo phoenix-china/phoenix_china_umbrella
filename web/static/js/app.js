@@ -12,17 +12,17 @@
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
 import "phoenix_html"
+import $ from "jquery";
+import moment from "moment";
+import "moment/locale/zh-cn";
 
 // Import local files
 //
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
 
-import socket from "./socket"
-
-
-import moment from "moment";
-import "moment/locale/zh-cn";
+// import socket from "./socket"
+import "./simditor";
 
 (function() {
   function phoenix_moment_render(elem) {

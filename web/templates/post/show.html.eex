@@ -37,7 +37,7 @@
       </nav>
       <hr>
       <div class="content">
-        <%= markdown @post.content %>
+        <%= raw @post.content %>
       </div>
 
       <hr>
@@ -107,7 +107,7 @@
               <%= end %>
               <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
               <br>
-              <%= comment.content %>
+              <%= raw comment.content %>
             </p>
           </div>
         </div>
@@ -145,6 +145,7 @@
     <div class="has-text-centered">
       暂无回复
     </div>
+    <hr>
     <%= end %>
 
     <%= if logged_in?(@conn) do %>
@@ -157,7 +158,7 @@
       <div class="media-content">
         <%= form_for @changeset, post_comment_path(@conn, :create, @post), fn f -> %>
         <p class="control">
-          <%= textarea f, :content, class: "textarea" %>
+          <%= textarea f, :content, class: "textarea simditor-comment-textarea" %>
         </p>
         <nav class="level">
           <div class="level-left">

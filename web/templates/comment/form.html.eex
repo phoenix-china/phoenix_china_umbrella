@@ -1,7 +1,7 @@
 <%= form_for @changeset, @action, fn f -> %>
   <%= label f, :content, "回帖", class: "label" %>
   <p class="control">
-    <%= textarea f, :content, class: "textarea simditor-textarea" %>
+    <%= textarea f, :content, class: "textarea simditor-comment-textarea" %>
   </p>
   <%= error_tag f, :content %>
 
