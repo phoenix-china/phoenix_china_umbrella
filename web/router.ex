@@ -39,12 +39,10 @@ defmodule PhoenixChina.Router do
 
     resources "/posts", PostController do
        resources "/comments", CommentController, except: [:index]
-       post "/collects", PostCollectController, :create
-       delete "/collects", PostCollectController, :cancel
 
-       post "/praises", PostPraiseController, :create
-       delete "/praises", PostPraiseController, :cancel
-
+       resources "/praise", PostPraiseController, as: :praise, only: [:create, :delete], singleton: true
+       resources "/collect", PostCollectController, as: :collect, only: [:create, :delete], singleton: true
+       
        put "/set_top", PostController, :set_top
        put "/cancel_top", PostController, :cancel_top
     end

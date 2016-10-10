@@ -1,3 +1,6 @@
-.column {
+body {
   background: #fff;
+}
+.icon.is-danger {
+  color: #ff3860;
 }

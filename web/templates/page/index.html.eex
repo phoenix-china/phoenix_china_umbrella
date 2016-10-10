@@ -24,58 +24,55 @@
     </div>
 
     <%= if @pagination.total_entries > 0 do %>
-    <div class="panel">
-      <div class="panel-block">
-        <%= for post <- @pagination do %>
-        <article class="media">
-          <figure class="media-left">
-            <p class="image is-48x48">
-              <%= link to: user_path(@conn, :show, post.user.username) do %>
-                <img src="<%= post.user.avatar %>">
-              <%= end %>
-            </p>
-          </figure>
-          <div class="media-content">
-            <div class="content">
-              <div class="title is-5" style="margin-top: 5px;">
-                <%= link post.title, to: post_path(@conn, :show, post) %>
-              </div>
-            </div>
-            <nav class="level">
-              <small class="level-left">
-                <%= link to: page_path(@conn, :index, label: post.label.content), class: "level-item" do %>
-                  <%= post.label.content %>
-                <%= end %>
-                <span class="level-item">•</span>
-                <%= link to: user_path(@conn, :show, post.user.username), class: "level-item" do %>
-                  <%= post.user.nickname %>
-                <%= end %>
-                <%= if not is_nil(post.latest_comment) do %>
-                <span class="level-item">•</span>
-                <div class="level-item">
-                  最后由
-                  <%= link to: user_path(@conn, :show, post.latest_comment.user.username) do %>
-                    <%= post.latest_comment.user.nickname %>
-                  <%= end %>
-                  回复于
-                  <span><%= post.latest_comment.inserted_at |> from_now %></span>
-                </div>
-                <%= end %>
-              </small>
-            </nav>
+    <%= for post <- @pagination do %>
+    <article class="media">
+      <figure class="media-left">
+        <p class="image is-48x48">
+          <%= link to: user_path(@conn, :show, post.user.username) do %>
+            <img src="<%= post.user.avatar %>">
+          <%= end %>
+        </p>
+      </figure>
+      <div class="media-content">
+        <div class="content">
+          <div class="title is-5" style="margin-top: 5px;">
+            <%= link post.title, to: post_path(@conn, :show, post) %>
           </div>
-          <div class="media-right">
-            <%= link to: post_path(@conn, :show, post) do %>
-              <span class="icon is-small">
-                <i class="fa fa-comments-o"></i>
-              </span>
-              <span><%= post.comment_count %></span>
+        </div>
+        <nav class="level">
+          <small class="level-left">
+            <%= link to: page_path(@conn, :index, label: post.label.content), class: "level-item" do %>
+              <%= post.label.content %>
             <%= end %>
-          </div>
-        </article>
+            <span class="level-item">•</span>
+            <%= link to: user_path(@conn, :show, post.user.username), class: "level-item" do %>
+              <%= post.user.nickname %>
+            <%= end %>
+            <%= if not is_nil(post.latest_comment) do %>
+            <span class="level-item">•</span>
+            <div class="level-item">
+              最后由
+              <%= link to: user_path(@conn, :show, post.latest_comment.user.username) do %>
+                <%= post.latest_comment.user.nickname %>
+              <%= end %>
+              回复于
+              <span><%= post.latest_comment.inserted_at |> from_now %></span>
+            </div>
+            <%= end %>
+          </small>
+        </nav>
+      </div>
+      <div class="media-right">
+        <%= link to: post_path(@conn, :show, post) do %>
+          <span class="icon is-small">
+            <i class="fa fa-comments-o"></i>
+          </span>
+          <span><%= post.comment_count %></span>
         <%= end %>
       </div>
-    </div>
+    </article>
+    <%= end %>
+    
     <%= pagination_links @conn, @pagination, path: &page_path/3, label: Map.get(@conn.params, "label", "全部") %>
     <%= else %>
     <section class="hero is-medium is-primary is-bold has-text-centered">
