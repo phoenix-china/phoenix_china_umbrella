@@ -1,0 +1,8 @@
+<div class="columns">
+  <div class="column is-4">
+    <%= render "show-card.html", conn: @conn, user: @user %>
+  </div>
+  <div class="column">
+    <%= render "show-tabs.html", conn: @conn, user: @user, current_tab: @current_tab %>
+  </div>
+</div>

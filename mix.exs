@@ -19,7 +19,7 @@ defmodule PhoenixChina.Mixfile do
   def application do
     [mod: {PhoenixChina, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger,
-      :gettext, :phoenix_ecto, :postgrex, :timex, :ueberauth_github, :httpotion,
+      :gettext, :phoenix_ecto, :postgrex, :timex, :timex_ecto, :ueberauth_github, :httpotion,
       :con_cache, :qiniu]]
   end
 
@@ -45,7 +45,8 @@ defmodule PhoenixChina.Mixfile do
       {:scrivener, "~> 2.0"},
       {:scrivener_ecto, "~> 1.0"},
       {:scrivener_html, "~> 1.1"},
-      {:timex, github: "PhoenixChina/timex"},
+      {:timex, "~> 3.0"},
+      {:timex_ecto, "~> 3.0"},
       {:mailgun, github: "AvaelKross/mailgun"},
       {:earmark, "~> 0.2.1"},
       {:ueberauth_github, "~> 0.2"},

@@ -3,6 +3,17 @@ defmodule PhoenixChina.UserView do
 
   import PhoenixChina.ViewHelpers
 
+  def tabs(conn, user) do
+    [
+      {"index", "用户主页", user_path(conn, :show, user.username)},
+      {"post", "帖子", user_path(conn, :show, user.username, tab: "post")},
+      {"comment", "回复", user_path(conn, :show, user.username, tab: "comment")},
+      {"collect", "收藏", user_path(conn, :show, user.username, tab: "collect")},
+      {"followers", "关注者", user_path(conn, :show, user.username, tab: "followers")},
+      {"following", "正在关注", user_path(conn, :show, user.username, tab: "following")},
+    ]
+  end
+
   def subnavs(conn) do
     current_user = current_user(conn)
 

@@ -99,4 +99,10 @@ defmodule PhoenixChina.ViewHelpers do
   def fullname(user) do
     "#{nickname(user)}(#{user.username})"
   end
+
+  def strftime(time, format \\ "{YYYY}-{0M}-{0D}") do
+    time
+    |> Timex.to_datetime("Etc/UTC")
+    |> Timex.format!(format)
+  end
 end

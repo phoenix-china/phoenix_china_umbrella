@@ -67,28 +67,78 @@ defmodule PhoenixChina.UserController do
     end
   end
 
-  # index post comment collect followers following
-  # 用户首页 帖子 回复 收藏 关注者 正在关注
+  @doc """
+  主页
+  """
+  def show(conn, %{"username" => username, "tab" => "index"}) do
+    user = Repo.get_by(User, %{username: username})
 
-  def show(conn, %{"username" => username, "page" => page}) do
-    user = User |> Repo.get_by!(username: username)
+    conn
+    |> assign(:title, "用户主页")
+    |> assign(:user, user)
+    |> assign(:current_tab, "index")
+    |> render("show-index.html")
+  end
 
-    conn = assign(conn, :title, "#{who(conn, user)}的主页")
+  @doc """
+  帖子
+  """
+  def show(conn, %{"username" => username, "tab" => "post"}) do
 
-    page = Post
-    |> where(user_id: ^user.id)
-    |> order_by(desc: :inserted_at)
-    |> preload([:label, :user, :latest_comment, latest_comment: :user])
-    |> Repo.paginate(%{"page" => page})
+  end
 
-    render conn, "show.html",
-      page: page,
-      current_page: nil
+  @doc """
+  回复
+  """
+  def show(conn, %{"username" => username, "tab" => "comment"}) do
+
+  end
+
+  @doc """
+  收藏
+  """
+  def show(conn, %{"username" => username, "tab" => "collect"}) do
+
+  end
+
+  @doc """
+  关注者
+  """
+  def show(conn, %{"username" => username, "tab" => "followers"}) do
+
+  end
+
+  @doc """
+  正在关注
+  """
+  def show(conn, %{"username" => username, "tab" => "following"}) do
+
   end
 
   def show(conn, %{"username" => username}) do
-    show(conn, %{"username" => username, "page" => "1"})
+    show(conn, %{"username" => username, "tab" => "index"})
   end
+
+
+  # def show(conn, %{"username" => username, "page" => page}) do
+  #   user = User |> Repo.get_by!(username: username)
+  #
+  #   conn = assign(conn, :title, "#{who(conn, user)}的主页")
+  #
+  #   page = Post
+  #   |> where(user_id: ^user.id)
+  #   |> order_by(desc: :inserted_at)
+  #   |> preload([:label, :user, :latest_comment, latest_comment: :user])
+  #   |> Repo.paginate(%{"page" => page})
+  #
+  #   render conn, "show.html",
+  #     page: page,
+  #     current_page: nil
+  # end
+  #
+  # def show(conn, %{"username" => username}) do
+  #   show(conn, %{"username" => username, "page" => "1"})
+  # end
 
   def profile(conn, _params) do
     user = current_user(conn)
