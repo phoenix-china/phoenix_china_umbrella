@@ -20,6 +20,10 @@
                 <%= post.label.content %>
               <%= end %>
               <span class="level-item">•</span>
+              <%= link to: user_path(@conn, :show, post.user.username), class: "level-item" do %>
+                <%= post.user.nickname %>
+              <%= end %>
+              <span class="level-item">•</span>
               <div class="level-item">
                 发布于
                 <span><%= post.inserted_at %></span>
@@ -41,11 +45,11 @@
         </article>
       <%= end %>
 
-      <%= pagination_links @conn, @pagination, [@user.username], action: :show, path: &user_path/4, tab: "post" %>
+      <%= pagination_links @conn, @pagination, [@user.username], action: :show, path: &user_path/4, tab: "collect" %>
     <%= else %>
       <hr>
       <div class="has-text-centered">
-        还没有任何帖子
+        还没有任何收藏
       </div>
     <%= end %>
   </div>

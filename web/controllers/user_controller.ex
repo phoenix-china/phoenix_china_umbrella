@@ -58,7 +58,7 @@ defmodule PhoenixChina.UserController do
     pagination = Post
     |> where(user_id: ^user.id)
     |> order_by([:inserted_at])
-    |> preload([:latest_comment, latest_comment: :user])
+    |> preload([:label, :latest_comment, latest_comment: :user])
     |> Repo.paginate(params)
 
     conn
@@ -92,8 +92,21 @@ defmodule PhoenixChina.UserController do
   @doc """
   收藏
   """
-  def show(conn, %{"username" => username, "tab" => "collect"}) do
+  def show(conn, %{"username" => username, "tab" => "collect"} = params) do
+    user = Repo.get_by(User, %{username: username})
 
+    pagination = Post
+    |> join(:inner, [p], c in PostCollect, c.post_id == p.id and c.user_id == ^user.id)
+    |> order_by([:inserted_at])
+    |> preload([:user, :label, :latest_comment, latest_comment: :user])
+    |> Repo.paginate(params)
+
+    conn
+    |> assign(:title, user.nickname <> " 的收藏")
+    |> assign(:user, user)
+    |> assign(:current_tab, "collect")
+    |> assign(:pagination, pagination)
+    |> render("show-collect.html")
   end
 
   @doc """
