@@ -1,95 +1,191 @@
-<div class="post-detail">
-  <div class="clearfix post-top">
-    <div class="post-user pull-right">
-      <a href="<%= user_path(@conn, :show, @post.user.username) %>">
-        <img class="media-object"
-        src="<%= @post.user.avatar %>"
-        alt="<%= @post.user.nickname %>"
-        width="40">
-      </a>
-    </div>
-    <div class="post-header pull-left">
-      <h1 class="post-title"><%= @post.title %></h1>
-      <div class="post-info" style="margin-top: 10px;">
-        <%= if @post.label do %>
-        <%= post_label(@post) %>
-        •
+<div class="columns">
+  <div class="column">
+    <div class="post-show">
+      <nav class="level">
+        <small class="level-left">
+          <%= link to: page_path(@conn, :index, label: @post.label.content), class: "level-item" do %>
+            <%= @post.label.content %>
+          <%= end %>
+          <span class="level-item">•</span>
+          <%= link to: user_path(@conn, :show, @post.user.username), class: "level-item" do %>
+            <%= @post.user.username %>
+          <%= end %>
+          <span class="level-item">•</span>
+          <div class="level-item">
+            发布于
+            <span class="phoenix-moment" data-timestamp="<%= @post.inserted_at %>"></span>
+          </div>
+          <%= if not is_nil(@post.latest_comment) do %>
+          <span class="level-item">•</span>
+          <div class="level-item">
+            最后由
+            <%= link to: user_path(@conn, :show, @post.latest_comment.user.username) do %>
+              <%= @post.latest_comment.user.username %>
+            <%= end %>
+            回复于
+            <span class="phoenix-moment" data-timestamp="<%= @post.latest_comment.inserted_at %>"></span>
+          </div>
+          <%= end %>
+        </small>
+        <div class="level-right">
+          <article class="image is-32x32">
+            <%= link to: user_path(@conn, :show, @post.user.username) do %>
+              <img src="<%= @post.user.avatar %>" alt="<%= @post.user.nickname %>" />
+            <%= end %>
+          </article>
+        </div>
+      </nav>
+      <hr>
+      <div class="content">
+        <%= raw @post.content %>
+      </div>
+
+      <hr>
+      <nav class="level">
+        <div class="level-left">
+          <div class="level-item">
+            <%= if PhoenixChina.PostPraiseView.praise?(@conn, @post) do %>
+              <%= link to: post_praise_path(@conn, :delete, @post), class: "button is-light is-small", method: :delete do %>
+                <span class="icon is-small is-danger"><i class="fa fa-heart"></i></span>
+                <span><%= PhoenixChina.PostPraiseView.praise_count(@post) %></span>
+              <%= end %>
+            <%= else %>
+              <%= link to: post_praise_path(@conn, :create, @post), class: "button is-light is-small", method: :post do %>
+                <span class="icon is-small"><i class="fa fa-heart-o"></i></span>
+                <span><%= PhoenixChina.PostPraiseView.praise_count(@post) %></span>
+              <%= end %>
+            <%= end %>
+          </div>
+          <div class="level-item">
+            <%= if PhoenixChina.PostCollectView.collect?(@conn, @post) do %>
+              <%= link to: post_collect_path(@conn, :delete, @post), class: "button is-light is-small", method: :delete do %>
+                <span class="icon is-small is-danger"><i class="fa fa-bookmark"></i></span>
+                <span>收藏</span>
+              <%= end %>
+            <%= else %>
+              <%= link to: post_collect_path(@conn, :create, @post), class: "button is-light is-small", method: :post do %>
+                <span class="icon is-small"><i class="fa fa-bookmark-o"></i></span>
+                <span>收藏</span>
+              <%= end %>
+            <%= end %>
+          </div>
+        </div>
+        <%= if logged_in?(@conn) and current_user(@conn).id == @post.user_id do %>
+        <div class="level-right">
+          <%= link to: post_path(@conn, :edit, @post), class: "level-item button is-success is-small" do %>
+            <span class="icon is-small"><i class="fa fa-pencil"></i></span>
+            <span>编辑</span>
+          <%= end %>
+        </div>
         <%= end %>
-        由 <%= link fullname(@post.user), to: user_path(@conn, :show, @post.user.username) %>
-        于<%= @post.inserted_at |> from_now %>发布
-        <%= if @post.latest_comment do %>
-         • 最后由 <%= link fullname(@post.latest_comment.user), to: user_path(@conn, :show, @post.latest_comment.user.username) %>
-         于<%= @post.latest_comment.inserted_at |> from_now %>回复
+      </nav>
+    </div>
+
+    <%= if Enum.count(@comments) > 0 do %>
+      <div class="title is-6" style="margin-top: 20px;">
+        共收到 <%= @post.comment_count %> 条回复
+      </div>
+      <hr>
+      <%= for {comment, index} <- @comments |> Enum.with_index(1) do %>
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-32x32">
+            <%= link to: user_path(@conn, :show, comment.user.username) do %>
+              <img src="<%= comment.user.avatar %>" alt="<%= comment.user.nickname %>">
+            <%= end %>
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <%= link to: user_path(@conn, :show, comment.user.username) do %>
+                <%= comment.user.username %>
+              <%= end %>
+              <small>@<%= comment.user.username %></small>
+              <%= link to: "" do %>
+                #<%= index %>
+              <%= end %>
+              <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
+              <br>
+              <%= raw comment.content %>
+            </p>
+          </div>
+        </div>
+        <div class="media-right">
+          <nav class="level">
+            <div class="level-left">
+              <%= if logged_in?(@conn) and current_user(@conn).id == comment.user_id do %>
+                <%= link to: post_comment_path(@conn, :edit, @post, comment), class: "level-item button is-small is-link" do %>
+                  <span class="icon is-small"><i class="fa fa-pencil"></i></span>
+                  <span>编辑</span>
+                <%= end %>
+              <%= end %>
+
+              <div class="level-item">
+                <%= if PhoenixChina.CommentPraiseView.praise?(@conn, comment) do %>
+                  <%= link to: comment_praise_path(@conn, :delete, comment), class: "button is-small is-link", method: :delete do %>
+                    <span class="icon is-small is-danger"><i class="fa fa-heart"></i></span>
+                    <span><%= PhoenixChina.CommentPraiseView.praise_count(comment) %></span>
+                  <%= end %>
+                <%= else %>
+                  <%= link to: comment_praise_path(@conn, :create, comment), class: "button is-small is-link", method: :post do %>
+                    <span class="icon is-small"><i class="fa fa-heart-o"></i></span>
+                    <span><%= PhoenixChina.CommentPraiseView.praise_count(comment) %></span>
+                  <%= end %>
+                <%= end %>
+              </div>
+            </div>
+          </nav>
+
+        </div>
+      </article>
+      <%= end %>
+    <%= else %>
+    <hr>
+    <div class="has-text-centered">
+      暂无回复
+    </div>
+    <hr>
+    <%= end %>
+
+    <%= if logged_in?(@conn) do %>
+    <article class="media">
+      <figure class="media-left">
+        <p class="image is-64x64">
+          <img src="<%= current_user(@conn).avatar %>">
+        </p>
+      </figure>
+      <div class="media-content">
+        <%= form_for @changeset, post_comment_path(@conn, :create, @post), fn f -> %>
+        <p class="control">
+          <%= textarea f, :content, class: "textarea simditor-comment-textarea" %>
+        </p>
+        <nav class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <%= submit "回复", class: "button is-info" %>
+            </div>
+          </div>
+        </nav>
         <%= end %>
       </div>
+    </article>
+    <%= else %>
+    <hr>
+    <div class="box">
+      需要
+      <%= link to: session_path(@conn, :new), class: "button is-info is-small" do %>
+        登录
+      <%= end %>
+      后方可回复, 如果你还没有账号请点击这里
+      <%= link to: user_path(@conn, :new), class: "button is-danger is-small" do %>
+        注册
+      <%= end %>
+      。
     </div>
+    <%= end %>
   </div>
+  <div class="column is-3">
 
-  <div class="post-content">
-    <%= markdown @post.content %>
-  </div>
-
-  <%= if @logged_in && @post.user_id == @current_user.id do %>
-  <div class="pull-right" style="position: relative;">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-      <span class="fa fa-angle-down fa-2x"></span>
-    </a>
-    <ul class="dropdown-menu" style="min-width: 80px;">
-      <li><%= link raw("<i class=\"fa fa-pencil-square-o\"></i> 编辑"), to: post_path(@conn, :edit, @post) %></li>
-      <li><%= link raw("<i class=\"fa fa-trash-o\"></i> 删除"), to: post_path(@conn, :delete, @post), method: :delete, data: [confirm: "确定要删除帖子吗?"] %></li>
-    </ul>
-  </div>
-  <%= end %>
-
-  <%= if @post.user.bio |> String.length > 0 do %>
-  <div class="post-user-bio">
-    |> <%= @post.user.bio %>
-  </div>
-  <%= end %>
-
-
-  <div class="row post-detail-handler">
-    <div class="col-xs-12" style="font-size: 12px; color: #666; margin-top: 10px;">
-        <%= if @logged_in && @post.user_id != @current_user.id do %>
-          <%= if post_praise? @current_user, @post do %>
-            <%= link raw("<i class=\"fa fa-thumbs-o-up text-danger\"></i> #{@post.praise_count}"), to: post_post_praise_path(@conn, :cancel, @post), method: :delete, data: [confirm: "确定要取消赞吗?"] %>
-          <%= else %>
-            <%= link raw("<i class=\"fa fa-thumbs-o-up\"></i> #{@post.praise_count}"), to: post_post_praise_path(@conn, :create, @post), method: :post %>
-          <%= end %>
-
-          <span style="padding: 0 10px; color: #ccc;">|</span>
-
-          <%= if post_collect? @current_user, @post do %>
-            <%= link raw("<i class=\"fa fa-star-o text-danger\"></i> 已收藏"), to: post_post_collect_path(@conn, :cancel, @post), method: :delete, data: [confirm: "确定要取消收藏吗?"] %>
-          <%= else %>
-            <%= link raw("<i class=\"fa fa-star-o\"></i> 收藏"), to: post_post_collect_path(@conn, :create, @post), method: :post %>
-          <%= end %>
-        <%= end %>
-        <%= if admin_logged_in?(@conn) do %>
-          <span style="padding: 0 10px; color: #ccc;">|</span>
-          <%= if @post.is_top do %>
-            <%= link raw("<i class=\"fa fa-thumb-tack\"></i> 取消置顶"), to: post_post_path(@conn, :cancel_top, @post), method: :put %>
-          <%= else %>
-            <%= link raw("<i class=\"fa fa-thumb-tack\"></i> 置顶"), to: post_post_path(@conn, :set_top, @post), method: :put %>
-          <%= end %>
-        <%= end %>
-    </div>
   </div>
 </div>
-
-<div class="panel" style="position: relative; top: 20px; padding: .5em; border-radius: 4px 4px 0 0; color: #999;">
-  共收到 <b><%= @post.comment_count %></b> 条回复
-</div>
-
-<%= render PhoenixChina.CommentView, "entries.html",
-  conn: @conn,
-  post: @post,
-  comments: @comments,
-  logged_in: @logged_in,
-  current_user: @current_user
-%>
-
-<%= render PhoenixChina.CommentView, "form.html",
-  changeset: @changeset,
-  action: post_comment_path(@conn, :create, @post)
-%>

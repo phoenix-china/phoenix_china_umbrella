@@ -1,43 +1,113 @@
-<%= render "header.html",
-  conn: @conn,
-  logged_in: @logged_in,
-  current_user: @current_user
-%>
+<!--
+  App Environments:
 
-<div class="row">
-  <div class="col-md-9">
-    <main role="main">
-      <%= render @view_module, @view_template, assigns %>
-    </main>
-  </div>
-  <div class="col-md-3">
-    <div class="panel panel-default">
-      <div class="panel-heading">最新用户</div>
-      <div class="panel-body">
-        <ul>
-          <%= for user <- @new_users do %>
-          <li>
-            <%= link fullname(user), to: user_path(@conn, :show, user.username) %>
-          </li>
-          <%= end %>
-        </ul>
+  - Erlang/OTP:  19
+  - Elixir:      1.3.2
+  - Phoenix:     1.2.1
+  - Postgresql:  9.5.0.0
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="PhoenixChina">
+    <meta name="keywords" content="phoenix中文社区, elixir, phoenix, phoenixframework, ecto, postgresql"/>
+    <meta name="author" content="https://github.com/nanlong/">
+    <meta name="csrf" content="<%= Plug.CSRFProtection.get_csrf_token() %>">
+    <title><%= @conn.assigns[:title] && @conn.assigns[:title] <>  " - " %>PhoenixChina</title>
+    <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+  </head>
+
+  <body>
+    <section class="hero is-medium" >
+      <div class="hero-head">
+        <nav class="nav">
+          <div class="container">
+            <div class="nav-left">
+              <%= link to: page_path(@conn, :index), class: "nav-item" do %>
+                <span class="title is-5">PhoenixChina</span>
+              <%= end %>
+
+              <%= link "首页", to: "/", class: "nav-item" %>
+            </div>
+
+            <%= if @conn.assigns[:title] do %>
+            <div class="nav-center">
+              <h1 class="nav-item title is-5"><%= @conn.assigns[:title] %></h1>
+            </div>
+            <%= end %>
+
+            <span class="nav-toggle">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+
+            <div class="nav-right nav-menu">
+              <%= if logged_in?(@conn) do %>
+                <!-- <%= link to: "", class: "nav-item" do %>
+                  <span class="icon is-small">
+                    <i class="fa fa-bell"></i>
+                  </span>
+
+                  <span class="tag is-danger is-small">
+                    0
+                  </span>
+                <%= end %> -->
+
+                <%= link to: user_path(@conn, :show, current_user(@conn).username), class: "nav-item" do %>
+                  <figure>
+                    <img src="<%= current_user(@conn).avatar %>" alt="<%= current_user(@conn).username %>" />
+                  </figure>
+                  <span style="margin-left: 5px;"><%= current_user(@conn).username %></span>
+                <%= end %>
+                <%= link "退出", to: session_path(@conn, :delete), class: "nav-item" %>
+                <%= else %>
+                <span class="nav-item">
+                  <%= link "注册", to: user_path(@conn, :new), class: "button" %>
+                  <%= link "登录", to: session_path(@conn, :new), class: "button is-info" %>
+                </span>
+              <%= end %>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+    </section>
+
+    <div style="padding: 20px 0 20px;">
+      <div class="container" style="min-height: 550px;">
+        <!-- <%= if flash = get_flash(@conn, :info) do %>
+        <p class="notification is-success">
+          <button class="delete"></button>
+          <%= flash %>
+        </p>
+        <%= end %>
+
+        <%= if flash = get_flash(@conn, :error) do %>
+        <p class="notification is-danger">
+          <button class="delete"></button>
+          <%= flash %>
+        </p>
+        <%= end %> -->
+
+        <main role="main">
+          <%= render @view_module, @view_template, assigns %>
+        </main>
       </div>
     </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">友情链接</div>
-      <div class="panel-body">
-        <ul>
-          <li><%= link "Elixir中文社区", to: "http://www.elixir-cn.com/", target: "_blank" %></li>
-          <li><%= link "Ruby中文社区", to: "https://ruby-china.org/", target: "_blank" %></li>
-          <li><%= link "Python中文社区", to: "https://python-china.org/", target: "_blank" %></li>
-          <li><%= link "Rust中文社区", to: "https://rust-china.org/", target: "_blank" %></li>
-          <li><%= link "掏抠客－为您省钱", to: "http://www.taokouke.com/", target: "_blank" %></li>
-          <li><%= link "自制系－手工玩家聚集地", to: "http://www.zizhixi.com/", target: "_blank" %></li>
-        </ul>
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          Copyright © 2016 phoenix-china.org
+        </div>
       </div>
-    </div>
-  </div>
-</div>
+    </footer>
 
-<%= render "footer.html", conn: @conn %>
+    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+  </body>
+</html>

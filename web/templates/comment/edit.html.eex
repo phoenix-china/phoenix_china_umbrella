@@ -1,5 +1,14 @@
-<div class="phoenix_china-form">
-  <h2>编辑评论内容</h2>
-
-  <%= render "form.html", changeset: @changeset, action: post_comment_path(@conn, :update, @post_id, @comment) %>
+<div class="columns">
+  <div class="column">
+    <%= render "form.html",
+      changeset: @changeset,
+      action: post_comment_path(@conn, :update, @comment.post_id, @comment)
+    %>
+  </div>
+  <div class="column is-3">
+    <%= link to: post_path(@conn, :show, @comment.post_id), class: "button is-link" do %>
+      <span class="icon is-small"><i class="fa fa-arrow-left"></i></span>
+      <span>返回</span>
+    <%= end %>
+  </div>
 </div>

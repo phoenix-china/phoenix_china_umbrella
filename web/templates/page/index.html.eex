@@ -1,21 +1,186 @@
-<div class="jumbotron">
-  <h2><%= gettext "欢迎来到 %{name}", name: "Phoenix中文社区" %></h2>
-  <p>
-    本项目使用基于Elixir语言的PhoenixFramework框架开发
-  </p>
-  <p class="lead">
-    <%= link "本项目github地址", to: "https://github.com/nanlong/phoenix_china", target: "_blank" %>
-    欢迎fork和提交代码！
-  </p>
+<div class="columns">
+  <div class="column">
+    <div class="tabs">
+      <ul>
+        <%= if @current_label == "全部" do %>
+        <li class="is-active">
+        <%= else %>
+        <li>
+        <%= end %>
+          <%= link "全部", to: page_path(@conn, :index) %>
+        </li>
+        <%= for label <- @labels do %>
+        <%= if @current_label == label.content do %>
+        <li class="is-active">
+        <%= else %>
+        <li>
+        <%= end %>
+          <%= link to: page_path(@conn, :index, label: label.content) do %>
+            <%= label.content %>
+          <%= end %>
+        </li>
+        <%= end %>
+      </ul>
+    </div>
+
+    <%= if @pagination.total_entries > 0 do %>
+    <%= for post <- @pagination do %>
+    <article class="media">
+      <figure class="media-left">
+        <p class="image is-48x48">
+          <%= link to: user_path(@conn, :show, post.user.username) do %>
+            <img src="<%= post.user.avatar %>">
+          <%= end %>
+        </p>
+      </figure>
+      <div class="media-content">
+        <div class="content">
+          <div class="title is-5" style="margin-top: 5px;">
+            <%= link post.title, to: post_path(@conn, :show, post) %>
+          </div>
+        </div>
+        <nav class="level">
+          <small class="level-left">
+            <%= link to: page_path(@conn, :index, label: post.label.content), class: "level-item" do %>
+              <%= post.label.content %>
+            <%= end %>
+            <span class="level-item">•</span>
+            <%= link to: user_path(@conn, :show, post.user.username), class: "level-item" do %>
+              <%= post.user.username %>
+            <%= end %>
+            <%= if not is_nil(post.latest_comment) do %>
+            <span class="level-item">•</span>
+            <div class="level-item">
+              最后由
+              <%= link to: user_path(@conn, :show, post.latest_comment.user.username) do %>
+                <%= post.latest_comment.user.username %>
+              <%= end %>
+              回复于
+              <span class="phoenix-moment" data-timestamp="<%= post.latest_comment.inserted_at %>"></span>
+            </div>
+            <%= end %>
+          </small>
+        </nav>
+      </div>
+      <div class="media-right">
+        <%= link to: post_path(@conn, :show, post) do %>
+          <span class="icon is-small">
+            <i class="fa fa-comments-o"></i>
+          </span>
+          <span><%= post.comment_count %></span>
+        <%= end %>
+      </div>
+    </article>
+    <%= end %>
+
+    <%= pagination_links @conn, @pagination, path: &page_path/3, label: Map.get(@conn.params, "label", "全部") %>
+    <%= else %>
+    <section class="hero is-medium is-primary is-bold has-text-centered">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            本话题还没有帖子
+          </h1>
+          <h2 class="subtitle">
+            <%= link to: post_path(@conn, :new), class: "button is-danger" do %>
+              发帖
+            <%= end %>
+          </h2>
+        </div>
+      </div>
+    </section>
+    <%= end %>
+  </div>
+  <div class="column is-3">
+    <%= if logged_in?(@conn) do %>
+    <div class="panel">
+      <div class="panel-block">
+        <%= link to: post_path(@conn, :new), class: "button is-info is-fullwidth" do %>
+          发帖
+        <%= end %>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;">
+      <div class="card-content">
+        <div class="media">
+          <div class="media-left">
+            <figure class="image is-32x32">
+              <img src="<%= current_user(@conn).avatar %>" alt="Image">
+            </figure>
+          </div>
+          <div class="media-content">
+            <p class="title is-5"><%= current_user(@conn).nickname %></p>
+            <p class="subtitle is-6">@<%= current_user(@conn).username %></p>
+          </div>
+        </div>
+        <%= if current_user(@conn).bio do %>
+        <div class="content">
+          <%= current_user(@conn).bio %>
+        </div>
+        <%= end %>
+
+      </div>
+      <footer class="card-footer">
+        <%= link to: user_path(@conn, :show, current_user(@conn).username, tab: "followers"), class: "card-footer-item" do %>
+          关注者 <%= current_user(@conn).follower_count %>
+        <%= end %>
+        <%= link to: user_path(@conn, :show, current_user(@conn).username, tab: "following"), class: "card-footer-item" do %>
+          正在关注 <%= current_user(@conn).followed_count %>
+        <%= end %>
+        <%= link to: user_path(@conn, :show, current_user(@conn).username, tab: "collect"), class: "card-footer-item" do %>
+          收藏 <%= current_user(@conn).collect_count %>
+        <%= end %>
+      </footer>
+    </div>
+    <%= end %>
+
+    <div class="panel">
+      <div class="panel-heading">
+        <span>友情链接</span>
+      </div>
+      <%= link to: "http://www.elixir-cn.com/", target: "_blank", class: "panel-block" do %>
+        <article class="icon image is-16x16">
+          <img src="http://www.elixir-cn.com/img/favicon.ico" alt="Elixir中文社区" />
+        </article>
+        <span>Elixir中文社区</span>
+      <%= end %>
+      <%= link to: "https://ruby-china.org/", target: "_blank", class: "panel-block" do %>
+        <article class="icon image is-16x16">
+          <img src="https://ruby-china.org/favicon.ico" alt="Ruby中文社区" />
+        </article>
+        <span>Ruby中文社区</span>
+      <%= end %>
+      <%= link to: "https://python-china.org/", target: "_blank", class: "panel-block" do %>
+        <article class="icon image is-16x16">
+          <img src="https://python-china.org/favicon.ico" alt="Python中文社区" />
+        </article>
+        <span>Python中文社区</span>
+      <%= end %>
+      <%= link to: "https://rust-china.org/", target: "_blank", class: "panel-block" do %>
+        <article class="icon image is-16x16">
+          <img src="https://rust-china.org/favicon.ico" alt="Rust中文社区" />
+        </article>
+        <span>Rust中文社区</span>
+      <%= end %>
+      <%= link to: "https://www.taokouke.com/", target: "_blank", class: "panel-block" do %>
+        <article class="icon image is-16x16">
+          <img src="https://www.taokouke.com/static/images/favicon.ico" alt="掏抠客－为您省钱" />
+        </article>
+        <span>掏抠客－为您省钱</span>
+      <%= end %>
+      <%= link to: "http://www.zizhixi.com/", target: "_blank", class: "panel-block" do %>
+        <span>自制系－手工玩家聚集地</span>
+      <%= end %>
+    </div>
+
+    <div class="panel">
+      <div class="panel-heading">
+        交流
+      </div>
+      <div class="panel-block">
+        QQ群：495942230
+      </div>
+    </div>
+  </div>
 </div>
-<%= navs(@conn, @labels) %>
-
-
-<div class="panel posts-info" style="border-radius: 4px 4px 0 0;">
-  <%= link "发布帖子", to: post_path(@conn, :new), class: "btn btn-success btn-xs pull-right" %>
-  <span>共有<%= @page.total_entries %>条帖子，当前第<%= @page.page_number %>页</span>
-</div>
-
-<%= raw @post_list_html %>
-
-<%= pagination_links @conn, @page, path: &page_path/3, label: Map.get(@conn.params, "label", "全部") %>

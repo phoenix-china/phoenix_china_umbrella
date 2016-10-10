@@ -1,0 +1,48 @@
+<div class="card is-fullwidth">
+  <div class="card-content">
+    <div class="media">
+      <div class="media-left">
+        <figure class="image is-64x64">
+          <img src="<%= @user.avatar %>" alt="<%= @user.nickname %>">
+        </figure>
+      </div>
+      <div class="media-content">
+        <p class="title is-5"><%= @user.nickname %></p>
+        <p class="subtitle is-6">@<%= @user.username %></p>
+      </div>
+    </div>
+
+    <div class="content">
+      <%= @user.bio %>
+      <br>
+      <small>Joined on <%= @user.inserted_at |> strftime %></small>
+    </div>
+    <%= if logged_in?(@conn) and current_user(@conn).id != @user.id do %>
+    <div class="content">
+      <%= if PhoenixChina.UserFollowView.follow?(@conn, @user) do %>
+        <%= link to: user_follow_path(@conn, :delete, @user.username), class: "button is-primary is-fullwidth", method: :delete do %>
+          <span class="icon is-small is-danger"><i class="fa fa-heart"></i></span>
+          <span>取消关注</span>
+        <%= end %>
+      <%= else %>
+        <%= link to: user_follow_path(@conn, :create, @user.username), class: "button is-primary is-fullwidth", method: :post do %>
+          <span class="icon is-small"><i class="fa fa-heart"></i></span>
+          <span>关注</span>
+        <%= end %>
+      <%= end %>
+    </div>
+    <%= end %>
+
+  </div>
+  <footer class="card-footer">
+    <%= link to: user_path(@conn, :show, @user.username, tab: "followers"), class: "card-footer-item" do %>
+      关注者 <%= @user.follower_count %>
+    <%= end %>
+    <%= link to: user_path(@conn, :show, @user.username, tab: "following"), class: "card-footer-item" do %>
+      正在关注 <%= @user.followed_count %>
+    <%= end %>
+    <%= link to: user_path(@conn, :show, @user.username, tab: "collect"), class: "card-footer-item" do %>
+      收藏 <%= @user.collect_count %>
+    <%= end %>
+  </footer>
+</div>

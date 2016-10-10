@@ -7,8 +7,6 @@ defmodule PhoenixChina.CommentPraiseController do
   import PhoenixChina.ModelOperator, only: [inc: 3, dec: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
-    when action in [:create, :cancel]
-
 
   def create(conn, %{"comment_id" => comment_id}) do
     current_user = current_user(conn)
@@ -48,7 +46,7 @@ defmodule PhoenixChina.CommentPraiseController do
     end
   end
 
-  def cancel(conn, %{"comment_id" => comment_id}) do
+  def delete(conn, %{"comment_id" => comment_id}) do
     current_user = current_user(conn)
     comment = Repo.get!(Comment, comment_id)
 

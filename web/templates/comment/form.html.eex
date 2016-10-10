@@ -1,19 +1,12 @@
-<div class="phoenix_china-form" style="margin-top: 15px;">
-  <%= form_for @changeset, @action, fn f -> %>
-    <%= if @changeset.action do %>
-      <div class="alert alert-danger">
-        <p>哎哟～评论失败了！</p>
-      </div>
-    <% end %>
+<%= form_for @changeset, @action, fn f -> %>
+  <%= label f, :content, "回帖", class: "label" %>
+  <p class="control">
+    <%= textarea f, :content, class: "textarea simditor-comment-textarea" %>
+  </p>
+  <%= error_tag f, :content %>
 
-    <div class="form-group">
-      <%= label f, :content, "回帖", class: "control-label" %>
-      <%= textarea f, :content, id: "mde", class: "form-control" %>
-      <%= error_tag f, :content %>
-    </div>
-
-    <div class="form-group">
-      <%= submit "回复", class: "btn btn-primary" %>
-    </div>
-  <% end %>
-</div>
+  <p class="control">
+    <%= submit "确定", class: "button is-info" %>
+    <button class="button is-link" type="reset">取消</button>
+  </p>
+<% end %>

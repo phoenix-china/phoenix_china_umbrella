@@ -13,7 +13,12 @@ defmodule PhoenixChina.PostController do
   def new(conn, _params) do
     changeset = Post.changeset(:insert, %Post{})
     labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
-    render(conn, "new.html", changeset: changeset, labels: labels)
+
+    conn
+    |> assign(:title, "发布帖子")
+    |> assign(:labels, labels)
+    |> assign(:changeset, changeset)
+    |> render("new.html")
   end
 
   def create(conn, %{"post" => post_params}) do
