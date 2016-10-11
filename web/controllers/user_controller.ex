@@ -183,7 +183,7 @@ defmodule PhoenixChina.UserController do
     file = user_params["avatar"]
     unless is_nil(file) do
       [filename, url] = PhoenixChina.Qiniu.filename_and_url(file)
-      Task.async(fn -> PhoenixChina.Qiniu.upload(file, filename) end)
+      PhoenixChina.Qiniu.upload(file, filename)
       user_params = %{user_params | "avatar" => url <> "?imageView2/1/w/200/h/200"}
     end
 
