@@ -20,8 +20,8 @@
                 <%= link to: page_path(@conn, :index, label: post.label.content), class: "level-item" do %>
                   <%= post.label.content %>
                 <%= end %>
+                <span class="level-item">•</span>
               <%= end %>
-              <span class="level-item">•</span>
               <%= link to: user_path(@conn, :show, post.user.username), class: "level-item" do %>
                 <%= post.user.username %>
               <%= end %>

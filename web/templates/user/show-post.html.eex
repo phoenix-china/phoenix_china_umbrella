@@ -20,8 +20,8 @@
                 <%= link to: page_path(@conn, :index, label: post.label.content), class: "level-item" do %>
                   <%= post.label.content %>
                 <%= end %>
+                <span class="level-item">•</span>
               <%= end %>
-              <span class="level-item">•</span>
               <div class="level-item">
                 发布于
                 <span class="phoenix-moment" data-timestamp="<%= post.inserted_at %>"></span>
