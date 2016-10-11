@@ -1,6 +1,12 @@
 body {
   background: #fff;
 }
+.columns {
+  margin: -10px 0;
+}
+div.level-item {
+  display: inline-block;
+}
 .content a,
 .content a:not(.button):visited {
   color: #333;
