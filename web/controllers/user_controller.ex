@@ -58,7 +58,7 @@ defmodule PhoenixChina.UserController do
 
     pagination = Post
     |> where(user_id: ^user.id)
-    |> order_by([:inserted_at])
+    |> order_by([desc: :inserted_at])
     |> preload([:label, :latest_comment, latest_comment: :user])
     |> Repo.paginate(params)
 
@@ -78,7 +78,7 @@ defmodule PhoenixChina.UserController do
 
     pagination = Comment
     |> where(user_id: ^user.id)
-    |> order_by([:inserted_at])
+    |> order_by([desc: :inserted_at])
     |> preload([:post])
     |> Repo.paginate(params)
 
