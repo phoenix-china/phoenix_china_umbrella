@@ -11,6 +11,9 @@ div.level-item {
 .content a:not(.button):visited {
   color: #333;
 }
+.button.is-link {
+  text-decoration: none;
+}
 .icon.is-danger {
   color: #ff3860;
 }
