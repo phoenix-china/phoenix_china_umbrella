@@ -105,6 +105,9 @@
         <div class="content has-text-centered">
           Copyright © 2016 phoenix-china.org
         </div>
+        <div class="content has-text-centered">
+          <iframe src="https://ghbtns.com/github-btn.html?user=nanlong&repo=phoenix_china&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+        </div>
       </div>
     </footer>
 
