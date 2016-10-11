@@ -1,0 +1,51 @@
+<div class="columns">
+  <div class="column is-3">
+    <%= render "edit-subnav.html", conn: @conn, current_page: @current_page %>
+  </div>
+  <div class="column">
+    <div class="panel">
+      <div class="panel-heading">
+        <%= @title %>
+      </div>
+      <div class="panel-block">
+        <div class="columns">
+          <div class="column is-8">
+            <%= form_for @changeset, user_path(@conn, :update, "profile"), [multipart: true], fn f -> %>
+
+              <%= label f, :avatar, "头像", class: "label" %>
+              <p class="control">
+                <%= file_input f, :avatar %>
+              </p>
+
+              <%= label f, :email, "邮箱", class: "label" %>
+              <p class="control">
+                <%= text_input f, :email, class: "input", disabled: "disabled" %>
+              </p>
+
+              <%= label f, :username, "用户名", class: "label" %>
+              <p class="control">
+                <%= text_input f, :username, class: "input", disabled: "disabled" %>
+              </p>
+
+              <%= label f, :nickname, "昵称", class: "label" %>
+              <p class="control">
+                <%= text_input f, :nickname, class: "input" %>
+                <%= error_tag f, :nickname %>
+              </p>
+
+              <%= label f, :bio, "个人签名", class: "label" %>
+              <p class="control">
+                <%= textarea f, :bio, class: "textarea" %>
+                <%= error_tag f, :bio %>
+              </p>
+
+              <p class="control">
+                <button class="button is-primary" type="submit">保存</button>
+              </p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

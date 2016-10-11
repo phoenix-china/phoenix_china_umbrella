@@ -1,7 +1,0 @@
-<div class="panel">
-  <div class="panel-body">
-    <h3>修改密码</h3>
-
-    <%= render "account_form.html", changeset: @changeset, action: user_path(@conn, :put_account) %>
-  </div>
-</div>

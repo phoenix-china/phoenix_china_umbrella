@@ -10,4 +10,14 @@
       </li>
     <%= end %>
   </ul>
+  <%= if logged_in?(@conn) and current_user(@conn).id == @user.id do %>
+  <ul class="is-right">
+    <li>
+      <%= link to: user_path(@conn, :edit, "profile"), class: "button is-small is-primary" do %>
+        <span class="icon is-small"><i class="fa fa-cog"></i></span>
+        <span>个人设置</span>
+      <%= end %>
+    </li>
+  </ul>
+  <%= end %>
 </div>

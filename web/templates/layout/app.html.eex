@@ -80,7 +80,7 @@
 
     <div style="padding: 20px 0 20px;">
       <div class="container" style="min-height: 550px;">
-        <!-- <%= if flash = get_flash(@conn, :info) do %>
+        <%= if flash = get_flash(@conn, :info) do %>
         <p class="notification is-success">
           <button class="delete"></button>
           <%= flash %>
@@ -92,7 +92,7 @@
           <button class="delete"></button>
           <%= flash %>
         </p>
-        <%= end %> -->
+        <%= end %>
 
         <main role="main">
           <%= render @view_module, @view_template, assigns %>

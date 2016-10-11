@@ -1,0 +1,24 @@
+<div class="panel">
+  <div class="panel-heading">
+    个人设置
+  </div>
+  <div class="panel-block">
+    <aside class="menu">
+      <ul class="menu-list">
+        <%= for {page, name, path} <- subnavs(@conn) do %>
+        <li>
+          <%= if @current_page == page do %>
+            <%= link to: path, class: "is-active" do %>
+              <%= name %>
+            <%= end %>
+          <%= else %>
+            <%= link to: path do %>
+              <%= name %>
+            <%= end %>
+          <%= end %>
+        </li>
+        <%= end %>
+      </ul>
+    </aside>
+  </div>
+</div>

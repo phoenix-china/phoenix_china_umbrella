@@ -78,11 +78,13 @@ defmodule PhoenixChina.Router do
   scope "/settings", PhoenixChina do
     pipe_through [:browser, :browser_session]
 
-    get "/profile", UserController, :profile
-    put "/profile", UserController, :put_profile
+    resources "/:page", UserController, only: [:edit, :update], singleton: true
 
-    get "/account", UserController, :account
-    put "/account", UserController, :put_account
+    # get "/profile", UserController, :profile
+    # put "/profile", UserController, :put_profile
+    #
+    # get "/account", UserController, :account
+    # put "/account", UserController, :put_account
   end
 
   scope "/auth", PhoenixChina do

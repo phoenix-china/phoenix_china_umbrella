@@ -6,6 +6,8 @@ defmodule PhoenixChina.UserController do
   import PhoenixChina.Mailer, only: [send_confirmation_email: 2, send_reset_password_email: 2]
   import PhoenixChina.ViewHelpers, only: [current_user: 1, logged_in?: 1]
 
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
+    when action in [:edit, :update]
 
   defp who(conn, user) do
     cond do
@@ -152,48 +154,38 @@ defmodule PhoenixChina.UserController do
     show(conn, %{"username" => username, "tab" => "index"})
   end
 
+  def edit(conn, %{"page" => "profile"}) do
+    current_user = current_user(conn)
+    changeset = User.changeset(:profile, current_user)
 
-  # def show(conn, %{"username" => username, "page" => page}) do
-  #   user = User |> Repo.get_by!(username: username)
-  #
-  #   conn = assign(conn, :title, "#{who(conn, user)}的主页")
-  #
-  #   page = Post
-  #   |> where(user_id: ^user.id)
-  #   |> order_by(desc: :inserted_at)
-  #   |> preload([:label, :user, :latest_comment, latest_comment: :user])
-  #   |> Repo.paginate(%{"page" => page})
-  #
-  #   render conn, "show.html",
-  #     page: page,
-  #     current_page: nil
-  # end
-  #
-  # def show(conn, %{"username" => username}) do
-  #   show(conn, %{"username" => username, "page" => "1"})
-  # end
-
-  def profile(conn, _params) do
-    user = current_user(conn)
-    changeset = User.changeset(:profile, user)
-
-    conn = assign(conn, :title, "编辑个人信息")
-
-    render conn, "profile.html",
-      current_page: :profile,
-      changeset: changeset
+    conn
+    |> assign(:title, "修改个人信息")
+    |> assign(:current_page, "profile")
+    |> assign(:changeset, changeset)
+    |> render("edit-profile.html")
   end
 
-  def put_profile(conn, %{"user" => user_params}) do
+  def edit(conn, %{"page" => "password"}) do
+    current_user = current_user(conn)
+    changeset = User.changeset(:account, current_user)
+
+    conn
+    |> assign(:title, "修改密码")
+    |> assign(:current_page, "password")
+    |> assign(:changeset, changeset)
+    |> render("edit-password.html")
+  end
+
+  def update(conn, %{"page" => "profile", "user" => user_params}) do
     user = current_user(conn)
 
     #upload to qiniu
-    # file = user_params["avatar"]
-    # unless is_nil(file) do
-    #   [filename, url] = PhoenixChina.Qiniu.filename_and_url(file)
-    #   Task.async(fn -> PhoenixChina.Qiniu.upload(file, filename) end)
-    #   user_params = %{user_params | "avatar" => url}
-    # end
+    file = user_params["avatar"]
+    unless is_nil(file) do
+      [filename, url] = PhoenixChina.Qiniu.filename_and_url(file)
+      Task.async(fn -> PhoenixChina.Qiniu.upload(file, filename) end)
+      user_params = %{user_params | "avatar" => url <> "?imageView2/1/w/200/h/200"}
+    end
 
     changeset = User.changeset(:profile, user, user_params)
 
@@ -201,39 +193,31 @@ defmodule PhoenixChina.UserController do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "个人信息编辑成功！")
-        |> redirect(to: user_path(conn, :profile))
+        |> redirect(to: user_path(conn, :edit, "profile"))
       {:error, changeset} ->
-        render conn, "profile.html",
-          current_page: :profile,
-          changeset: changeset
+        conn
+        |> assign(:title, "修改个人信息")
+        |> assign(:current_page, "profile")
+        |> assign(:changeset, changeset)
+        |> render("edit-profile.html")
     end
   end
 
-  def account(conn, _params) do
-    user = current_user(conn)
-    changeset = User.changeset(:account, user)
-
-    conn = assign(conn, :title, "修改密码")
-
-    render conn, "account.html",
-      current_page: :account,
-      changeset: changeset
-  end
-
-  def put_account(conn, %{"user" => user_params}) do
-    user = current_user(conn)
-    changeset = User.changeset(:account, user, user_params)
+  def update(conn, %{"page" => "password", "user" => user_params}) do
+    current_user = current_user(conn)
+    changeset = User.changeset(:account, current_user, user_params)
 
     case Repo.update(changeset) do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "密码修改成功！")
-        |> redirect(to: user_path(conn, :account))
+        |> redirect(to: user_path(conn, :edit, "password"))
       {:error, changeset} ->
-        changeset = %{changeset | action: :account}
-        render conn, "account.html",
-          current_page: :account,
-          changeset: changeset
+        conn
+        |> assign(:title, "修改密码")
+        |> assign(:current_page, "password")
+        |> assign(:changeset, changeset)
+        |> render("edit-password.html")
     end
   end
 

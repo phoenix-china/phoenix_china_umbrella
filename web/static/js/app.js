@@ -50,17 +50,18 @@ import "./simditor";
 })();
 
 $(function() {
-  var codes = $('code')
+  // 消息框
+  (function() {
+    let $notification = $('.notification');
 
-  if (codes.length > 0) {
-    $.each(codes, function(index, element) {
-      var $self = $(element)
-      var text = $self.text();
-      text = text.replace(new RegExp(/(&quot;)/g), "\"");
-      text = text.replace(new RegExp(/(&lt;)/g), "<");
-      text = text.replace(new RegExp(/(&gt;)/g), ">");
-      text = text.replace(new RegExp(/(&#39;)/g), "'");
-      $self.text(text);
-    })
-  }
+    if ($notification.length) {
+      setTimeout(function() {
+        $notification.fadeOut();
+      }, 2000);
+
+      $notification.find('.delete').on('click', function() {
+        $notification.fadeOut();
+      });
+    };
+  })();
 })
