@@ -47,7 +47,7 @@
       </div>
       <%= end %>
     </div>
-
+    <hr>
     <%= pagination_links @conn, @pagination, [@user.username], action: :show, path: &user_path/4, tab: "following" %>
     <%= else %>
     <hr>

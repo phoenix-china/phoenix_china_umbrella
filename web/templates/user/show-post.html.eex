@@ -42,7 +42,7 @@
         </div>
         </article>
       <%= end %>
-
+      <hr>
       <%= pagination_links @conn, @pagination, [@user.username], action: :show, path: &user_path/4, tab: "post" %>
     <%= else %>
       <hr>

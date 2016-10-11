@@ -47,7 +47,7 @@
               <%= end %>
               <span class="level-item">•</span>
             <%= end %>
-            
+
             <%= link to: user_path(@conn, :show, post.user.username), class: "level-item" do %>
               <%= post.user.username %>
             <%= end %>
@@ -75,7 +75,7 @@
       </div>
     </article>
     <%= end %>
-
+    <hr>
     <%= pagination_links @conn, @pagination, path: &page_path/3, label: Map.get(@conn.params, "label", "全部") %>
     <%= else %>
     <section class="hero is-medium is-primary is-bold has-text-centered">
@@ -104,7 +104,7 @@
       </div>
     </div>
 
-    <div class="card" style="margin-bottom: 20px;">
+    <div class="card is-fullwidth" style="margin-bottom: 20px;">
       <div class="card-content">
         <div class="media">
           <div class="media-left">
