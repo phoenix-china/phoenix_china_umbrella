@@ -19,10 +19,11 @@
 <div class="columns">
   <div class="column">
     <div class="post-show">
-      <div class="content">
-        <%= raw @post.content %>
+      <div class="simditor simditor-markdown">
+        <div class="simditor-body">
+          <%= raw @post.content %>
+        </div>
       </div>
-
       <hr>
       <nav class="level">
         <div class="level-left">
