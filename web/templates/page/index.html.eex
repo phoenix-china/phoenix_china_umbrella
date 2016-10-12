@@ -36,6 +36,9 @@
         </figure>
         <div class="media-content">
           <div class="title is-5">
+            <%= if is_today?(post.inserted_at) do %>
+            <small class="tag is-small is-warning">今</small>
+            <%= end %>
             <%= link post.title, to: post_path(@conn, :show, post) %>
           </div>
           <nav class="level">
