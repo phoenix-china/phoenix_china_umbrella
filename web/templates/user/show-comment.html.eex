@@ -9,15 +9,13 @@
       <%= for comment <- @pagination do %>
       <article class="media">
         <div class="media-content">
-          <div class="content">
-            <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
-            回复：
-            <%= link to: post_path(@conn, :show, comment.post) do %>
-              <%= comment.post.title %>
-            <%= end %>
-            <div class="">
-              <%= raw comment.content %>
-            </div>
+          <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
+          回复：
+          <%= link to: post_path(@conn, :show, comment.post) do %>
+            <%= comment.post.title %>
+          <%= end %>
+          <div class="">
+            <%= raw comment.content %>
           </div>
         </div>
         </article>

@@ -142,7 +142,6 @@ defmodule PhoenixChina.User do
     changeset
   end
 
-
   def validate_password(%Ecto.Changeset{valid?: true} = changeset, field) do
     user = get_field(changeset, :user) || changeset.data
     password = get_field(changeset, field)
@@ -203,13 +202,6 @@ defmodule PhoenixChina.User do
 
   def put_avatar(%Ecto.Changeset{valid?: false} = changeset) do
     changeset
-  end
-
-  def new_list do
-    __MODULE__
-    |> order_by(desc: :inserted_at)
-    |> limit(10)
-    |> Repo.all
   end
 
   def generate_token(user, token_name \\ "user_id") do

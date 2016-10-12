@@ -4,17 +4,10 @@ defmodule PhoenixChina.UserController do
   alias PhoenixChina.{User, Post, Comment, PostCollect, UserFollow, LayoutView}
 
   import PhoenixChina.Mailer, only: [send_confirmation_email: 2, send_reset_password_email: 2]
-  import PhoenixChina.ViewHelpers, only: [current_user: 1, logged_in?: 1]
+  import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:edit, :update]
-
-  defp who(conn, user) do
-    cond do
-      logged_in?(conn) && current_user(conn).id == user.id -> "我"
-      true -> user.nickname
-    end
-  end
 
   def new(conn, _params) do
     changeset = User.changeset(:signup, %User{})
@@ -180,11 +173,12 @@ defmodule PhoenixChina.UserController do
     user = current_user(conn)
 
     #upload to qiniu
-    file = user_params["avatar"]
-    unless is_nil(file) do
-      [filename, url] = PhoenixChina.Qiniu.filename_and_url(file)
-      PhoenixChina.Qiniu.upload(file, filename)
-      user_params = %{user_params | "avatar" => url <> "?imageView2/1/w/200/h/200"}
+    user_params = case is_nil(user_params["avatar"]) do
+      true -> user_params
+      false ->
+        [filename, url] = PhoenixChina.Qiniu.filename_and_url(user_params["avatar"])
+        PhoenixChina.Qiniu.upload(user_params["avatar"], filename)
+        %{user_params | "avatar" => url <> "?imageView2/1/w/200/h/200"}
     end
 
     changeset = User.changeset(:profile, user, user_params)

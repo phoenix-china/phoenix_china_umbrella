@@ -8,7 +8,6 @@ defmodule PhoenixChina.PostController do
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:new, :create, :edit, :update, :delete]
-  plug PhoenixChina.GuardianPlug
 
   def new(conn, _params) do
     changeset = Post.changeset(:insert, %Post{})

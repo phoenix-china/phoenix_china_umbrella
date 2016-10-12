@@ -25,7 +25,5 @@ defmodule PhoenixChina.UserView do
       nil -> navigation
       _ -> List.insert_at(navigation, 1, {"password", "修改密码", user_path(conn, :edit, "password")})
     end
-
   end
-
 end

@@ -64,7 +64,7 @@
                   <figure>
                     <img src="<%= current_user(@conn).avatar %>" alt="<%= current_user(@conn).username %>" />
                   </figure>
-                  <span style="margin-left: 5px;"><%= current_user(@conn).username %></span>
+                  <span style="margin-left: 5px;"><%= current_user(@conn) |> fullname %></span>
                 <%= end %>
                 <%= link "退出", to: session_path(@conn, :delete), class: "nav-item" %>
                 <%= else %>

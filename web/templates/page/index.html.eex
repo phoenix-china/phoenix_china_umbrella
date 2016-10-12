@@ -34,10 +34,8 @@
         </p>
       </figure>
       <div class="media-content">
-        <div class="content">
-          <div class="title is-5" style="margin-top: 5px;">
-            <%= link post.title, to: post_path(@conn, :show, post) %>
-          </div>
+        <div class="title is-5" style="margin-top: 5px;">
+          <%= link post.title, to: post_path(@conn, :show, post) %>
         </div>
         <nav class="level">
           <small class="level-left">
@@ -49,14 +47,14 @@
             <%= end %>
 
             <%= link to: user_path(@conn, :show, post.user.username), class: "level-item" do %>
-              <%= post.user.username %>
+              <%= fullname(post.user) %>
             <%= end %>
             <%= if not is_nil(post.latest_comment) do %>
             <span class="level-item">•</span>
             <div class="level-item">
               最后由
               <%= link to: user_path(@conn, :show, post.latest_comment.user.username) do %>
-                <%= post.latest_comment.user.username %>
+                <%= post.latest_comment.user |> fullname %>
               <%= end %>
               回复于
               <span class="phoenix-moment" data-timestamp="<%= post.latest_comment.inserted_at %>"></span>

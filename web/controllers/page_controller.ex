@@ -3,8 +3,6 @@ defmodule PhoenixChina.PageController do
 
   alias PhoenixChina.{Post, PostLabel}
 
-  plug PhoenixChina.GuardianPlug
-
   def index(conn, %{"label" => label} = params) do
     query = Post
     |> order_by(desc: :is_top, desc: :latest_comment_inserted_at)

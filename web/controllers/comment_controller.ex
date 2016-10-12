@@ -8,7 +8,6 @@ defmodule PhoenixChina.CommentController do
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:create, :edit, :update, :delete]
-  plug PhoenixChina.GuardianPlug
 
   def show(conn, %{"post_id" => post_id, "id" => comment_id}) do
     post = Post

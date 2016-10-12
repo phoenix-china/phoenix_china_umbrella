@@ -1,3 +1,3 @@
-<%= link @user.username, to: user_path(@conn, :show, @user.username) %>
+<%= link fullname(@user), to: user_path(@conn, :show, @user.username) %>
 <span>置顶了你的帖子</span>
 <%= link @post.title, to: post_path(@conn, :show, @post) %>

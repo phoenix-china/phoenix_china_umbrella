@@ -2,7 +2,6 @@ defmodule PhoenixChina.SessionController do
   use PhoenixChina.Web, :controller
 
   alias PhoenixChina.User
-  plug PhoenixChina.GuardianPlug
 
   def new(conn, _params) do
     changeset = User.changeset(:signin, %User{})
@@ -24,7 +23,7 @@ defmodule PhoenixChina.SessionController do
         |> Guardian.Plug.sign_in(user)
         |> put_flash(:info, "登录成功！")
         |> redirect(to: page_path(conn, :index))
-        
+
       false ->
         changeset = %{changeset | action: :signin}
         render(conn, "new.html", changeset: changeset)

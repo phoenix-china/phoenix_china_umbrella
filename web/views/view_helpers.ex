@@ -88,16 +88,12 @@ defmodule PhoenixChina.ViewHelpers do
     PhoenixChina.Luosimao.captcha_site_key
   end
 
-  defp nickname(user) do
+  def fullname(user) do
     cond do
       is_nil(user.nickname) -> user.username
       user.nickname == "" -> user.username
-      true -> user.nickname
+      true -> user.nickname <> "(" <> user.username <> ")"
     end
-  end
-
-  def fullname(user) do
-    "#{nickname(user)}(#{user.username})"
   end
 
   def strftime(time, format \\ "{YYYY}-{0M}-{0D}") do

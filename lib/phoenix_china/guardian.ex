@@ -8,24 +8,6 @@ defmodule PhoenixChina.GuardianErrorHandler do
 end
 
 
-defmodule PhoenixChina.GuardianPlug do
-  alias PhoenixChina.User
-
-  def init(opts), do: opts
-
-  def call(conn, _opts) do
-    new_users = ConCache.get_or_store(:phoenix_china, "new_users", fn() ->
-      User.new_list()
-    end)
-
-    conn
-    |> Plug.Conn.assign(:logged_in, Guardian.Plug.authenticated?(conn))
-    |> Plug.Conn.assign(:current_user, Guardian.Plug.current_resource(conn))
-    |> Plug.Conn.assign(:new_users, new_users)
-  end
-end
-
-
 defmodule PhoenixChina.GuardianSerializer do
   @behaviour Guardian.Serializer
 

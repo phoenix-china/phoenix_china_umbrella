@@ -9,11 +9,9 @@
       <%= for post <- @pagination do %>
       <article class="media">
         <div class="media-content">
-          <div class="content">
-            <%= link to: post_path(@conn, :show, post) do %>
-              <%= post.title %>
-            <%= end %>
-          </div>
+          <%= link to: post_path(@conn, :show, post) do %>
+            <%= post.title %>
+          <%= end %>
           <nav class="level">
             <small class="level-left">
               <%= if not is_nil(post.label) do %>
@@ -23,7 +21,7 @@
                 <span class="level-item">•</span>
               <%= end %>
               <%= link to: user_path(@conn, :show, post.user.username), class: "level-item" do %>
-                <%= post.user.username %>
+                <%= post.user |> fullname %>
               <%= end %>
               <span class="level-item">•</span>
               <div class="level-item">
@@ -35,7 +33,7 @@
               <div class="level-item">
                 最后由
                 <%= link to: user_path(@conn, :show, post.latest_comment.user.username) do %>
-                  <%= post.latest_comment.user.username %>
+                  <%= post.latest_comment.user |> fullname %>
                 <%= end %>
                 回复于
                 <span class="phoenix-moment" data-timestamp="<%= post.latest_comment.inserted_at %>"></span>

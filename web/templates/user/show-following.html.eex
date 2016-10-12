@@ -21,7 +21,7 @@
               </div>
               <div class="media-content">
                 <div class="title is-5" style="margin-bottom: 6px;">
-                  <%= link user.username, to: user_path(@conn, :show, user.username) %>
+                  <%= link user |> fullname, to: user_path(@conn, :show, user.username) %>
                 </div>
                 <div class="subtitle is-6" style="margin-top: 0;">
                   <%= if logged_in?(@conn) and current_user(@conn).id != user.id do %>

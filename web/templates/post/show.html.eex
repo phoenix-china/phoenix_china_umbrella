@@ -80,20 +80,18 @@
           </p>
         </figure>
         <div class="media-content">
-          <div class="content">
-            <p>
-              <%= link to: user_path(@conn, :show, comment.user.username) do %>
-                <%= comment.user.username %>
-              <%= end %>
-              <small>@<%= comment.user.username %></small>
-              <%= link to: "" do %>
-                #<%= index %>
-              <%= end %>
-              <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
-              <br>
-              <%= raw comment.content %>
-            </p>
-          </div>
+          <p>
+            <%= link to: user_path(@conn, :show, comment.user.username) do %>
+              <%= comment.user |> fullname %>
+            <%= end %>
+
+            <%= link to: "" do %>
+              #<%= index %>
+            <%= end %>
+            <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
+            <br>
+            <%= raw comment.content %>
+          </p>
         </div>
         <div class="media-right">
           <nav class="level">
@@ -182,26 +180,24 @@
             </p>
           </figure>
           <div class="media-content">
-            <div class="content">
-              <div class="">
-                <%= link to: user_path(@conn, :show, @post.user.username) do %>
-                  <%= @post.user.username %>
+            <div class="">
+              <%= link to: user_path(@conn, :show, @post.user.username) do %>
+                <%= @post.user |> fullname %>
+              <%= end %>
+            </div>
+            <div class="">
+              <small>
+                <%= link to: user_path(@conn, :show, @post.user.username, tab: "followers") do %>
+                  <span>关注者</span>
+                  <span><%= @post.user.follower_count%></span>
                 <%= end %>
-              </div>
-              <div class="">
-                <small>
-                  <%= link to: user_path(@conn, :show, @post.user.username, tab: "followers") do %>
-                    <span>关注者</span>
-                    <span><%= @post.user.follower_count%></span>
-                  <%= end %>
-                </small> /
-                <small>
-                  <%= link to: user_path(@conn, :show, @post.user.username, tab: "following") do %>
-                    <span>正在关注</span>
-                    <span><%= @post.user.followed_count%></span>
-                  <%= end %>
-                </small>
-              </div>
+              </small> /
+              <small>
+                <%= link to: user_path(@conn, :show, @post.user.username, tab: "following") do %>
+                  <span>正在关注</span>
+                  <span><%= @post.user.followed_count%></span>
+                <%= end %>
+              </small>
             </div>
           </div>
         </article>
@@ -218,7 +214,7 @@
         <li>
           <strong>最后回复</strong>
           <%= link to: user_path(@conn, :show, @post.latest_comment.user.username) do %>
-            <%= @post.latest_comment.user.username %>
+            <%= @post.latest_comment.user |> fullname %>
           <%= end %>
         </li>
         <li>
