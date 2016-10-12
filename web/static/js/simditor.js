@@ -1,5 +1,8 @@
 import $ from "jquery";
 import Simditor from "simditor";
+import "to-markdown";
+import "marked";
+import "simditor-markdown";
 
 (function() {
   $(function() {
@@ -8,6 +11,7 @@ import Simditor from "simditor";
     if ($simditor_textarea.length > 0) {
       new Simditor({
         textarea: $simditor_textarea,
+        markdown: true,
         toolbar: [
           'title',
           'bold',
@@ -23,7 +27,8 @@ import Simditor from "simditor";
           'hr',
           'indent',
           'outdent',
-          'alignment'
+          'alignment',
+          'markdown'
         ],
         imageButton: 'upload',
         pasteImage: true,
@@ -39,13 +44,15 @@ import Simditor from "simditor";
     if ($simditor_comment_textarea.length > 0) {
       new Simditor({
         textarea: $simditor_comment_textarea,
+        markdown: true,
         toolbar: [
           'bold',
           'ol',
           'ul',
           'blockquote',
           'link',
-          'alignment'
+          'alignment',
+          'markdown'
         ],
         imageButton: 'upload',
         pasteImage: true,
