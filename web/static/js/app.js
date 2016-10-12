@@ -64,4 +64,20 @@ $(function() {
       });
     };
   })();
+
+  // 内容中代码标点符号处理
+  (function() {
+    var codes = $('code')
+
+    if (codes.length > 0) {
+      $.each(codes, function(index, element) {
+        var $self = $(element)
+        var text = $self.text();
+        text = text.replace(new RegExp(/(&quot;)/g), "\"");
+        text = text.replace(new RegExp(/(&lt;)/g), "<");
+        text = text.replace(new RegExp(/(&gt;)/g), ">");
+        $self.text(text);
+      })
+    }
+  })();
 })
