@@ -71,7 +71,7 @@
       </div>
       <hr>
       <%= for {comment, index} <- @comments |> Enum.with_index(1) do %>
-      <article class="media">
+      <article class="media comment-entry">
         <figure class="media-left">
           <p class="image is-32x32">
             <%= link to: user_path(@conn, :show, comment.user.username) do %>
@@ -90,8 +90,12 @@
             <%= end %>
             <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
             <br>
-            <%= raw comment.content %>
           </p>
+          <div class="simditor simditor-markdown">
+            <div class="simditor-body">
+              <%= raw comment.content %>
+            </div>
+          </div>
         </div>
         <div class="media-right">
           <nav class="level">

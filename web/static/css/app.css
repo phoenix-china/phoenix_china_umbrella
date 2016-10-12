@@ -48,3 +48,15 @@ div.level-item {
   text-decoration: underline;
 }
 /* page index style end */
+
+
+/* post show style begin */
+.comment-entry .simditor {
+  border: none;
+}
+.comment-entry .simditor.simditor-markdown .simditor-body {
+  background: none;
+  min-height: inherit;
+  padding: 10px 0 0;
+}
+/* post show style end */
