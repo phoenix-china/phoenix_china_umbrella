@@ -1,0 +1,17 @@
+<div class="columns">
+  <div class="column">
+    <div class="panel">
+      <%= for notification <- @pagination do %>
+        <div class="panel-block">
+          <span class="phoenix-moment" data-timestamp="<%= notification.inserted_at %>"></span>
+          <%= raw notification.html %>
+        </div>
+      <%= end %>
+    </div>
+    <hr>
+    <%= pagination_links @conn, @pagination %>
+  </div>
+  <div class="column is-3">
+
+  </div>
+</div>

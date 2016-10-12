@@ -50,41 +50,10 @@ defmodule PhoenixChina.Router do
 
     resources "/users", UserController, param: "username", only: [:show] do
       resources "/follow", UserFollowController, as: :follow, only: [:create, :delete], singleton: true
-
     end
-  end
 
-  scope "/users", PhoenixChina do
-     pipe_through [:browser, :browser_session]
-
-    #  get "/:username", UserController, :show
-    #  get "/:username/avatar", UserController, :avatar
-    #  get "/:username/posts", PostController, :user_posts
-    #  get "/:username/comments", UserController, :comments
-    #  get "/:username/collects", UserController, :collects
-    #  get "/:username/follower", UserController, :follower
-    #  get "/:username/followed", UserController, :followed
-
-     get "/password/forget", UserController, :password_forget
-     post "/password/forget", UserController, :post_password_forget
-
-     get "/password/reset", UserController, :password_reset
-     put "/password/reset", UserController, :put_password_reset
-
-    #  post "/:username/follows", UserFollowController, :create
-    #  delete "/:username/follows", UserFollowController, :cancel
-  end
-
-  scope "/settings", PhoenixChina do
-    pipe_through [:browser, :browser_session]
-
-    resources "/:page", UserController, only: [:edit, :update], singleton: true
-
-    # get "/profile", UserController, :profile
-    # put "/profile", UserController, :put_profile
-    #
-    # get "/account", UserController, :account
-    # put "/account", UserController, :put_account
+    resources "/settings/:page", UserController, only: [:edit, :update], singleton: true
+    resources "/notifications", NotificationController, only: [:index]
   end
 
   scope "/auth", PhoenixChina do
@@ -92,13 +61,6 @@ defmodule PhoenixChina.Router do
 
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
-  end
-
-  scope "/notifications", PhoenixChina do
-     pipe_through [:browser, :browser_session]
-
-     get "/default", NotificationController, :default
-     put "/readall", NotificationController, :readall
   end
 
   # Other scopes may use custom stacks.

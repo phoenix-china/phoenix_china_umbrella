@@ -1,36 +1,26 @@
 defmodule PhoenixChina.NotificationController do
   use PhoenixChina.Web, :controller
 
-  alias PhoenixChina.User
-  alias PhoenixChina.Notification
+  alias PhoenixChina.{User, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.ModelOperator, only: [set: 4]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
-    when action in [:default, :readall]
 
-
-  def default(conn, %{"page" => _page} = params) do
+  def index(conn, params) do
     current_user = current_user(conn)
 
-    page = Notification
+    User |> set(current_user, :unread_notifications_count, 0)
+
+    pagination = Notification
     |> where(user_id: ^current_user.id)
-    |> order_by(desc: :inserted_at)
+    |> order_by([desc: :inserted_at])
     |> Repo.paginate(params)
 
     conn
-    |> render("default_page.json", page: page)
+    |> assign(:title, "消息")
+    |> assign(:pagination, pagination)
+    |> render("index.html")
   end
-
-  def default(conn, %{}) do
-    default(conn, %{"page" => 1})
-  end
-
-  def readall(conn, _params) do
-    current_user = current_user(conn)
-    User |> set(current_user, :unread_notifications_count, 0)
-    conn |> json(%{unread_notifications_count: 0})
-  end
-
 end

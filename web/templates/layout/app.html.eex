@@ -48,15 +48,17 @@
 
             <div class="nav-right nav-menu">
               <%= if logged_in?(@conn) do %>
-                <!-- <%= link to: "", class: "nav-item" do %>
+                <%= link to: notification_path(@conn, :index), class: "nav-item" do %>
                   <span class="icon is-small">
                     <i class="fa fa-bell"></i>
                   </span>
 
+                  <%= if current_user(@conn).unread_notifications_count > 0 do %>
                   <span class="tag is-danger is-small">
-                    0
+                    <%= current_user(@conn).unread_notifications_count %>
                   </span>
-                <%= end %> -->
+                  <%= end %>
+                <%= end %>
 
                 <%= link to: user_path(@conn, :show, current_user(@conn).username), class: "nav-item" do %>
                   <figure>

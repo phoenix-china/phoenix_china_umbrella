@@ -22,3 +22,8 @@ div.level-item {
   font-size: 12px;
   color: #ff3860;
 }
+.pagination .active a,
+.pagination .active a:visited {
+  color: #666;
+  font-weight: bold;
+}
