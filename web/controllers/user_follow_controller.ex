@@ -48,10 +48,9 @@ defmodule PhoenixChina.UserFollowController do
     current_user = current_user(conn)
     to_user = User |> Repo.get_by!(username: username)
 
-    user_follow = UserFollow
+    UserFollow
     |> Repo.get_by!(user_id: current_user.id, to_user_id: to_user.id)
-
-    Repo.delete!(user_follow)
+    |> Repo.delete!
 
     User |> dec(to_user, :follower_count)
     User |> dec(current_user, :followed_count)

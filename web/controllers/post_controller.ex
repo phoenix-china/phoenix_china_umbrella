@@ -128,7 +128,7 @@ defmodule PhoenixChina.PostController do
 
     Post
     |> Repo.get_by!(Post, id: id, user_id: current_user.id)
-    |> Repo.delete!(post)
+    |> Repo.delete!
 
     conn
     |> put_flash(:info, "帖子删除成功")
