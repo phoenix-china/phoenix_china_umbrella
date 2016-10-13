@@ -47,10 +47,9 @@ defmodule PhoenixChina.PostPraiseController do
     current_user = current_user(conn)
     post = Repo.get!(Post, post_id)
 
-    post_praise = PostPraise
+    PostPraise
     |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
-
-    Repo.delete!(post_praise)
+    |> Repo.delete!
 
     Post |> dec(post, :praise_count)
 
