@@ -4,7 +4,7 @@ defmodule PhoenixChina.PostController do
   alias PhoenixChina.{User, Post, PostLabel, Comment, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1, admin_logged_in?: 1]
-  import PhoenixChina.ModelOperator, only: [set: 4, inc: 3]
+  import PhoenixChina.Ecto.Helpers, only: [increment: 2]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:new, :create, :edit, :update, :delete]
@@ -46,7 +46,7 @@ defmodule PhoenixChina.PostController do
               notification_html
             )
 
-            User |> inc(user, :unread_notifications_count)
+            user |> increment(:unread_notifications_count)
           end
         end)
 

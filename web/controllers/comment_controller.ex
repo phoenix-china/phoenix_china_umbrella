@@ -4,7 +4,7 @@ defmodule PhoenixChina.CommentController do
   alias PhoenixChina.{User, Comment, Post, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
-  import PhoenixChina.ModelOperator, only: [set: 4, inc: 3, dec: 3]
+  import PhoenixChina.Ecto.Helpers, only: [increment: 2, decrement: 2, update_field: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:create, :edit, :update, :delete]
@@ -27,7 +27,7 @@ defmodule PhoenixChina.CommentController do
 
   def create(conn, %{"post_id" => post_id, "comment" => comment_params}) do
     current_user = current_user(conn)
-    post = Repo.get!(Post, post_id)
+    post = Post |> preload([:user]) |> Repo.get!(post_id)
 
     comment_params = comment_params
     |> Map.put_new("post_id", post.id)
@@ -37,9 +37,10 @@ defmodule PhoenixChina.CommentController do
 
     case Repo.insert(changeset) do
       {:ok, comment} ->
-        Post |> set(post, :latest_comment_id, comment.id)
-        Post |> set(post, :latest_comment_inserted_at, comment.inserted_at)
-        Post |> inc(post, :comment_count)
+        post
+        |> update_field(:latest_comment_id, comment.id)
+        |> update_field(:latest_comment_inserted_at, comment.inserted_at)
+        |> increment(:comment_count)
 
         Enum.map(Regex.scan(~r/@(\S+)\s?/, comment.content), fn [_, username] ->
           user = User |> Repo.get_by(username: username)
@@ -60,7 +61,7 @@ defmodule PhoenixChina.CommentController do
               notification_html
             )
 
-            User |> inc(user, :unread_notifications_count)
+            user |> increment(:unread_notifications_count)
           end
         end)
 
@@ -79,7 +80,7 @@ defmodule PhoenixChina.CommentController do
             notification_html
           )
 
-          User |> inc(%{id: post.user_id}, :unread_notifications_count)
+          post.user |> increment(:unread_notifications_count)
         end
 
         conn |> put_flash(:info, "评论创建成功.")
@@ -132,11 +133,11 @@ defmodule PhoenixChina.CommentController do
     |> select([u], max(u.id))
     |> Repo.one
 
-    Post |> set(post, :latest_comment_id, latest_comment_id)
+    post
+    |> update_field(:latest_comment_id, latest_comment_id)
+    |> decrement(:comment_count)
 
     Repo.delete!(comment)
-
-    Post |> dec(post, :comment_count)
 
     conn
     |> put_flash(:info, "评论删除成功！")

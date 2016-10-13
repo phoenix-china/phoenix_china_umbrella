@@ -4,7 +4,7 @@ defmodule PhoenixChina.PostCollectController do
   alias PhoenixChina.{User, Post, PostCollect, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
-  import PhoenixChina.ModelOperator, only: [inc: 3, dec: 3]
+  import PhoenixChina.Ecto.Helpers, only: [increment: 2, decrement: 2]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
 
@@ -13,14 +13,14 @@ defmodule PhoenixChina.PostCollectController do
   """
   def create(conn, %{"post_id" => post_id}) do
     current_user = current_user(conn)
-    post = Repo.get!(Post, post_id)
+    post = Post |> preload([:user]) |> Repo.get!(post_id)
     params = %{:post_id => post_id, :user_id => current_user.id}
     changeset = PostCollect.changeset(%PostCollect{}, params)
 
     case Repo.insert(changeset) do
       {:ok, _post_collect} ->
-        User |> inc(current_user, :collect_count)
-        Post |> inc(post, :collect_count)
+        current_user |> increment(:collect_count)
+        post |> increment(:collect_count)
 
         notification_html = Notification.render "post_collect.html",
           conn: conn,
@@ -35,7 +35,7 @@ defmodule PhoenixChina.PostCollectController do
           notification_html
         )
 
-        User |> inc(%{id: post.user_id}, :unread_notifications_count)
+        post.user |> increment(:unread_notifications_count)
 
         conn
         |> put_flash(:info, "收藏成功.")
@@ -53,13 +53,13 @@ defmodule PhoenixChina.PostCollectController do
   def delete(conn, %{"post_id" => post_id}) do
     current_user = current_user(conn)
     post = Repo.get!(Post, post_id)
-    
+
     PostCollect
     |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
     |> Repo.delete!
 
-    User |> dec(current_user, :collect_count)
-    Post |> dec(post, :collect_count)
+    current_user |> decrement(:collect_count)
+    post |> decrement(:collect_count)
 
     conn
     |> put_flash(:info, "取消收藏成功.")

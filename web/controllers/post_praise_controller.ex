@@ -4,19 +4,19 @@ defmodule PhoenixChina.PostPraiseController do
   alias PhoenixChina.{User, Post, PostPraise, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
-  import PhoenixChina.ModelOperator, only: [inc: 3, dec: 3]
+  import PhoenixChina.Ecto.Helpers, only: [increment: 2, decrement: 2]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
 
   def create(conn, %{"post_id" => post_id}) do
     current_user = current_user(conn)
-    post = Repo.get!(Post, post_id)
+    post = Post |> preload([:user]) |> Repo.get!(post_id)
     params = %{:post_id => post_id, :user_id => current_user.id}
     changeset = PostPraise.changeset(%PostPraise{}, params)
 
     case Repo.insert(changeset) do
       {:ok, _post_collect} ->
-        Post |> inc(post, :praise_count)
+        post |> increment(:praise_count)
 
         notification_html = Notification.render "post_praise.html",
           conn: conn,
@@ -31,7 +31,7 @@ defmodule PhoenixChina.PostPraiseController do
           notification_html
         )
 
-        User |> inc(%{id: post.user_id}, :unread_notifications_count)
+        post.user |> increment(:unread_notifications_count)
 
         conn
         |> put_flash(:info, "点赞成功.")
@@ -51,7 +51,7 @@ defmodule PhoenixChina.PostPraiseController do
     |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
     |> Repo.delete!
 
-    Post |> dec(post, :praise_count)
+    post |> decrement(:praise_count)
 
     conn
     |> put_flash(:info, "取消点赞成功.")

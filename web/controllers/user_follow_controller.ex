@@ -4,7 +4,7 @@ defmodule PhoenixChina.UserFollowController do
   alias PhoenixChina.{User, UserFollow, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
-  import PhoenixChina.ModelOperator, only: [inc: 3, dec: 3]
+  import PhoenixChina.Ecto.Helpers, only: [increment: 2, decrement: 2]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
 
@@ -17,8 +17,8 @@ defmodule PhoenixChina.UserFollowController do
 
     case Repo.insert(changeset) do
       {:ok, _user_follow} ->
-        User |> inc(to_user, :follower_count)
-        User |> inc(current_user, :followed_count)
+        to_user |> increment(:follower_count)
+        current_user |> increment(:followed_count)
 
         notification_html = Notification.render "user_follow.html",
           conn: conn,
@@ -32,7 +32,7 @@ defmodule PhoenixChina.UserFollowController do
           notification_html
         )
 
-        User |> inc(%{id: to_user.id}, :unread_notifications_count)
+        to_user |> increment(:unread_notifications_count)
 
         conn
         |> put_flash(:info, "关注成功.")
@@ -52,8 +52,8 @@ defmodule PhoenixChina.UserFollowController do
     |> Repo.get_by!(user_id: current_user.id, to_user_id: to_user.id)
     |> Repo.delete!
 
-    User |> dec(to_user, :follower_count)
-    User |> dec(current_user, :followed_count)
+    to_user |> decrement(:follower_count)
+    current_user |> decrement(:followed_count)
 
     conn
     |> put_flash(:info, "取消关注成功.")

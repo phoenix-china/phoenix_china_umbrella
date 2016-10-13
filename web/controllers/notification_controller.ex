@@ -4,14 +4,13 @@ defmodule PhoenixChina.NotificationController do
   alias PhoenixChina.{User, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
-  import PhoenixChina.ModelOperator, only: [set: 4]
+  import PhoenixChina.Ecto.Helpers, only: [update_field: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
 
   def index(conn, params) do
     current_user = current_user(conn)
-
-    User |> set(current_user, :unread_notifications_count, 0)
+    |> update_field(:unread_notifications_count, 0)
 
     pagination = Notification
     |> where(user_id: ^current_user.id)
