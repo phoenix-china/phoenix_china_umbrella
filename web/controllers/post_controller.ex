@@ -55,7 +55,12 @@ defmodule PhoenixChina.PostController do
         |> redirect(to: page_path(conn, :index))
       {:error, changeset} ->
         labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
-        render(conn, "new.html", changeset: changeset, labels: labels)
+
+        conn
+        |> assign(:title, "发布帖子")
+        |> assign(:labels, labels)
+        |> assign(:changeset, changeset)
+        |> render("new.html")
     end
   end
 
@@ -72,19 +77,17 @@ defmodule PhoenixChina.PostController do
 
     changeset = Comment.changeset(%Comment{})
 
-    conn = assign(conn, :title, post.title)
-
-    render conn, "show.html",
-      post: post,
-      comments: comments,
-      changeset: changeset
+    conn
+    |> assign(:title, post.title)
+    |> assign(:post, post)
+    |> assign(:comments, comments)
+    |> assign(:changeset, changeset)
+    |> render("show.html")
   end
 
   def edit(conn, %{"id" => id}) do
     current_user = current_user(conn)
     post = Repo.get!(Post, id)
-
-    conn = assign(conn, :title, "编辑帖子")
 
     case post.user_id == current_user.id do
       false ->
@@ -95,7 +98,13 @@ defmodule PhoenixChina.PostController do
       true ->
         changeset = Post.changeset(:update, post)
         labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
-        render(conn, "edit.html", post: post, changeset: changeset, labels: labels)
+
+        conn
+        |> assign(:title, "编辑帖子")
+        |> assign(:labels, labels)
+        |> assign(:post, post)
+        |> assign(:changeset, changeset)
+        |> render("edit.html")
     end
   end
 
@@ -119,7 +128,13 @@ defmodule PhoenixChina.PostController do
             |> redirect(to: post_path(conn, :show, post))
           {:error, changeset} ->
             labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
-            render(conn, "edit.html", post: post, changeset: changeset, labels: labels)
+
+            conn
+            |> assign(:title, "编辑帖子")
+            |> assign(:labels, labels)
+            |> assign(:post, post)
+            |> assign(:changeset, changeset)
+            |> render("edit.html")
         end
     end
   end
@@ -141,51 +156,6 @@ defmodule PhoenixChina.PostController do
         conn
         |> put_flash(:info, "帖子删除成功")
         |> redirect(to: page_path(conn, :index))
-    end
-  end
-
-  def set_top(conn, %{"post_id" => id}) do
-    current_user = current_user(conn)
-
-    case admin_logged_in?(conn) do
-      true ->
-        post = Repo.get!(Post, id)
-        Post |> set(post, :is_top, true)
-
-        notification_html = Notification.render "post_top.html",
-          conn: conn,
-          user: current_user,
-          post: post
-
-        Notification.publish(
-          "post_top",
-          post.user_id,
-          current_user.id,
-          post.id,
-          notification_html
-        )
-
-        User |> inc(%{id: post.user_id}, :unread_notifications_count)
-
-        conn
-        |> put_flash(:info, "置顶成功")
-        |> redirect(to: post_path(conn, :show, post))
-
-      false -> conn |> redirect(to: page_path(conn, :index))
-    end
-  end
-
-  def cancel_top(conn, %{"post_id" => id}) do
-    case admin_logged_in?(conn) do
-      true ->
-        post = Repo.get!(Post, id)
-        Post |> set(post, :is_top, false)
-
-        conn
-        |> put_flash(:info, "取消置顶成功")
-        |> redirect(to: post_path(conn, :show, post))
-
-      false -> conn |> redirect(to: page_path(conn, :index))
     end
   end
 end
