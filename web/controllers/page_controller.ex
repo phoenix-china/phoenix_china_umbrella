@@ -9,21 +9,23 @@ defmodule PhoenixChina.PageController do
     |> preload([:label, :user, :latest_comment, latest_comment: :user])
 
     query = case PostLabel |> Repo.get_by(content: label) do
-      nil ->
-        query
-
-      label_res ->
-        query |> where(label_id: ^label_res.id)
+      nil -> query
+      label_res -> query |> where(label_id: ^label_res.id)
     end
 
-    pagination = query |> Repo.paginate(params)
+    pagination = query
+    |> Repo.paginate(params)
 
-    labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
+    labels = PostLabel
+    |> where(is_hide: false)
+    |> order_by(:order)
+    |> Repo.all
 
-    render conn, "index.html",
-      current_label: label,
-      labels: labels,
-      pagination: pagination
+    conn
+    |> assign(:current_label, label)
+    |> assign(:labels, labels)
+    |> assign(:pagination, pagination)
+    |> render("index.html")
   end
 
   def index(conn, _params) do
