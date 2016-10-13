@@ -5,8 +5,11 @@ defmodule PhoenixChina.SessionController do
 
   def new(conn, _params) do
     changeset = User.changeset(:signin, %User{})
-    conn = assign(conn, :title, "用户登录")
-    render(conn, "new.html", changeset: changeset)
+
+    conn
+    |> assign(:title, "用户登录")
+    |> assign(:changeset, changeset)
+    |> render("new.html")
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -26,12 +29,16 @@ defmodule PhoenixChina.SessionController do
 
       false ->
         changeset = %{changeset | action: :signin}
-        render(conn, "new.html", changeset: changeset)
+
+        conn
+        |> assign(:changeset, changeset)
+        |> render("new.html")
     end
   end
 
   def delete(conn, _params) do
-    Guardian.Plug.sign_out(conn)
+    conn
+    |> Guardian.Plug.sign_out
     |> put_flash(:info, "已退出登录")
     |> redirect(to: page_path(conn, :index))
   end
