@@ -87,16 +87,31 @@ defmodule PhoenixChina.PostController do
 
   def edit(conn, %{"id" => id}) do
     current_user = current_user(conn)
-    post = Repo.get!(Post, id)
+    post = Repo.get_by!(Post, id: id, user_id: current_user.id)
 
-    case post.user_id == current_user.id do
-      false ->
+    changeset = Post.changeset(:update, post)
+    labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
+
+    conn
+    |> assign(:title, "编辑帖子")
+    |> assign(:labels, labels)
+    |> assign(:post, post)
+    |> assign(:changeset, changeset)
+    |> render("edit.html")
+  end
+
+  def update(conn, %{"id" => id, "post" => post_params}) do
+    current_user = current_user(conn)
+    post = Repo.get_by!(Post, id: id, user_id: current_user.id)
+
+    changeset = Post.changeset(:update, post, post_params)
+
+    case Repo.update(changeset) do
+      {:ok, post} ->
         conn
-        |> put_flash(:info, "不是自己的帖子，不允许编辑！")
-        |> redirect(to: post_path(conn, :show, id))
-
-      true ->
-        changeset = Post.changeset(:update, post)
+        |> put_flash(:info, "帖子更新成功.")
+        |> redirect(to: post_path(conn, :show, post))
+      {:error, changeset} ->
         labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
 
         conn
@@ -108,54 +123,15 @@ defmodule PhoenixChina.PostController do
     end
   end
 
-  def update(conn, %{"id" => id, "post" => post_params}) do
-    current_user = current_user(conn)
-    post = Repo.get!(Post, id)
-
-    case post.user_id == current_user.id do
-      false ->
-        conn
-        |> put_flash(:info, "不是自己的帖子，不允许编辑！")
-        |> redirect(to: post_path(conn, :show, id))
-
-      true ->
-        changeset = Post.changeset(:update, post, post_params)
-
-        case Repo.update(changeset) do
-          {:ok, post} ->
-            conn
-            |> put_flash(:info, "帖子更新成功.")
-            |> redirect(to: post_path(conn, :show, post))
-          {:error, changeset} ->
-            labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
-
-            conn
-            |> assign(:title, "编辑帖子")
-            |> assign(:labels, labels)
-            |> assign(:post, post)
-            |> assign(:changeset, changeset)
-            |> render("edit.html")
-        end
-    end
-  end
-
   def delete(conn, %{"id" => id}) do
     current_user = current_user(conn)
-    post = Repo.get!(Post, id)
+    post = Repo.get_by!(Post, id: id, user_id: current_user.id)
 
-    case post.user_id == current_user.id do
-      false ->
-        conn
-        |> put_flash(:info, "不是自己的帖子，不允许删除！")
-        |> redirect(to: post_path(conn, :show, id))
+    Post |> set(post, :latest_comment_id, nil)
+    Repo.delete!(post)
 
-      true ->
-        Post |> set(post, :latest_comment_id, nil)
-        Repo.delete!(post)
-
-        conn
-        |> put_flash(:info, "帖子删除成功")
-        |> redirect(to: page_path(conn, :index))
-    end
+    conn
+    |> put_flash(:info, "帖子删除成功")
+    |> redirect(to: page_path(conn, :index))
   end
 end
