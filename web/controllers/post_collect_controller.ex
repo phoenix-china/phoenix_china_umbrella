@@ -53,11 +53,10 @@ defmodule PhoenixChina.PostCollectController do
   def delete(conn, %{"post_id" => post_id}) do
     current_user = current_user(conn)
     post = Repo.get!(Post, post_id)
-
-    post_collect = PostCollect
+    
+    PostCollect
     |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
-
-    Repo.delete!(post_collect)
+    |> Repo.delete!
 
     User |> dec(current_user, :collect_count)
     Post |> dec(post, :collect_count)
