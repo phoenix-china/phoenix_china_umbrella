@@ -3,9 +3,10 @@ defmodule PhoenixChina.Ecto.Helpers do
 
   example:
     post = Repo.get(Post, post_id)
-    Post |> inc(post, :comment_count)
 
-    post |> inc(:comment_count)
+    post |> increment(:comment_count)
+    post |> increment(:comment_count, 1)
+    post |> decrement(:comment_count, 2)
   """
   alias PhoenixChina.Repo
 
@@ -18,11 +19,7 @@ defmodule PhoenixChina.Ecto.Helpers do
   end
 
   def decrement(struct, field, step \\ 1) do
-    params = %{}
-    |> Map.put_new(field, Map.get(struct, field))
-    |> Map.update!(field, &(&1 - step))
-
-    update_struct(struct, params)
+    increment(struct, field, -step)
   end
 
   def update_field(struct, field, value) do
