@@ -91,17 +91,29 @@ defmodule PhoenixChina.CommentController do
 
   def edit(conn, %{"post_id" => post_id, "id" => id}) do
     current_user = current_user(conn)
-    comment = Repo.get!(Comment, id)
+    comment = Repo.get_by!(Comment, post_id: post_id, id: id, user_id: current_user.id)
 
-    case comment.user_id == current_user.id do
-      false ->
+    changeset = Comment.changeset(comment)
+
+    conn
+    |> assign(:title, "编辑评论")
+    |> assign(:comment, comment)
+    |> assign(:changeset, changeset)
+    |> render("edit.html")
+  end
+
+  def update(conn, %{"post_id" => post_id, "id" => id, "comment" => comment_params}) do
+    current_user = current_user(conn)
+    comment = Repo.get_by!(Comment, post_id: post_id, id: id, user_id: current_user.id)
+
+    changeset = Comment.changeset(comment, comment_params)
+
+    case Repo.update(changeset) do
+      {:ok, _comment} ->
         conn
-        |> put_flash(:info, "不是自己的评论，不允许编辑！")
+        |> put_flash(:info, "评论更新成功！")
         |> redirect(to: post_path(conn, :show, post_id))
-
-      true ->
-        changeset = Comment.changeset(comment)
-
+      {:error, changeset} ->
         conn
         |> assign(:title, "编辑评论")
         |> assign(:comment, comment)
@@ -110,60 +122,24 @@ defmodule PhoenixChina.CommentController do
     end
   end
 
-  def update(conn, %{"post_id" => post_id, "id" => id, "comment" => comment_params}) do
-    current_user = current_user(conn)
-    comment = Repo.get!(Comment, id)
-
-    case comment.user_id == current_user.id do
-      false ->
-        conn
-        |> put_flash(:info, "不是自己的评论，不允许编辑！")
-        |> redirect(to: post_path(conn, :show, post_id))
-
-      true ->
-        changeset = Comment.changeset(comment, comment_params)
-
-        case Repo.update(changeset) do
-          {:ok, _comment} ->
-            conn
-            |> put_flash(:info, "评论更新成功！")
-            |> redirect(to: post_path(conn, :show, post_id))
-          {:error, changeset} ->
-            conn
-            |> assign(:title, "编辑评论")
-            |> assign(:comment, comment)
-            |> assign(:changeset, changeset)
-            |> render("edit.html")
-        end
-    end
-  end
-
   def delete(conn, %{"post_id" => post_id, "id" => id}) do
     current_user = current_user(conn)
     post = Repo.get!(Post, post_id)
-    comment = Repo.get!(Comment, id)
+    comment = Repo.get_by!(Comment, post_id: post_id, id: id, user_id: current_user.id)
 
-    case comment.user_id == current_user.id do
-      false ->
-        conn
-        |> put_flash(:info, "不是自己的评论，不允许删除！")
-        |> redirect(to: post_path(conn, :show, post_id))
+    latest_comment_id = Comment
+    |> where([c], c.post_id == ^comment.post_id and c.id != ^comment.id)
+    |> select([u], max(u.id))
+    |> Repo.one
 
-      true ->
-        latest_comment_id = Comment
-        |> where([c], c.post_id == ^comment.post_id and c.id != ^comment.id)
-        |> select([u], max(u.id))
-        |> Repo.one
+    Post |> set(post, :latest_comment_id, latest_comment_id)
 
-        Post |> set(post, :latest_comment_id, latest_comment_id)
+    Repo.delete!(comment)
 
-        Repo.delete!(comment)
+    Post |> dec(post, :comment_count)
 
-        Post |> dec(post, :comment_count)
-
-        conn
-        |> put_flash(:info, "评论删除成功！")
-        |> redirect(to: post_path(conn, :show, post_id))
-    end
+    conn
+    |> put_flash(:info, "评论删除成功！")
+    |> redirect(to: post_path(conn, :show, post_id))
   end
 end
