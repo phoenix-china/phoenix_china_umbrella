@@ -50,11 +50,9 @@ defmodule PhoenixChina.CommentPraiseController do
     current_user = current_user(conn)
     comment = Repo.get!(Comment, comment_id)
 
-    comment_praise = CommentPraise
-    |> where(user_id: ^current_user.id)
-    |> where(comment_id: ^comment_id)
-    |> Repo.one!
-    Repo.delete!(comment_praise)
+    CommentPraise
+    |> Repo.get_by!(comment_id: comment_id, user_id: current_user.id)
+    |> Repo.delete!
 
     Comment |> dec(comment, :praise_count)
 
