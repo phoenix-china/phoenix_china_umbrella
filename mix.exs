@@ -47,7 +47,6 @@ defmodule PhoenixChina.Mixfile do
       {:scrivener_html, "~> 1.1"},
       {:timex, "~> 3.0"},
       {:timex_ecto, "~> 3.0"},
-      {:mailgun, github: "AvaelKross/mailgun"},
       {:earmark, "~> 0.2.1"},
       {:ueberauth_github, "~> 0.2"},
       {:httpotion, "~> 3.0.0"},

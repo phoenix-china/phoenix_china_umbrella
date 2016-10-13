@@ -1,9 +1,8 @@
 defmodule PhoenixChina.UserController do
   use PhoenixChina.Web, :controller
 
-  alias PhoenixChina.{User, Post, Comment, PostCollect, UserFollow, LayoutView}
+  alias PhoenixChina.{User, Post, Comment, PostCollect, UserFollow}
 
-  import PhoenixChina.Mailer, only: [send_confirmation_email: 2, send_reset_password_email: 2]
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
@@ -11,23 +10,26 @@ defmodule PhoenixChina.UserController do
 
   def new(conn, _params) do
     changeset = User.changeset(:signup, %User{})
-    conn = assign(conn, :title, "用户注册")
-    render conn, "new.html",
-      changeset: changeset
+
+    conn
+    |> assign(:title, "用户注册")
+    |> assign(:changeset, changeset)
+    |> render("new.html")
   end
 
   def create(conn, %{"user" => user_params}) do
     changeset = User.changeset(:signup, %User{}, user_params)
 
     case Repo.insert(changeset) do
-      {:ok, user} ->
-        send_confirmation_email(conn, user)
+      {:ok, _user} ->
         conn
         |> put_flash(:info, "注册成功了！.")
         |> redirect(to: session_path(conn, :new))
       {:error, changeset} ->
-        render conn, "new.html",
-          changeset: changeset
+        conn
+        |> assign(:title, "用户注册")
+        |> assign(:changeset, changeset)
+        |> render("new.html")
     end
   end
 
