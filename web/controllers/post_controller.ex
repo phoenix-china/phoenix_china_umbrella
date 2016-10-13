@@ -125,10 +125,10 @@ defmodule PhoenixChina.PostController do
 
   def delete(conn, %{"id" => id}) do
     current_user = current_user(conn)
-    post = Repo.get_by!(Post, id: id, user_id: current_user.id)
 
-    Post |> set(post, :latest_comment_id, nil)
-    Repo.delete!(post)
+    Post
+    |> Repo.get_by!(Post, id: id, user_id: current_user.id)
+    |> Repo.delete!(post)
 
     conn
     |> put_flash(:info, "帖子删除成功")
