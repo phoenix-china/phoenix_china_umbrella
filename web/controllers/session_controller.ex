@@ -31,6 +31,7 @@ defmodule PhoenixChina.SessionController do
         changeset = %{changeset | action: :signin}
 
         conn
+        |> assign(:title, "用户登录")
         |> assign(:changeset, changeset)
         |> render("new.html")
     end
