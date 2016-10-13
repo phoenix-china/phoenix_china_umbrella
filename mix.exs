@@ -54,6 +54,7 @@ defmodule PhoenixChina.Mixfile do
       {:con_cache, "~> 0.11.1"},
       {:qiniu, "~> 0.3.0"},
       {:hashids, "~> 2.0"},
+      {:aliyun_direct_mail, github: "nanlong/aliyun_direct_mail"},
     ]
   end
 

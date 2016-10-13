@@ -34,6 +34,8 @@ defmodule PhoenixChina.Router do
     post "/signin", SessionController, :create
     get "/signout", SessionController, :delete
 
+    resources "/password_reset", PasswordResetController, only: [:create, :show, :update], singleton: true
+
     resources "/posts", PostController do
        resources "/comments", CommentController, except: [:index]
 

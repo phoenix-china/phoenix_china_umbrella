@@ -1,6 +1,7 @@
 defmodule PhoenixChina.User do
   use PhoenixChina.Web, :model
 
+  alias Ecto.Changeset
   alias PhoenixChina.{Repo, UserGithub}
 
   schema "users" do
@@ -26,6 +27,9 @@ defmodule PhoenixChina.User do
 
     timestamps()
   end
+
+  @regex_email ~r/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
+  @regex_mobile ~r/1\d{10}$/
 
   def changeset(action, struct, params \\ %{})
 
@@ -71,24 +75,6 @@ defmodule PhoenixChina.User do
     |> put_password_hash(:password)
   end
 
-  def changeset(:password_forget, struct, params) do
-    struct
-    |> cast(params, [:email])
-    |> validate_required([:email], message: "不能为空")
-    |> validate_format(:email, ~r/@/, message: "请输入正确的邮箱地址")
-    |> validate_user_exist(:email)
-  end
-
-  def changeset(:password_reset, struct, params) do
-    struct
-    |> cast(params, [:token, :password, :password_confirmation])
-    |> validate_required([:token, :password, :password_confirmation], message: "不能为空")
-    |> validate_length(:password, min: 6, max: 128)
-    |> validate_confirmation(:password, message: "两次密码输入不一致")
-    |> validate_token(:token, "user_id", 60 * 60 * 24)
-    |> put_password_hash(:password)
-  end
-
   def changeset(:profile, struct, params) do
     struct
     |> cast(params, [:nickname, :bio], [:avatar])
@@ -103,6 +89,22 @@ defmodule PhoenixChina.User do
     |> unique_constraint(:email)
     |> unique_constraint(:username)
     |> unique_constraint(:nickname)
+  end
+
+  def changeset(:password_reset_for_email, struct, params) do
+    struct
+    |> cast(params, [:email])
+    |> validate_required([:email])
+    |> load_user(:email)
+  end
+
+  def changeset(:password_reset, struct, params) do
+    struct
+    |> cast(params, [:password, :password_confirmation])
+    |> validate_required([:password, :password_confirmation])
+    |> validate_length(:password, mix: 6, max: 128)
+    |> validate_confirmation(:password)
+    |> put_password_hash(:password)
   end
 
   # defp validate_luotest_response(changeset) do
@@ -204,7 +206,39 @@ defmodule PhoenixChina.User do
     changeset
   end
 
+  @doc """
+  通过账号获取用户，支持用户名，邮箱，手机号
+  """
+  def get_by_account(account) do
+    cond do
+      String.match?(account, @regex_email) ->
+        __MODULE__ |> Repo.get_by(email: account)
+      String.match?(account, @regex_mobile) ->
+        __MODULE__ |> Repo.get_by(mobile: account)
+      true ->
+        __MODULE__ |> Repo.get_by(username: account)
+    end
+  end
+
+  @doc """
+  加载用户
+  """
+  def load_user(%Changeset{valid?: true} = changeset, field) do
+    case changeset |> get_field(field) |> get_by_account do
+      nil -> changeset |> add_error(field, "用户不存在")
+      user -> %{changeset | data: user}
+    end
+  end
+
+  def load_user(%Changeset{valid?: false} = changeset, _field) do
+    changeset
+  end
+
   def generate_token(user, token_name \\ "user_id") do
     Phoenix.Token.sign(PhoenixChina.Endpoint, token_name, user.id)
+  end
+
+  def validate_token(token, token_name \\ "user_id", max_age \\ 60 * 60 * 12) do
+    Phoenix.Token.verify(PhoenixChina.Endpoint, token_name, token, max_age: max_age)
   end
 end
