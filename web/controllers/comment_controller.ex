@@ -1,7 +1,7 @@
 defmodule PhoenixChina.CommentController do
   use PhoenixChina.Web, :controller
 
-  alias PhoenixChina.{LayoutView, User, Comment, Post, Notification}
+  alias PhoenixChina.{User, Comment, Post, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.ModelOperator, only: [set: 4, inc: 3, dec: 3]
@@ -18,12 +18,11 @@ defmodule PhoenixChina.CommentController do
     |> preload(:user)
     |> Repo.get!(comment_id)
 
-    conn = assign(conn, :title, "#{comment.user.nickname}在帖子#{post.title}的评论")
-
-    render conn, "post.html",
-      layout: {LayoutView, "base.html"},
-      post: post,
-      comment: comment
+    conn
+    |> assign(:title, comment.user.nickname <> "在帖子" <> post.title <> "的评论")
+    |> assign(:post, post)
+    |> assign(:comment, comment)
+    |> render("show.html")
   end
 
   def create(conn, %{"post_id" => post_id, "comment" => comment_params}) do
@@ -31,7 +30,7 @@ defmodule PhoenixChina.CommentController do
     post = Repo.get!(Post, post_id)
 
     comment_params = comment_params
-    |> Map.put_new("post_id", String.to_integer(post_id))
+    |> Map.put_new("post_id", post.id)
     |> Map.put_new("user_id", current_user.id)
 
     changeset = Comment.changeset(%Comment{}, comment_params)
@@ -83,19 +82,16 @@ defmodule PhoenixChina.CommentController do
           User |> inc(%{id: post.user_id}, :unread_notifications_count)
         end
 
-        conn
-        |> put_flash(:info, "评论创建成功.")
-        |> redirect(to: post_path(conn, :show, post_id))
-      {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset, post_id: post_id)
+        conn |> put_flash(:info, "评论创建成功.")
+      {:error, _changeset} ->
+        conn |> put_flash(:error, "评论创建失败.")
     end
+    |> redirect(to: post_path(conn, :show, post_id))
   end
 
   def edit(conn, %{"post_id" => post_id, "id" => id}) do
     current_user = current_user(conn)
     comment = Repo.get!(Comment, id)
-
-    conn = assign(conn, :title, "编辑评论")
 
     case comment.user_id == current_user.id do
       false ->
@@ -105,7 +101,12 @@ defmodule PhoenixChina.CommentController do
 
       true ->
         changeset = Comment.changeset(comment)
-        render(conn, "edit.html", post_id: post_id, comment: comment, changeset: changeset)
+
+        conn
+        |> assign(:title, "编辑评论")
+        |> assign(:comment, comment)
+        |> assign(:changeset, changeset)
+        |> render("edit.html")
     end
   end
 
@@ -128,7 +129,11 @@ defmodule PhoenixChina.CommentController do
             |> put_flash(:info, "评论更新成功！")
             |> redirect(to: post_path(conn, :show, post_id))
           {:error, changeset} ->
-            render(conn, "edit.html", comment: comment, changeset: changeset)
+            conn
+            |> assign(:title, "编辑评论")
+            |> assign(:comment, comment)
+            |> assign(:changeset, changeset)
+            |> render("edit.html")
         end
     end
   end
