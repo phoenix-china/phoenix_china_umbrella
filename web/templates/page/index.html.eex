@@ -148,31 +148,31 @@
       </div>
       <%= link to: "http://www.elixir-cn.com/", target: "_blank", class: "panel-block" do %>
         <article class="icon image is-16x16">
-          <img src="http://www.elixir-cn.com/img/favicon.ico" alt="Elixir中文社区" />
+          <img src="http://www.elixir-cn.com/img/favicon.ico" alt="Elixir中文社区" width="16" />
         </article>
         <span>Elixir中文社区</span>
       <%= end %>
       <%= link to: "https://ruby-china.org/", target: "_blank", class: "panel-block" do %>
         <article class="icon image is-16x16">
-          <img src="https://ruby-china.org/favicon.ico" alt="Ruby中文社区" />
+          <img src="https://ruby-china.org/favicon.ico" alt="Ruby中文社区" width="16" />
         </article>
         <span>Ruby中文社区</span>
       <%= end %>
       <%= link to: "https://python-china.org/", target: "_blank", class: "panel-block" do %>
         <article class="icon image is-16x16">
-          <img src="https://python-china.org/favicon.ico" alt="Python中文社区" />
+          <img src="https://python-china.org/favicon.ico" alt="Python中文社区" width="16" />
         </article>
         <span>Python中文社区</span>
       <%= end %>
       <%= link to: "https://rust-china.org/", target: "_blank", class: "panel-block" do %>
         <article class="icon image is-16x16">
-          <img src="https://rust-china.org/favicon.ico" alt="Rust中文社区" />
+          <img src="https://rust-china.org/favicon.ico" alt="Rust中文社区" width="16" />
         </article>
         <span>Rust中文社区</span>
       <%= end %>
       <%= link to: "https://www.taokouke.com/", target: "_blank", class: "panel-block" do %>
         <article class="icon image is-16x16">
-          <img src="https://www.taokouke.com/static/images/favicon.ico" alt="掏抠客－为您省钱" />
+          <img src="https://www.taokouke.com/static/images/favicon.ico" alt="掏抠客－为您省钱" width="16" />
         </article>
         <span>掏抠客－为您省钱</span>
       <%= end %>

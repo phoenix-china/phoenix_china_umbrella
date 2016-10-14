@@ -105,7 +105,12 @@
     <footer class="footer">
       <div class="container">
         <div class="content has-text-centered">
-          Copyright © 2016 phoenix-china.org
+          Copyright © 2016
+          |
+          Powered by
+          <%= link to: "http://www.phoenixframework.org/", target: "_blank" do %>
+            <strong>PhoenixFramework</strong>
+          <%= end %>
         </div>
         <div class="content has-text-centered">
           <iframe src="https://ghbtns.com/github-btn.html?user=nanlong&repo=phoenix_china&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
