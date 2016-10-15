@@ -21,10 +21,11 @@ defmodule PhoenixChina.UserController do
     changeset = User.changeset(:signup, %User{}, user_params)
 
     case Repo.insert(changeset) do
-      {:ok, _user} ->
+      {:ok, user} ->
         conn
-        |> put_flash(:info, "注册成功了！.")
-        |> redirect(to: session_path(conn, :new))
+        |> put_flash(:info, "注册成功了！")
+        |> Guardian.Plug.sign_in(user)
+        |> redirect(to: page_path(conn, :index))
       {:error, changeset} ->
         conn
         |> assign(:title, "用户注册")
