@@ -28,7 +28,21 @@
       <nav class="level">
         <div class="level-left">
           <div class="level-item">
-            <%= if PhoenixChina.PostPraiseView.praise?(@conn, @post) do %>
+            <%= if logged_in?(@conn) do %>
+              <post-praise
+                :is-praise="<%= PhoenixChina.PostPraiseView.praise?(@conn, @post) %>"
+                :praise-count="<%= @post.praise_count %>"
+                :post-id="<%= @post.id %>">
+              </post-praise>
+            <%= else %>
+              <%= link to: post_praise_path(@conn, :create, @post), class: "button is-light is-small", method: :post do %>
+                <span class="icon is-small"><i class="fa fa-heart-o"></i></span>
+                <span><%= PhoenixChina.PostPraiseView.praise_count(@post) %></span>
+              <%= end %>
+            <%= end %>
+
+
+            <!-- <%= if PhoenixChina.PostPraiseView.praise?(@conn, @post) do %>
               <%= link to: post_praise_path(@conn, :delete, @post), class: "button is-light is-small", method: :delete do %>
                 <span class="icon is-small is-danger"><i class="fa fa-heart"></i></span>
                 <span><%= PhoenixChina.PostPraiseView.praise_count(@post) %></span>
@@ -38,7 +52,7 @@
                 <span class="icon is-small"><i class="fa fa-heart-o"></i></span>
                 <span><%= PhoenixChina.PostPraiseView.praise_count(@post) %></span>
               <%= end %>
-            <%= end %>
+            <%= end %> -->
           </div>
           <div class="level-item">
             <%= if PhoenixChina.PostCollectView.collect?(@conn, @post) do %>

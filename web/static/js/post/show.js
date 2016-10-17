@@ -4,6 +4,55 @@ import VueResource from "vue-resource";
 Vue.use(VueResource);
 Vue.http.headers.common["X-CSRF-TOKEN"] = $("meta[name=csrf]").attr("content");
 
+
+Vue.component('post-praise', {
+  props: ['isPraise', 'praiseCount', 'postId'],
+  data: function() {
+    return {
+      is_praise: this.isPraise,
+      praise_count: this.praiseCount
+    }
+  },
+  template: `
+    <a class="button is-light is-small" @click="praise">
+      <span class="icon is-small" :class="{'is-danger': is_praise}">
+        <i class="fa fa-heart" :class="[is_praise ? 'fa-heart' : 'fa-heart-o']"></i>
+      </span>
+      <span>{{ count }}</span>
+    </a>
+  `,
+  created: function() {
+    this.count = this.praiseCount > 0 ? this.praiseCount + "个赞" : "赞";
+    this.http_method = this.isPraise ? "DELETE" : "POST";
+    this.http_url = '/posts/'+ this.postId +'/praise';
+  },
+  watch: {
+    praise_count: function(newValue, oldValue) {
+      console.log(newValue, oldValue)
+      this.count = newValue > 0 ? this.praise_count + "个赞" : "赞";
+    },
+    is_praise: function(newValue, oldValue) {
+      this.http_method = newValue ? "DELETE" : "POST";
+    }
+  },
+  methods: {
+    praise: function() {
+      var options = {
+        method: this.http_method,
+        url: this.http_url
+      }
+
+      this.$http(options).then((response) => {
+        response.json().then((res) => {
+          this.is_praise = res.is_praise;
+          this.praise_count = res.data.praise_count;
+        })
+      });
+    }
+  }
+});
+
+
 Vue.component('comment-praise', {
   props: ['isPraise', 'praiseCount', 'commentId'],
   data: function() {

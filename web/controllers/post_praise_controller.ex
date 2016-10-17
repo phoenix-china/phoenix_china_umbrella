@@ -16,7 +16,7 @@ defmodule PhoenixChina.PostPraiseController do
 
     case Repo.insert(changeset) do
       {:ok, _post_collect} ->
-        post |> increment(:praise_count)
+        post = increment(post, :praise_count)
 
         notification_html = Notification.render "post_praise.html",
           conn: conn,
@@ -34,12 +34,11 @@ defmodule PhoenixChina.PostPraiseController do
         post.user |> increment(:unread_notifications_count)
 
         conn
-        |> put_flash(:info, "点赞成功.")
-        |> redirect(to: post_path(conn, :show, post_id))
+        |> render("show.json", post: post, is_praise: true)
       {:error, _changeset} ->
         conn
-        |> put_flash(:info, "点赞失败.")
-        |> redirect(to: post_path(conn, :show, post_id))
+        |> put_status(:bad_request)
+        |> render("error.json", changeset: changeset)
     end
   end
 
@@ -51,10 +50,9 @@ defmodule PhoenixChina.PostPraiseController do
     |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
     |> Repo.delete!
 
-    post |> decrement(:praise_count)
+    post = decrement(post, :praise_count)
 
     conn
-    |> put_flash(:info, "取消点赞成功.")
-    |> redirect(to: post_path(conn, :show, post_id))
+    |> render("show.json", post: post, is_praise: false)
   end
 end

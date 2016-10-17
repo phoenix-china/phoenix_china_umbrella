@@ -10,6 +10,12 @@ defmodule PhoenixChina.PostView do
   }
 
   def post_label(post) do
-    raw ~s(<span class="label #{Map.get(@label_classes, rem(post.label.order + 1, 5), "label-default")}">#{post.label.content}</span>) 
+    raw ~s(<span class="label #{Map.get(@label_classes, rem(post.label.order + 1, 5), "label-default")}">#{post.label.content}</span>)
+  end
+
+  def render("post.json", %{post: post}) do
+    %{
+      praise_count: post.praise_count
+    }
   end
 end
