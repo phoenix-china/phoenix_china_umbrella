@@ -72,7 +72,7 @@
       </div>
       <hr>
       <%= for {comment, index} <- @comments |> Enum.with_index(1) do %>
-      <comment>
+      <comment class="media comment-entry">
         <figure class="media-left">
           <p class="image is-32x32">
             <%= link to: user_path(@conn, :show, comment.user.username) do %>
