@@ -14,6 +14,7 @@ defmodule PhoenixChina.CommentPraise do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:user_id, :comment_id])
-    |> validate_required([:user_id, :comment_id])
+    |> assoc_constraint(:user)
+    |> assoc_constraint(:comment)
   end
 end

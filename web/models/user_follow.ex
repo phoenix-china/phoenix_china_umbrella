@@ -14,6 +14,7 @@ defmodule PhoenixChina.UserFollow do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:user_id, :to_user_id])
-    |> validate_required([:user_id, :to_user_id])
+    |> assoc_constraint(:user)
+    |> assoc_constraint(:to_user)
   end
 end

@@ -15,5 +15,6 @@ defmodule PhoenixChina.PostCollect do
     struct
     |> cast(params, [:user_id, :post_id])
     |> validate_required([:user_id, :post_id])
+    |> assoc_constraint(:user)
   end
 end
