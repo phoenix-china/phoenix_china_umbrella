@@ -96,7 +96,7 @@ defmodule PhoenixChina.UserController do
 
     pagination = Post
     |> join(:inner, [p], c in PostCollect, c.post_id == p.id and c.user_id == ^user.id)
-    |> order_by([:inserted_at])
+    |> order_by([desc: :inserted_at])
     |> preload([:user, :label, :latest_comment, latest_comment: :user])
     |> Repo.paginate(params)
 
