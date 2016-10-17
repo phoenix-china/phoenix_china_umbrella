@@ -1,7 +1,7 @@
 defmodule PhoenixChina.PostCollectController do
   use PhoenixChina.Web, :controller
 
-  alias PhoenixChina.{User, Post, PostCollect, Notification}
+  alias PhoenixChina.{Post, PostCollect, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.Ecto.Helpers, only: [increment: 2, decrement: 2]
