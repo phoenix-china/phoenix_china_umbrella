@@ -40,26 +40,13 @@
                 <span><%= PhoenixChina.PostPraiseView.praise_count(@post) %></span>
               <%= end %>
             <%= end %>
-
-
-            <!-- <%= if PhoenixChina.PostPraiseView.praise?(@conn, @post) do %>
-              <%= link to: post_praise_path(@conn, :delete, @post), class: "button is-light is-small", method: :delete do %>
-                <span class="icon is-small is-danger"><i class="fa fa-heart"></i></span>
-                <span><%= PhoenixChina.PostPraiseView.praise_count(@post) %></span>
-              <%= end %>
-            <%= else %>
-              <%= link to: post_praise_path(@conn, :create, @post), class: "button is-light is-small", method: :post do %>
-                <span class="icon is-small"><i class="fa fa-heart-o"></i></span>
-                <span><%= PhoenixChina.PostPraiseView.praise_count(@post) %></span>
-              <%= end %>
-            <%= end %> -->
           </div>
           <div class="level-item">
-            <%= if PhoenixChina.PostCollectView.collect?(@conn, @post) do %>
-              <%= link to: post_collect_path(@conn, :delete, @post), class: "button is-light is-small", method: :delete do %>
-                <span class="icon is-small is-danger"><i class="fa fa-bookmark"></i></span>
-                <span>收藏</span>
-              <%= end %>
+            <%= if logged_in?(@conn) do %>
+              <post-collect
+                :is-collect="<%= PhoenixChina.PostCollectView.collect?(@conn, @post) %>"
+                :post-id="<%= @post.id %>">
+              </post-collect>
             <%= else %>
               <%= link to: post_collect_path(@conn, :create, @post), class: "button is-light is-small", method: :post do %>
                 <span class="icon is-small"><i class="fa fa-bookmark-o"></i></span>

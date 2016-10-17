@@ -38,12 +38,11 @@ defmodule PhoenixChina.PostCollectController do
         post.user |> increment(:unread_notifications_count)
 
         conn
-        |> put_flash(:info, "收藏成功.")
-        |> redirect(to: post_path(conn, :show, post_id))
+        |> render("show.json", is_collect: true)
       {:error, _changeset} ->
         conn
-        |> put_flash(:info, "收藏失败.")
-        |> redirect(to: post_path(conn, :show, post_id))
+        |> put_status(:bad_request)
+        |> render("error.json", changeset: changeset)
     end
   end
 
@@ -62,7 +61,6 @@ defmodule PhoenixChina.PostCollectController do
     post |> decrement(:collect_count)
 
     conn
-    |> put_flash(:info, "取消收藏成功.")
-    |> redirect(to: post_path(conn, :show, post_id))
+    |> render("show.json", is_collect: false)
   end
 end

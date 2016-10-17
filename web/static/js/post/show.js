@@ -16,7 +16,7 @@ Vue.component('post-praise', {
   template: `
     <a class="button is-light is-small" @click="praise">
       <span class="icon is-small" :class="{'is-danger': is_praise}">
-        <i class="fa fa-heart" :class="[is_praise ? 'fa-heart' : 'fa-heart-o']"></i>
+        <i class="fa" :class="[is_praise ? 'fa-heart' : 'fa-heart-o']"></i>
       </span>
       <span>{{ count }}</span>
     </a>
@@ -53,6 +53,47 @@ Vue.component('post-praise', {
 });
 
 
+Vue.component('post-collect', {
+  props: ['isCollect', 'postId'],
+  data: function() {
+    return {
+      is_collect: this.isCollect
+    }
+  },
+  template: `
+    <a class="button is-light is-small" @click="collect">
+      <span class="icon is-small" :class="{'is-danger': is_collect}">
+        <i class="fa" :class="[is_collect ? 'fa-bookmark' : 'fa-bookmark-o']"></i>
+      </span>
+      <span>收藏</span>
+    </a>
+  `,
+  created: function() {
+    this.http_method = this.isCollect ? "DELETE" : "POST";
+    this.http_url = '/posts/'+ this.postId +'/collect';
+  },
+  watch: {
+    is_collect: function(newValue, oldValue) {
+      this.http_method = newValue ? "DELETE" : "POST";
+    }
+  },
+  methods: {
+    collect: function() {
+      var options = {
+        method: this.http_method,
+        url: this.http_url
+      }
+
+      this.$http(options).then((response) => {
+        response.json().then((res) => {
+          this.is_collect = res.is_collect;
+        })
+      });
+    }
+  }
+});
+
+
 Vue.component('comment-praise', {
   props: ['isPraise', 'praiseCount', 'commentId'],
   data: function() {
@@ -64,7 +105,7 @@ Vue.component('comment-praise', {
   template: `
     <a class="button is-link is-small" @click="praise">
       <span class="icon is-small" :class="{'is-danger': is_praise}">
-        <i class="fa fa-heart" :class="[is_praise ? 'fa-heart' : 'fa-heart-o']"></i>
+        <i class="fa" :class="[is_praise ? 'fa-heart' : 'fa-heart-o']"></i>
       </span>
       <span>{{ count }}</span>
     </a>

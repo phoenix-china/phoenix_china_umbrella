@@ -18,4 +18,10 @@ defmodule PhoenixChina.PostCollectView do
       false
     end
   end
+
+  def render("show.json", %{is_collect: is_collect}) do
+    %{
+      is_collect: is_collect
+    }
+  end
 end
