@@ -14,6 +14,7 @@ defmodule PhoenixChina.PostPraise do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:user_id, :post_id])
-    |> validate_required([:user_id, :post_id])
+    |> assoc_constraint(:user)
+    |> assoc_constraint(:post)
   end
 end
