@@ -16,7 +16,7 @@
 </div> -->
 
 
-<div class="columns">
+<div class="columns" id="post-show">
   <div class="column">
     <div class="post-show">
       <div class="simditor simditor-markdown">
@@ -108,11 +108,12 @@
               <%= end %>
 
               <div class="level-item">
-                <%= if PhoenixChina.CommentPraiseView.praise?(@conn, comment) do %>
-                  <%= link to: comment_praise_path(@conn, :delete, comment), class: "button is-small is-link", method: :delete do %>
-                    <span class="icon is-small is-danger"><i class="fa fa-heart"></i></span>
-                    <span><%= PhoenixChina.CommentPraiseView.praise_count(comment) %></span>
-                  <%= end %>
+                <%= if logged_in?(@conn) do %>
+                  <comment-praise
+                    :is-praise="<%= PhoenixChina.CommentPraiseView.praise?(@conn, comment) %>"
+                    :praise-count="<%= comment.praise_count %>"
+                    :comment-id="<%= comment.id %>">
+                  </comment-praise>
                 <%= else %>
                   <%= link to: comment_praise_path(@conn, :create, comment), class: "button is-small is-link", method: :post do %>
                     <span class="icon is-small"><i class="fa fa-heart-o"></i></span>

@@ -24,6 +24,9 @@ import "moment/locale/zh-cn";
 // import socket from "./socket"
 import "./simditor";
 
+
+import "./post/show";
+
 (function() {
   function phoenix_moment_render(elem) {
     let from_now = moment($(elem).data('timestamp'), $(elem).data('format')).fromNow();

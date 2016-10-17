@@ -40,7 +40,7 @@ defmodule PhoenixChina.Post do
     |> validate_required(@required_params)
     |> validate_length(:title, min: 1, max: 140)
     |> validate_length(:content, min: 1, max: 20000)
-    |> put_change(:latest_comment_inserted_at, Ecto.DateTime.utc)
+    |> put_change(:latest_comment_inserted_at, Timex.now)
   end
 
   def changeset(:update, struct, params) do
