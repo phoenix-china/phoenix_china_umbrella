@@ -72,7 +72,7 @@
       </div>
       <hr>
       <%= for {comment, index} <- @comments |> Enum.with_index(1) do %>
-      <article class="media comment-entry">
+      <comment>
         <figure class="media-left">
           <p class="image is-32x32">
             <%= link to: user_path(@conn, :show, comment.user.username) do %>
@@ -102,10 +102,10 @@
           <nav class="level">
             <div class="level-left">
               <%= if logged_in?(@conn) and current_user(@conn).id == comment.user_id do %>
-                <%= link to: post_comment_path(@conn, :edit, @post, comment), class: "level-item button is-small is-link" do %>
-                  <span class="icon is-small"><i class="fa fa-pencil"></i></span>
-                  <span>编辑</span>
-                <%= end %>
+              <%= link to: post_comment_path(@conn, :edit, @post, comment), class: "level-item button is-small is-link comment-edit-btn is-hidden" do %>
+                <span class="icon is-small"><i class="fa fa-pencil"></i></span>
+                <span>编辑</span>
+              <%= end %>
               <%= end %>
 
               <div class="level-item">
@@ -124,9 +124,8 @@
               </div>
             </div>
           </nav>
-
         </div>
-      </article>
+      </comment>
       <%= end %>
     <%= else %>
     <hr>
