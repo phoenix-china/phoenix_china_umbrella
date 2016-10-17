@@ -25,4 +25,11 @@ defmodule PhoenixChina.CommentPraiseView do
       false -> "赞"
     end
   end
+
+  def render("show.json", %{comment: comment, is_praise: is_praise}) do
+    %{
+      is_praise: is_praise,
+      data: render_one(comment, PhoenixChina.CommentView, "comment.json")
+    }
+  end
 end

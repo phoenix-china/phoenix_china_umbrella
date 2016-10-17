@@ -66,6 +66,10 @@ exports.config = {
   },
 
   npm: {
-    enabled: true
+    resolve: {
+      alias: {
+        'vue$': 'vue/dist/vue.js'
+      }
+    }
   }
 };
