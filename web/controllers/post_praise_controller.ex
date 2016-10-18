@@ -44,13 +44,25 @@ defmodule PhoenixChina.PostPraiseController do
 
   def delete(conn, %{"post_id" => post_id}) do
     current_user = current_user(conn)
-    post = Repo.get!(Post, post_id)
+    post = Post |> preload([:user]) |> Repo.get!(post_id)
 
     PostPraise
     |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
     |> Repo.delete!
 
+    Notification
+    |> where(action: "post_praise")
+    |> where(user_id: ^post.user_id)
+    |> where(operator_id: ^current_user.id)
+    |> where(data_id: ^post.id)
+    |> Repo.delete_all
+
     post = decrement(post, :praise_count)
+
+    if post.user.unread_notifications_count > 0 do
+      post.user |> decrement(:unread_notifications_count)
+    end
+
 
     conn
     |> render("show.json", post: post, is_praise: false)

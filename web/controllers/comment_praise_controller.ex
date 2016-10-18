@@ -47,13 +47,24 @@ defmodule PhoenixChina.CommentPraiseController do
 
   def delete(conn, %{"comment_id" => comment_id}) do
     current_user = current_user(conn)
-    comment = Repo.get!(Comment, comment_id)
+    comment = Comment |> preload([:user]) |> Repo.get!(comment_id)
 
     CommentPraise
     |> Repo.get_by!(comment_id: comment_id, user_id: current_user.id)
     |> Repo.delete!
 
+    Notification
+    |> where(action: "comment_praise")
+    |> where(user_id: ^comment.user_id)
+    |> where(operator_id: ^current_user.id)
+    |> where(data_id: ^comment.id)
+    |> Repo.delete_all
+
     comment = decrement(comment, :praise_count)
+
+    if comment.user.unread_notifications_count > 0 do
+      comment.user |> decrement(:unread_notifications_count)
+    end
 
     conn
     |> render("show.json", comment: comment, is_praise: false)

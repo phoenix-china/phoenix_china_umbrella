@@ -51,14 +51,25 @@ defmodule PhoenixChina.PostCollectController do
   """
   def delete(conn, %{"post_id" => post_id}) do
     current_user = current_user(conn)
-    post = Repo.get!(Post, post_id)
+    post = Post |> preload([:user]) |> Repo.get!(post_id)
 
     PostCollect
     |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
     |> Repo.delete!
 
+    Notification
+    |> where(action: "post_collect")
+    |> where(user_id: ^post.user_id)
+    |> where(operator_id: ^current_user.id)
+    |> where(data_id: ^post.id)
+    |> Repo.delete_all
+
     current_user |> decrement(:collect_count)
     post |> decrement(:collect_count)
+
+    if post.user.unread_notifications_count > 0 do
+      post.user |> decrement(:unread_notifications_count)
+    end
 
     conn
     |> render("show.json", is_collect: false)
