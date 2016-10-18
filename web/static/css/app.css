@@ -66,4 +66,10 @@ div.level-item {
 #post-show .media + .media.comment-deleted {
   padding-top: 20px;
 }
+#post-show .comment-entry {
+  padding: 10px;
+}
+#post-show .comment-entry.popular {
+  background: #fffce9;
+}
 /* post show style end */

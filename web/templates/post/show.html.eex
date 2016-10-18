@@ -79,7 +79,7 @@
           </div>
         </div>
         <%= else %>
-          <comment class="media comment-entry">
+          <comment class="media comment-entry<%= if comment.praise_count >= 5, do: " popular"%>">
             <figure class="media-left">
               <p class="image is-32x32">
                 <%= link to: user_path(@conn, :show, comment.user.username) do %>
