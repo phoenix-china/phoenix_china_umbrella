@@ -32,6 +32,8 @@
               <%= end %>
 
               <%= link "首页", to: "/", class: "nav-item" %>
+              <%= link "学习Elixir", to: "https://wizardforcel.gitbooks.io/programming-elixir/content/", class: "nav-item", target: "_blank" %>
+              <%= link "指南", to: "https://mydearxym.gitbooks.io/phoenix-doc-in-chinese/content/", class: "nav-item", target: "_blank" %>
             </div>
 
             <%= if @conn.assigns[:title] do %>
