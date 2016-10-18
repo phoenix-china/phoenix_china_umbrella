@@ -3,7 +3,9 @@ defmodule PhoenixChina.Comment do
 
   schema "comments" do
     field :content, :string
+    field :index, :integer
     field :praise_count, :integer, default: 0
+
     belongs_to :user, PhoenixChina.User
     belongs_to :post, PhoenixChina.Post
 
@@ -15,8 +17,10 @@ defmodule PhoenixChina.Comment do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:content, :post_id, :user_id])
-    |> validate_required([:content, :post_id, :user_id])
+    |> cast(params, [:content, :index, :post_id, :user_id])
+    |> validate_required([:content, :index])
     |> validate_length(:content, min: 1, max: 200)
+    |> assoc_constraint(:user)
+    |> assoc_constraint(:post)
   end
 end

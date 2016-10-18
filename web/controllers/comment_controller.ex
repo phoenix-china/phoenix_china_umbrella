@@ -30,6 +30,7 @@ defmodule PhoenixChina.CommentController do
     post = Post |> preload([:user]) |> Repo.get!(post_id)
 
     comment_params = comment_params
+    |> Map.put_new("index", post.comment_count + 1)
     |> Map.put_new("post_id", post.id)
     |> Map.put_new("user_id", current_user.id)
 

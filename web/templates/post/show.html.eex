@@ -66,12 +66,12 @@
       </nav>
     </div>
 
-    <%= if Enum.count(@comments) > 0 do %>
+    <%= if @post.comment_count > 0 do %>
       <div class="title is-6" style="margin-top: 20px;">
         共收到 <%= @post.comment_count %> 条回复
       </div>
       <hr>
-      <%= for {comment, index} <- @comments |> Enum.with_index(1) do %>
+      <%= for comment <- @comments do %>
       <comment class="media comment-entry">
         <figure class="media-left">
           <p class="image is-32x32">
@@ -87,7 +87,7 @@
             <%= end %>
 
             <%= link to: "" do %>
-              #<%= index %>
+              #<%= comment.index %>
             <%= end %>
             <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
             <br>

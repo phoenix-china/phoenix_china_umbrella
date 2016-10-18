@@ -71,7 +71,7 @@ defmodule PhoenixChina.PostController do
 
     comments = Comment
     |> where(post_id: ^id)
-    |> order_by(asc: :inserted_at)
+    |> order_by(asc: :index)
     |> preload([:user])
     |> Repo.all
 
