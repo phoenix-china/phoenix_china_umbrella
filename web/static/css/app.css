@@ -47,6 +47,9 @@ div.level-item {
 .post-entry .level a:hover {
   text-decoration: underline;
 }
+.tag {
+  display: inline-flex !important;
+}
 /* page index style end */
 
 

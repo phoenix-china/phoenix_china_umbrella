@@ -37,7 +37,16 @@
         <div class="media-content">
           <div class="title is-5">
             <%= if is_today?(post.inserted_at) do %>
-            <small class="tag is-small is-warning">今</small>
+            <small class="tag is-small is-warning hint--top" aria-label="今日发帖">
+              <span>今</span>
+            </small>
+            <%= end %>
+            <%= if post.is_top do %>
+            <span class="tag is-small hint--top" aria-label="置顶">
+              <span class="icon is-small" style="">
+                <i class="fa fa-thumb-tack"></i>
+              </span>
+            </span>
             <%= end %>
             <%= link post.title, to: post_path(@conn, :show, post) %>
           </div>
