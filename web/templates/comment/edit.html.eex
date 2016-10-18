@@ -4,7 +4,17 @@
       changeset: @changeset,
       action: post_comment_path(@conn, :update, @comment.post_id, @comment)
     %>
+
+    <%= link to: post_comment_path(@conn, :delete, @comment.post_id, @comment),
+      class: "button is-danger is-pulled-right",
+      method: "DELETE",
+      style: "margin-top: -32px;",
+      data: [confirm: "确定要删除吗？"] do %>
+      删除
+    <%= end %>
   </div>
+
+
   <div class="column is-3">
     <%= link to: post_path(@conn, :show, @comment.post_id), class: "button is-link" do %>
       <span class="icon is-small"><i class="fa fa-arrow-left"></i></span>

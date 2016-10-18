@@ -5,6 +5,7 @@ defmodule PhoenixChina.Comment do
     field :content, :string
     field :index, :integer
     field :praise_count, :integer, default: 0
+    field :is_deleted, :boolean, default: false
 
     belongs_to :user, PhoenixChina.User
     belongs_to :post, PhoenixChina.Post

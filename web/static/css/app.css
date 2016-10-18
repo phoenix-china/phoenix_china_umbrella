@@ -59,4 +59,11 @@ div.level-item {
   min-height: inherit;
   padding: 10px 0 0;
 }
+#post-show .comment-deleted {
+  display: block;
+  color: #999;
+}
+#post-show .media + .media.comment-deleted {
+  padding-top: 20px;
+}
 /* post show style end */

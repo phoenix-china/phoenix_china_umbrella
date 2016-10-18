@@ -134,11 +134,9 @@ defmodule PhoenixChina.CommentController do
     |> select([u], max(u.id))
     |> Repo.one
 
-    post
-    |> update_field(:latest_comment_id, latest_comment_id)
-    |> decrement(:comment_count)
+    post |> update_field(:latest_comment_id, latest_comment_id)
 
-    Repo.delete!(comment)
+    comment |> update_field(:is_deleted, true)
 
     conn
     |> put_flash(:info, "评论删除成功！")

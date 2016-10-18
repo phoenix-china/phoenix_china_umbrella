@@ -76,6 +76,7 @@ defmodule PhoenixChina.UserController do
 
     pagination = Comment
     |> where(user_id: ^user.id)
+    |> where(is_deleted: false)
     |> order_by([desc: :inserted_at])
     |> preload([:post])
     |> Repo.paginate(params)
