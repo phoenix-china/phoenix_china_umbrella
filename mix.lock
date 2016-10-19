@@ -1,4 +1,4 @@
-%{"aliyun_direct_mail": {:git, "https://github.com/nanlong/aliyun_direct_mail.git", "052c78eb8dccd0d5060a01113e921a6cfc112fac", []},
+%{"aliyun_direct_mail": {:git, "https://github.com/nanlong/aliyun-direct-mail.git", "d88cccdb9fa015f01d7a1ed941913f8f1de168b6", []},
   "base64url": {:hex, :base64url, "0.0.1", "36a90125f5948e3afd7be97662a1504b934dd5dac78451ca6e9abf85a10286be", [:rebar], []},
   "certifi": {:hex, :certifi, "0.4.0", "a7966efb868b179023618d29a407548f70c52466bf1849b9e8ebd0e34b7ea11f", [:rebar3], []},
   "combine": {:hex, :combine, "0.9.1", "5fd778ee77032ae593bf79aedb8519d9e36283e4f869abd98c2d6029ca476db8", [:mix], []},
