@@ -89,13 +89,16 @@
             </figure>
             <div class="media-content">
               <p>
+                <strong class="tag is-small is-dark">#<%= comment.index %></strong>
+
+                <%= if @post.user_id == comment.user_id do %>
+                  <span class="tag is-small is-danger">楼主</span>
+                <%= end %>
+
                 <%= link to: user_path(@conn, :show, comment.user.username) do %>
                   <%= comment.user |> fullname %>
                 <%= end %>
 
-                <%= link to: "" do %>
-                  #<%= comment.index %>
-                <%= end %>
                 <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
                 <br>
               </p>
