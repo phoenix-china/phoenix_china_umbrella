@@ -2,7 +2,7 @@ defmodule PhoenixChina.User do
   use PhoenixChina.Web, :model
 
   alias Ecto.Changeset
-  alias PhoenixChina.{Repo, UserGithub}
+  alias PhoenixChina.{Repo}
 
   schema "users" do
     field :email, :string
@@ -23,7 +23,7 @@ defmodule PhoenixChina.User do
     field :token, :string, virtual: true
     field :luotest_response, :string, virtual: true
 
-    has_many :github, UserGithub
+    has_many :github, PhoenixChina.UserGithub
 
     timestamps()
   end

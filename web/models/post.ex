@@ -1,8 +1,6 @@
 defmodule PhoenixChina.Post do
   use PhoenixChina.Web, :model
 
-  alias PhoenixChina.{User, Comment, PostLabel}
-
   schema "posts" do
     field :title, :string
     field :content, :string
@@ -12,10 +10,10 @@ defmodule PhoenixChina.Post do
     field :latest_comment_inserted_at, Timex.Ecto.DateTime
     field :is_top, :boolean, default: false
 
-    belongs_to :user, User
-    belongs_to :label, PostLabel
-    belongs_to :latest_comment, Comment, foreign_key: :latest_comment_id
-    has_many :comments, Comment, on_delete: :delete_all
+    belongs_to :user, PhoenixChina.User
+    belongs_to :label, PhoenixChina.PostLabel
+    belongs_to :latest_comment, PhoenixChina.Comment, foreign_key: :latest_comment_id
+    has_many :comments, PhoenixChina.Comment, on_delete: :delete_all
 
     timestamps()
   end
