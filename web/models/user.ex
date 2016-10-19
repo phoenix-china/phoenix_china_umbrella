@@ -165,15 +165,6 @@ defmodule PhoenixChina.User do
     changeset
   end
 
-  def validate_token(changeset, field, token_name, max_age) do
-    token = get_field(changeset, field)
-    case Phoenix.Token.verify(PhoenixChina.Endpoint, token_name, token, max_age: max_age) do
-      {:ok, user_id} -> changeset |> put_change(:user, __MODULE__ |> Repo.get!(user_id))
-      {:error, :invalid} -> changeset |> add_error(field, "token不正确，请重新申请重置密码！")
-      {:error, :expired} -> changeset |> add_error(field, "token已过期，请重新申请重置密码！")
-    end
-  end
-
   def put_password_hash(%Ecto.Changeset{valid?: true} = changeset, field) do
     value = get_field(changeset, field)
 

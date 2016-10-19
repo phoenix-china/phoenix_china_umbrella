@@ -1,7 +1,7 @@
 defmodule PhoenixChina.NotificationController do
   use PhoenixChina.Web, :controller
 
-  alias PhoenixChina.{User, Notification}
+  alias PhoenixChina.{Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.Ecto.Helpers, only: [update_field: 3]

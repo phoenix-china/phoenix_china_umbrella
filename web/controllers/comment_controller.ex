@@ -4,7 +4,7 @@ defmodule PhoenixChina.CommentController do
   alias PhoenixChina.{User, Comment, Post, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
-  import PhoenixChina.Ecto.Helpers, only: [increment: 2, decrement: 2, update_field: 3]
+  import PhoenixChina.Ecto.Helpers, only: [increment: 2, update_field: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:create, :edit, :update, :delete]

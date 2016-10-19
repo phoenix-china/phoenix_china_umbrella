@@ -3,7 +3,7 @@ defmodule PhoenixChina.PostController do
 
   alias PhoenixChina.{User, Post, PostLabel, Comment, Notification}
 
-  import PhoenixChina.ViewHelpers, only: [current_user: 1, admin_logged_in?: 1]
+  import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.Ecto.Helpers, only: [increment: 2]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]

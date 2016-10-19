@@ -6,22 +6,16 @@ defmodule PhoenixChina.Post do
   schema "posts" do
     field :title, :string
     field :content, :string
+    field :comment_count, :integer, default: 0
+    field :collect_count, :integer, default: 0
+    field :praise_count, :integer, default: 0
+    field :latest_comment_inserted_at, Timex.Ecto.DateTime
+    field :is_top, :boolean, default: false
+
     belongs_to :user, User
     belongs_to :label, PostLabel
-    has_many :comments, Comment, on_delete: :delete_all
-
-    # 评论数量
-    field :comment_count, :integer, default: 0
-    # 收藏数量
-    field :collect_count, :integer, default: 0
-    # 点赞数量
-    field :praise_count, :integer, default: 0
-    # 最新一个评论
     belongs_to :latest_comment, Comment, foreign_key: :latest_comment_id
-    # 最新一条评论的创建时间
-    field :latest_comment_inserted_at, Timex.Ecto.DateTime
-
-    field :is_top, :boolean, default: false
+    has_many :comments, Comment, on_delete: :delete_all
 
     timestamps()
   end
@@ -41,6 +35,7 @@ defmodule PhoenixChina.Post do
     |> validate_length(:title, min: 1, max: 140)
     |> validate_length(:content, min: 1, max: 20000)
     |> put_change(:latest_comment_inserted_at, Timex.now)
+    |> assoc_constraint(:user)
   end
 
   def changeset(:update, struct, params) do
