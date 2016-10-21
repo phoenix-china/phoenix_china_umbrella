@@ -179,8 +179,23 @@
       <div class="panel-heading">
         交流
       </div>
-      <div class="panel-block has-text-centered">
+      <div class="panel-block">
         QQ群：495942230
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-heading">
+        统计信息
+      </div>
+      <div class="panel-block">
+        用户：<%= @user_count %>
+      </div>
+      <div class="panel-block">
+        帖子：<%= @post_count %>
+      </div>
+      <div class="panel-block">
+        回复：<%= @comment_count %>
       </div>
     </div>
   </div>
