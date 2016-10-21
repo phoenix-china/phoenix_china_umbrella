@@ -184,6 +184,30 @@
     <%= end %>
   </div>
   <div class="column is-3">
+
+
+    <div>
+      <ul>
+        <li>
+          <strong>发布时间</strong>
+          <small class="phoenix-moment" data-timestamp="<%= @post.inserted_at %>"></small>
+        </li>
+        <%= if not is_nil(@post.latest_comment) do %>
+        <li>
+          <strong>最后回复</strong>
+          <%= link to: user_path(@conn, :show, @post.latest_comment.user.username) do %>
+            <%= @post.latest_comment.user |> fullname %>
+          <%= end %>
+        </li>
+        <li>
+          <strong>最后活跃</strong>
+          <small class="phoenix-moment" data-timestamp="<%= @post.latest_comment.inserted_at %>"></small>
+        </li>
+        <%= end %>
+      </ul>
+    </div>
+    <hr>
+
     <div class="panel">
       <div class="panel-heading">
         作者
@@ -219,26 +243,26 @@
         </article>
       </div>
     </div>
-    <hr>
-    <div>
-      <ul>
-        <li>
-          <strong>发布时间</strong>
-          <small class="phoenix-moment" data-timestamp="<%= @post.inserted_at %>"></small>
-        </li>
-        <%= if not is_nil(@post.latest_comment) do %>
-        <li>
-          <strong>最后回复</strong>
-          <%= link to: user_path(@conn, :show, @post.latest_comment.user.username) do %>
-            <%= @post.latest_comment.user |> fullname %>
+
+    <%= if @post.praise_count > 0 do %>
+    <div class="panel">
+      <div class="panel-heading">
+        谁赞过
+      </div>
+      <div class="panel-block">
+        <ul class="is-clearfix">
+          <%= for user <- @praises do %>
+          <li class="is-pulled-left" style="margin: 0 5px 5px 0;">
+            <%= link to: user_path(@conn, :show, user.username), class: "hint--left", aria_label: fullname(user) do %>
+              <article class="image is-24x24">
+                <img src="<%= user.avatar %>" alt="" />
+              </article>
+            <%= end %>
+          </li>
           <%= end %>
-        </li>
-        <li>
-          <strong>最后活跃</strong>
-          <small class="phoenix-moment" data-timestamp="<%= @post.latest_comment.inserted_at %>"></small>
-        </li>
-        <%= end %>
-      </ul>
+        </ul>
+      </div>
     </div>
+    <%= end %>
   </div>
 </div>

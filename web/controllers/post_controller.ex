@@ -1,7 +1,7 @@
 defmodule PhoenixChina.PostController do
   use PhoenixChina.Web, :controller
 
-  alias PhoenixChina.{User, Post, PostLabel, Comment, Notification}
+  alias PhoenixChina.{User, Post, PostLabel, PostPraise, Comment, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.Ecto.Helpers, only: [increment: 2]
@@ -75,12 +75,18 @@ defmodule PhoenixChina.PostController do
     |> preload([:user])
     |> Repo.all
 
+    praises = User
+    |> join(:inner, [u], p in PostPraise, u.id == p.user_id and p.post_id == ^id)
+    |> order_by([p], [desc: p.inserted_at])
+    |> Repo.all
+
     changeset = Comment.changeset(%Comment{})
 
     conn
     |> assign(:title, post.title)
     |> assign(:post, post)
     |> assign(:comments, comments)
+    |> assign(:praises, praises)
     |> assign(:changeset, changeset)
     |> render("show.html")
   end
