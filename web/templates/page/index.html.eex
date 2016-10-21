@@ -155,37 +155,22 @@
       <div class="panel-heading">
         <span>友情链接</span>
       </div>
-      <%= link to: "http://www.elixir-cn.com/", target: "_blank", class: "panel-block" do %>
-        <article class="icon image is-16x16">
-          <img src="http://www.elixir-cn.com/img/favicon.ico" alt="Elixir中文社区" width="16" />
-        </article>
+      <%= link to: "http://www.elixir-cn.com/", target: "_blank", class: "panel-block has-text-centered" do %>
         <span>Elixir中文社区</span>
       <%= end %>
-      <%= link to: "https://ruby-china.org/", target: "_blank", class: "panel-block" do %>
-        <article class="icon image is-16x16">
-          <img src="https://ruby-china.org/favicon.ico" alt="Ruby中文社区" width="16" />
-        </article>
+      <%= link to: "https://ruby-china.org/", target: "_blank", class: "panel-block has-text-centered" do %>
         <span>Ruby中文社区</span>
       <%= end %>
-      <%= link to: "https://python-china.org/", target: "_blank", class: "panel-block" do %>
-        <article class="icon image is-16x16">
-          <img src="https://python-china.org/favicon.ico" alt="Python中文社区" width="16" />
-        </article>
+      <%= link to: "https://python-china.org/", target: "_blank", class: "panel-block has-text-centered" do %>
         <span>Python中文社区</span>
       <%= end %>
-      <%= link to: "https://rust-china.org/", target: "_blank", class: "panel-block" do %>
-        <article class="icon image is-16x16">
-          <img src="https://rust-china.org/favicon.ico" alt="Rust中文社区" width="16" />
-        </article>
+      <%= link to: "https://rust-china.org/", target: "_blank", class: "panel-block has-text-centered" do %>
         <span>Rust中文社区</span>
       <%= end %>
-      <%= link to: "https://www.taokouke.com/", target: "_blank", class: "panel-block" do %>
-        <article class="icon image is-16x16">
-          <img src="https://www.taokouke.com/static/images/favicon.ico" alt="掏抠客－为您省钱" width="16" />
-        </article>
+      <%= link to: "https://www.taokouke.com/", target: "_blank", class: "panel-block has-text-centered" do %>
         <span>掏抠客－为您省钱</span>
       <%= end %>
-      <%= link to: "http://www.zizhixi.com/", target: "_blank", class: "panel-block" do %>
+      <%= link to: "http://www.zizhixi.com/", target: "_blank", class: "panel-block has-text-centered" do %>
         <span>自制系－手工玩家聚集地</span>
       <%= end %>
     </div>
@@ -194,7 +179,7 @@
       <div class="panel-heading">
         交流
       </div>
-      <div class="panel-block">
+      <div class="panel-block has-text-centered">
         QQ群：495942230
       </div>
     </div>
