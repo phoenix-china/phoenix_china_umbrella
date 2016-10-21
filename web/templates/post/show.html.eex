@@ -247,7 +247,7 @@
     <%= if @post.praise_count > 0 do %>
     <div class="panel">
       <div class="panel-heading">
-        谁赞过
+        <%= @post.praise_count %> 人赞过
       </div>
       <div class="panel-block">
         <ul class="is-clearfix">
