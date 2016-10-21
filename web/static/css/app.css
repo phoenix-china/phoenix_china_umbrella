@@ -76,3 +76,11 @@ div.level-item {
   background: #fffce9;
 }
 /* post show style end */
+
+.panel-heading {
+  font-size: 14px;
+  padding: 5px 10px;
+  font-weight: bold;
+  color: #777;
+  background: #fafafa;
+}
