@@ -1,9 +1,0 @@
-<%= for {comment, index} <- @comments |> Enum.with_index(1) |> Enum.to_list do %>
-  <%= render "entry.html",
-    conn: @conn,
-    index: index,
-    comment: comment,
-    post: @post ,
-    logged_in: @logged_in,
-    current_user: @current_user %>
-<%= end %>
