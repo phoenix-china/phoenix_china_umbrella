@@ -1,3 +1,4 @@
+import $ from "jquery";
 import Vue from "vue/dist/vue.js";
 import VueResource from "vue-resource";
 
@@ -157,9 +158,30 @@ import VueResource from "vue-resource";
     }
   });
 
+  function highlight_comment() {
+    var hash = window.location.hash.slice(1);
+
+    if (! hash) {return;}
+
+    var $anchor = $('a[name='+ hash +']');
+    var $comment = $anchor.parent();
+    var animation_class = 'flash animated'
+    var animation_end = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+
+    setTimeout(function() {
+      $comment.addClass(animation_class);
+    }, 500);
+
+    $comment.one(animation_end, function() {
+      $(this).removeClass(animation_class)
+    });
+  }
+
   if ($('#post-show').length > 0) {
     new Vue({
       el: '#post-show'
     });
+
+    highlight_comment();
   }
 })();

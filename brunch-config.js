@@ -14,8 +14,8 @@ exports.config = {
       // To change the order of concatenation of files, explicitly mention here
       order: {
         before: [
-          "web/static/vendor/js/jquery.min.js",
-          "web/static/vendor/js/bootstrap.min.js"
+          // "web/static/vendor/js/jquery.min.js",
+          // "web/static/vendor/js/bootstrap.min.js"
         ]
       }
     },
@@ -68,7 +68,8 @@ exports.config = {
   npm: {
     resolve: {
       alias: {
-        'vue$': 'vue/dist/vue.js'
+        'vue$': 'vue/dist/vue.js',
+        'jquery-color-animate$': 'jquery-color-animation/jqery.animate-colors-min.js'
       }
     }
   }
