@@ -55,8 +55,16 @@
             <%= end %>
           </div>
         </div>
-        <%= if logged_in?(@conn) and current_user(@conn).id == @post.user_id do %>
+        <%= if logged_in?(@conn) and current_user(@conn).id == @post.user_id and not @post.is_closed do %>
         <div class="level-right">
+          <div class="level-item">
+            <%= link to: post_path(@conn, :update, @post), class: "button is-danger is-small", method: :put, data: [confirm: "确定要关闭吗？关闭之后不能再打开了。"] do %>
+              <input type="hidden" name="post[is_closed]" value="true">
+              <span class="icon is-small"><i class="fa fa-check"></i></span>
+              <span>结束</span>
+            <%= end %>
+          </div>
+
           <%= link to: post_path(@conn, :edit, @post), class: "level-item button is-success is-small" do %>
             <span class="icon is-small"><i class="fa fa-pencil"></i></span>
             <span>编辑</span>
@@ -149,46 +157,50 @@
     <hr>
     <%= end %>
 
-    <%= if logged_in?(@conn) do %>
-    <article class="media">
-      <figure class="media-left">
-        <p class="image is-64x64">
-          <img src="<%= current_user(@conn).avatar %>">
-        </p>
-      </figure>
-      <div class="media-content">
-        <%= form_for @changeset, post_comment_path(@conn, :create, @post), fn f -> %>
-        <p class="control">
-          <%= textarea f, :content, class: "textarea simditor-comment-textarea" %>
-        </p>
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <%= submit "回复", class: "button is-info" %>
-            </div>
-          </div>
-        </nav>
-        <%= end %>
+    <%= if @post.is_closed do %>
+      <div class="box has-text-centered">
+        帖子已经关闭，不再接受任何回帖
       </div>
-    </article>
     <%= else %>
-    <hr>
-    <div class="box">
-      需要
-      <%= link to: session_path(@conn, :new), class: "button is-info is-small" do %>
-        登录
+      <%= if logged_in?(@conn) do %>
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <img src="<%= current_user(@conn).avatar %>">
+          </p>
+        </figure>
+        <div class="media-content">
+          <%= form_for @changeset, post_comment_path(@conn, :create, @post), fn f -> %>
+          <p class="control">
+            <%= textarea f, :content, class: "textarea simditor-comment-textarea" %>
+          </p>
+          <nav class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <%= submit "回复", class: "button is-info" %>
+              </div>
+            </div>
+          </nav>
+          <%= end %>
+        </div>
+      </article>
+      <%= else %>
+      <hr>
+      <div class="box">
+        需要
+        <%= link to: session_path(@conn, :new), class: "button is-info is-small" do %>
+          登录
+        <%= end %>
+        后方可回复, 如果你还没有账号请点击这里
+        <%= link to: user_path(@conn, :new), class: "button is-danger is-small" do %>
+          注册
+        <%= end %>
+        。
+      </div>
       <%= end %>
-      后方可回复, 如果你还没有账号请点击这里
-      <%= link to: user_path(@conn, :new), class: "button is-danger is-small" do %>
-        注册
-      <%= end %>
-      。
-    </div>
     <%= end %>
   </div>
   <div class="column is-3">
-
-
     <div>
       <ul>
         <li>

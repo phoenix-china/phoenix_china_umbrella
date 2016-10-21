@@ -9,6 +9,7 @@ defmodule PhoenixChina.Post do
     field :praise_count, :integer, default: 0
     field :latest_comment_inserted_at, Timex.Ecto.DateTime
     field :is_top, :boolean, default: false
+    field :is_closed, :boolean, default: false
 
     belongs_to :user, PhoenixChina.User
     belongs_to :label, PhoenixChina.PostLabel

@@ -4,7 +4,7 @@ defmodule PhoenixChina.PostController do
   alias PhoenixChina.{User, Post, PostLabel, PostPraise, Comment, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
-  import PhoenixChina.Ecto.Helpers, only: [increment: 2]
+  import PhoenixChina.Ecto.Helpers, only: [increment: 2, update_field: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:new, :create, :edit, :update, :delete]
@@ -106,6 +106,19 @@ defmodule PhoenixChina.PostController do
     |> render("edit.html")
   end
 
+  @doc """
+  关闭帖子
+  """
+  def update(conn, %{"id" => id, "post" => %{"is_closed" => is_closed}}) do
+    current_user = current_user(conn)
+    post = Repo.get_by!(Post, id: id, user_id: current_user.id)
+    post |> update_field(:is_closed, is_closed == "true")
+    
+    conn
+    |> put_flash(:info, "操作成功，帖子已结束")
+    |> redirect(to: post_path(conn, :show, post))
+  end
+
   def update(conn, %{"id" => id, "post" => post_params}) do
     current_user = current_user(conn)
     post = Repo.get_by!(Post, id: id, user_id: current_user.id)
@@ -128,6 +141,8 @@ defmodule PhoenixChina.PostController do
         |> render("edit.html")
     end
   end
+
+
 
   def delete(conn, %{"id" => id}) do
     current_user = current_user(conn)

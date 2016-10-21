@@ -68,8 +68,7 @@ exports.config = {
   npm: {
     resolve: {
       alias: {
-        'vue$': 'vue/dist/vue.js',
-        'jquery-color-animate$': 'jquery-color-animation/jqery.animate-colors-min.js'
+        'vue$': 'vue/dist/vue.js'
       }
     }
   }
