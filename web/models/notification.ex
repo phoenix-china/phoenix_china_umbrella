@@ -49,8 +49,16 @@ defmodule PhoenixChina.Notification do
     end
   end
 
-  def create(%Post{} = post) do
+  @doc """
+  收藏帖子
+  """
+  def create(conn, %PostCollect{} = collect) do
+    collect = collect |> Repo.preload(:user) |> Repo.preload(:post)
 
+    if collect.user_id != collect.post.user_id do
+      html = render("post_collect.html", conn: conn, user: collect.user, post: collect.post)
+      publish("post_collect", collect.post.user_id, collect.user_id, collect.post_id, html)
+    end
   end
 
   @doc """
@@ -66,7 +74,27 @@ defmodule PhoenixChina.Notification do
   end
 
   @doc """
-  取消点赞
+  取消收藏帖子
+  """
+  def delete(%PostCollect{} = collect) do
+    collect = collect |> Repo.preload(:user) |> Repo.preload(:post) |> Repo.preload(post: :user)
+
+    if collect.user_id != collect.post.user_id do
+      __MODULE__
+      |> where(action: "post_collect")
+      |> where(user_id: ^collect.post.user_id)
+      |> where(operator_id: ^collect.user_id)
+      |> where(data_id: ^collect.post_id)
+      |> Repo.delete_all
+
+      if collect.post.user.unread_notifications_count > 0 do
+        collect.post.user |> decrement(:unread_notifications_count)
+      end
+    end
+  end
+
+  @doc """
+  取消点赞帖子
   """
   def delete(%PostPraise{} = praise) do
     praise = praise |> Repo.preload(:user) |> Repo.preload(:post) |> Repo.preload(post: :user)

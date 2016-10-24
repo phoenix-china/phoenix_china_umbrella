@@ -18,24 +18,11 @@ defmodule PhoenixChina.PostCollectController do
     changeset = PostCollect.changeset(%PostCollect{}, params)
 
     case Repo.insert(changeset) do
-      {:ok, _post_collect} ->
+      {:ok, post_collect} ->
         current_user |> increment(:collect_count)
         post |> increment(:collect_count)
 
-        notification_html = Notification.render "post_collect.html",
-          conn: conn,
-          user: current_user,
-          post: post
-
-        Notification.publish(
-          "post_collect",
-          post.user_id,
-          current_user.id,
-          post.id,
-          notification_html
-        )
-
-        post.user |> increment(:unread_notifications_count)
+        Notification.create(conn, post_collect)
 
         conn
         |> render("show.json", is_collect: true)
@@ -53,23 +40,14 @@ defmodule PhoenixChina.PostCollectController do
     current_user = current_user(conn)
     post = Post |> preload([:user]) |> Repo.get!(post_id)
 
-    PostCollect
-    |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
-    |> Repo.delete!
+    post_collect = PostCollect |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
 
-    Notification
-    |> where(action: "post_collect")
-    |> where(user_id: ^post.user_id)
-    |> where(operator_id: ^current_user.id)
-    |> where(data_id: ^post.id)
-    |> Repo.delete_all
+    Notification.delete(post_collect)
+
+    post_collect |> Repo.delete!
 
     current_user |> decrement(:collect_count)
     post |> decrement(:collect_count)
-
-    if post.user.unread_notifications_count > 0 do
-      post.user |> decrement(:unread_notifications_count)
-    end
 
     conn
     |> render("show.json", is_collect: false)
