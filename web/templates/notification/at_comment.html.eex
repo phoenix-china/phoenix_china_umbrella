@@ -1,4 +1,4 @@
 <%= link fullname(@user), to: user_path(@conn, :show, @user.username) %>
 <span>在</span>
-<%= link @post.title, to: post_path(@conn, :show, @post) <> "?#comment-#{@comment.id}" %>
+<%= link @post.title, to: post_path(@conn, :show, @post) <> "?#comment-" <> to_string(@comment.index) %>
 <span>的评论中@了你</span>
