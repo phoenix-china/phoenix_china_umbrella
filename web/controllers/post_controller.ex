@@ -28,27 +28,7 @@ defmodule PhoenixChina.PostController do
 
     case Repo.insert(changeset) do
       {:ok, post} ->
-        Enum.map(Regex.scan(~r/@(\S+)\s?/, post.content), fn [_, username] ->
-          user = User |> Repo.get_by(username: username)
-
-          if user && (user != current_user) do
-
-            notification_html = Notification.render "at_post.html",
-              conn: conn,
-              user: current_user,
-              post: post
-
-            Notification.publish(
-              "at_post",
-              user.id,
-              current_user.id,
-              post.id,
-              notification_html
-            )
-
-            user |> increment(:unread_notifications_count)
-          end
-        end)
+        Notification.create(conn, :at, post)
 
         conn
         |> put_flash(:info, "帖子发布成功.")
@@ -113,7 +93,7 @@ defmodule PhoenixChina.PostController do
     current_user = current_user(conn)
     post = Repo.get_by!(Post, id: id, user_id: current_user.id)
     post |> update_field(:is_closed, is_closed == "true")
-    
+
     conn
     |> put_flash(:info, "操作成功，帖子已结束")
     |> redirect(to: post_path(conn, :show, post))

@@ -63,12 +63,15 @@ defmodule PhoenixChina.Notification do
     end
   end
 
+  @doc """
+  在评论中@用户
+  """
   def create(conn, :at, %Comment{} = comment) do
     comment = comment |> Repo.preload(:user) |> Repo.preload(:post)
 
     Enum.map(Regex.scan(~r/@(\S+)\s?/, comment.content), fn [_, username] ->
       user = User |> Repo.get_by(username: username)
-      
+
       if not is_nil(user) and user.id != comment.user_id do
         html = render("at_comment.html", conn: conn, user: comment.user, post: comment.post, comment: comment)
         publish("at_comment", user.id, comment.user_id, comment.id, html)
@@ -76,6 +79,21 @@ defmodule PhoenixChina.Notification do
     end)
   end
 
+  @doc """
+  在帖子中@用户
+  """
+  def create(conn, :at, %Post{} = post) do
+    post = post |> Repo.preload(:user)
+    
+    Enum.map(Regex.scan(~r/@(\S+)\s?/, post.content), fn [_, username] ->
+      user = User |> Repo.get_by(username: username)
+
+      if not is_nil(user) and user.id != post.user_id do
+        html = render("at_post.html", conn: conn, user: post.user, post: post)
+        publish("at_post", user.id, post.user_id, post.id, html)
+      end
+    end)
+  end
   @doc """
   收藏帖子
   """
