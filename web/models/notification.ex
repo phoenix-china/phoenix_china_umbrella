@@ -50,20 +50,6 @@ defmodule PhoenixChina.Notification do
   end
 
   @doc """
-  评论帖子
-  """
-  def create(conn, %Comment{} = comment) do
-    comment = comment |> Repo.preload(:user) |> Repo.preload(:post)
-
-    create(conn, :at, comment)
-
-    if comment.user_id != comment.post.user_id do
-      html = render("comment.html", conn: conn, user: comment.user, post: comment.post, comment: comment)
-      publish("comment_post", comment.post.user_id, comment.user_id, comment.post_id, html)
-    end
-  end
-
-  @doc """
   在评论中@用户
   """
   def create(conn, :at, %Comment{} = comment) do
@@ -84,7 +70,7 @@ defmodule PhoenixChina.Notification do
   """
   def create(conn, :at, %Post{} = post) do
     post = post |> Repo.preload(:user)
-    
+
     Enum.map(Regex.scan(~r/@(\S+)\s?/, post.content), fn [_, username] ->
       user = User |> Repo.get_by(username: username)
 
@@ -94,6 +80,21 @@ defmodule PhoenixChina.Notification do
       end
     end)
   end
+
+  @doc """
+  评论帖子
+  """
+  def create(conn, %Comment{} = comment) do
+    comment = comment |> Repo.preload(:user) |> Repo.preload(:post)
+
+    create(conn, :at, comment)
+
+    if comment.user_id != comment.post.user_id do
+      html = render("comment.html", conn: conn, user: comment.user, post: comment.post, comment: comment)
+      publish("comment_post", comment.post.user_id, comment.user_id, comment.post_id, html)
+    end
+  end
+
   @doc """
   收藏帖子
   """

@@ -1,7 +1,7 @@
 defmodule PhoenixChina.CommentPraiseController do
   use PhoenixChina.Web, :controller
 
-  alias PhoenixChina.{Post, Comment, CommentPraise, Notification}
+  alias PhoenixChina.{Comment, CommentPraise, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.Ecto.Helpers, only: [increment: 2, decrement: 2]
@@ -11,7 +11,6 @@ defmodule PhoenixChina.CommentPraiseController do
   def create(conn, %{"comment_id" => comment_id}) do
     current_user = current_user(conn)
     comment = Comment |> preload([:user]) |> Repo.get!(comment_id)
-    post = Repo.get!(Post, comment.post_id)
 
     params = %{:comment_id => comment_id, :user_id => current_user.id}
     changeset = CommentPraise.changeset(%CommentPraise{}, params)

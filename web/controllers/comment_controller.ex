@@ -1,7 +1,7 @@
 defmodule PhoenixChina.CommentController do
   use PhoenixChina.Web, :controller
 
-  alias PhoenixChina.{User, Comment, Post, Notification}
+  alias PhoenixChina.{Comment, Post, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.Ecto.Helpers, only: [increment: 2, update_field: 3]

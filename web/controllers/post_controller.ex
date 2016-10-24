@@ -4,7 +4,7 @@ defmodule PhoenixChina.PostController do
   alias PhoenixChina.{User, Post, PostLabel, PostPraise, Comment, Notification}
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
-  import PhoenixChina.Ecto.Helpers, only: [increment: 2, update_field: 3]
+  import PhoenixChina.Ecto.Helpers, only: [update_field: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
     when action in [:new, :create, :edit, :update, :delete]
