@@ -15,23 +15,10 @@ defmodule PhoenixChina.PostPraiseController do
     changeset = PostPraise.changeset(%PostPraise{}, params)
 
     case Repo.insert(changeset) do
-      {:ok, _post_collect} ->
+      {:ok, post_praise} ->
         post = increment(post, :praise_count)
 
-        notification_html = Notification.render "post_praise.html",
-          conn: conn,
-          user: current_user,
-          post: post
-
-        Notification.publish(
-          "post_praise",
-          post.user_id,
-          current_user.id,
-          post.id,
-          notification_html
-        )
-
-        post.user |> increment(:unread_notifications_count)
+        Notification.create(conn, post_praise)
 
         conn
         |> render("show.json", post: post, is_praise: true)
@@ -44,25 +31,16 @@ defmodule PhoenixChina.PostPraiseController do
 
   def delete(conn, %{"post_id" => post_id}) do
     current_user = current_user(conn)
+    
     post = Post |> preload([:user]) |> Repo.get!(post_id)
 
-    PostPraise
-    |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
-    |> Repo.delete!
+    post_praise = PostPraise |> Repo.get_by!(user_id: current_user.id, post_id: post_id)
 
-    Notification
-    |> where(action: "post_praise")
-    |> where(user_id: ^post.user_id)
-    |> where(operator_id: ^current_user.id)
-    |> where(data_id: ^post.id)
-    |> Repo.delete_all
+    Notification.delete(post_praise)
+
+    post_praise |> Repo.delete!
 
     post = decrement(post, :praise_count)
-
-    if post.user.unread_notifications_count > 0 do
-      post.user |> decrement(:unread_notifications_count)
-    end
-
 
     conn
     |> render("show.json", post: post, is_praise: false)
