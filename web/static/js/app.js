@@ -83,4 +83,14 @@ $(function() {
       })
     }
   })();
+
+  // Fix 重复提交
+  (function() {
+    $('button[type=submit]').on('click', function() {
+      if ($(this).data('is-submited')) {
+        return false;
+      }
+      $(this).data('is-submited', true);
+    });
+  })();
 })
