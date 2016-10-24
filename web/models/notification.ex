@@ -74,6 +74,18 @@ defmodule PhoenixChina.Notification do
   end
 
   @doc """
+  点赞评论
+  """
+  def create(conn, %CommentPraise{} = praise) do
+    praise = praise |> Repo.preload(:user) |> Repo.preload(:comment) |> Repo.preload(comment: :post)
+
+    if praise.user_id != praise.comment.user_id do
+      html = render("comment_praise.html", conn: conn, user: praise.user, post: praise.comment.post, comment: praise.comment)
+      publish("comment_praise", praise.comment.user_id, praise.user_id, praise.comment_id, html)
+    end
+  end
+
+  @doc """
   取消收藏帖子
   """
   def delete(%PostCollect{} = collect) do
@@ -109,6 +121,26 @@ defmodule PhoenixChina.Notification do
 
       if praise.post.user.unread_notifications_count > 0 do
         praise.post.user |> decrement(:unread_notifications_count)
+      end
+    end
+  end
+
+  @doc """
+  取消评论点赞
+  """
+  def delete(%CommentPraise{} = praise) do
+    praise = praise |> Repo.preload(:user) |> Repo.preload(:comment) |> Repo.preload(comment: :user)
+
+    if praise.user_id != praise.comment.user_id do
+      __MODULE__
+      |> where(action: "comment_praise")
+      |> where(user_id: ^praise.comment.user_id)
+      |> where(operator_id: ^praise.user_id)
+      |> where(data_id: ^praise.comment.id)
+      |> Repo.delete_all
+
+      if praise.comment.user.unread_notifications_count > 0 do
+        praise.comment.user |> decrement(:unread_notifications_count)
       end
     end
   end

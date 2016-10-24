@@ -17,24 +17,10 @@ defmodule PhoenixChina.CommentPraiseController do
     changeset = CommentPraise.changeset(%CommentPraise{}, params)
 
     case Repo.insert(changeset) do
-      {:ok, _comment_praise} ->
+      {:ok, comment_praise} ->
         comment = increment(comment, :praise_count)
 
-        notification_html = Notification.render "comment_praise.html",
-          conn: conn,
-          user: current_user,
-          post: post,
-          comment: comment
-
-        Notification.publish(
-          "comment_praise",
-          comment.user_id,
-          current_user.id,
-          comment.id,
-          notification_html
-        )
-
-        comment.user |> increment(:unread_notifications_count)
+        Notification.create(conn, comment_praise)
 
         conn
         |> render("show.json", comment: comment, is_praise: true)
@@ -49,22 +35,13 @@ defmodule PhoenixChina.CommentPraiseController do
     current_user = current_user(conn)
     comment = Comment |> preload([:user]) |> Repo.get!(comment_id)
 
-    CommentPraise
-    |> Repo.get_by!(comment_id: comment_id, user_id: current_user.id)
-    |> Repo.delete!
+    comment_praise = CommentPraise |> Repo.get_by!(comment_id: comment_id, user_id: current_user.id)
 
-    Notification
-    |> where(action: "comment_praise")
-    |> where(user_id: ^comment.user_id)
-    |> where(operator_id: ^current_user.id)
-    |> where(data_id: ^comment.id)
-    |> Repo.delete_all
+    Notification.delete(comment_praise)
+
+    comment_praise |> Repo.delete!
 
     comment = decrement(comment, :praise_count)
-
-    if comment.user.unread_notifications_count > 0 do
-      comment.user |> decrement(:unread_notifications_count)
-    end
 
     conn
     |> render("show.json", comment: comment, is_praise: false)
