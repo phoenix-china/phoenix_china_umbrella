@@ -46,7 +46,7 @@ defmodule PhoenixChina.User do
     |> cast(params, [:email, :password, :username, :luotest_response])
     |> validate_required([:email, :password, :username], message: "不能为空")
     |> validate_format(:email, ~r/@/, message: "请输入正确的邮箱地址")
-    |> unique_constraint(:email, message: "邮箱已被注册啦！")
+    |> unique_constraint(:email, name: :users_lower_email_index, message: "邮箱已被注册啦！")
     |> validate_length(:password, min: 6, max: 128)
     |> validate_exclusion(:username, ~w(admin, superadmin), message: "不允许使用的用户名")
     |> validate_format(:username, ~r/^[a-zA-Z][\w\.\-]{3,17}$/, message: "只允许字母开头，由字母、数字、\"_\"、\".\"、\"-\"组成，4-18位。")
