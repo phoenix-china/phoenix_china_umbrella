@@ -47,7 +47,7 @@ defmodule PhoenixChina.CommentController do
 
         conn |> put_flash(:info, "评论创建成功.")
       {:error, _changeset} ->
-        conn |> put_flash(:error, "评论创建失败.")
+        conn |> put_flash(:error, "评论创建失败, 评论不能超过1000字.")
     end
     |> redirect(to: post_path(conn, :show, post_id))
   end
