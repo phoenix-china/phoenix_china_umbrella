@@ -49,7 +49,7 @@
             </span>
             <%= end %>
             <%= if post.is_closed do %>
-            <span class="tag is-small is-primary hint--top" aria-label="已结束，不再接受评论">
+            <span class="tag is-small is-primary hint--top" aria-label="已关闭，不再接受评论">
               <span class="icon is-small" style="">
                 <i class="fa fa-check"></i>
               </span>
