@@ -112,7 +112,15 @@
                 <%= end %>
 
                 <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
-                <br>
+                <%= if logged_in?(@conn) and current_user(@conn).id != comment.user.id do %>
+                <span class="zheye-web-chat-button">
+                  <chat-button user-id="<%= comment.user.id %>"
+                    user-name="<%= comment.user |> fullname %>"
+                    user-avatar="<%= comment.user.avatar %>"
+                    user-bio="<%= comment.user.bio %>">
+                  </chat-button>
+                </span>
+                <%= end %>
               </p>
               <div class="simditor simditor-markdown">
                 <div class="simditor-body">
@@ -258,6 +266,18 @@
           </div>
         </article>
       </div>
+
+      <%= if logged_in?(@conn) and current_user(@conn).id != @post.user.id do %>
+      <div class="pannel-block" style="padding: 10px; text-align: center;">
+        <span class="zheye-web-chat-button">
+          <chat-button user-id="<%= @post.user.id %>"
+            user-name="<%= @post.user |> fullname %>"
+            user-avatar="<%= @post.user.avatar %>"
+            user-bio="<%= @post.user.bio %>">
+          </chat-button>
+        </span>
+      </div>
+      <%= end %>
     </div>
 
     <%= if @post.praise_count > 0 do %>
