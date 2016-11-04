@@ -62,7 +62,7 @@
             <%= link to: post_path(@conn, :update, @post), class: "button is-danger is-small", method: :put, data: [confirm: "确定要关闭吗？关闭之后不能再打开了。"] do %>
               <input type="hidden" name="post[is_closed]" value="true">
               <span class="icon is-small"><i class="fa fa-check"></i></span>
-              <span>结束</span>
+              <span>关闭</span>
             <%= end %>
           </div>
 
