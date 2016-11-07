@@ -1,5 +1,8 @@
 use Mix.Config
 
+config :phoenix_china,
+  cookie_sign_salt: "676NfJkO"
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

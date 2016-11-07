@@ -36,7 +36,7 @@ defmodule PhoenixChina.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_phoenix_china_key",
-    signing_salt: "676NfJkO"
+    signing_salt: Application.get_env(:phoenix_china, :cookie_sign_salt)
 
   plug PhoenixChina.Router
 end
