@@ -144,7 +144,7 @@
         }
       }
     </script>
-    <script src="https://www.zheye.im/js/app-d3914b222a058d0c0ba8c02f8861157b.js?vsn=d"></script>
+    <script src="https://www.zheye.im/js/app-58efb0d92f0a57a467b57fdaef6428e9.js?vsn=d"></script>
     <%= end %>
   </body>
 </html>
