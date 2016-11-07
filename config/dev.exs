@@ -42,12 +42,7 @@ config :phoenix_china, PhoenixChina.Repo,
   hostname: "localhost",
   pool_size: 10
 
-# 供本地测试使用， 支持localhost, 127.0.0.1
-config :phoenix_china, PhoenixChina.Luosimao,
-  site_key: "2563bdb7c87ff384e025d263aa982552",
-  api_key: "ab28caeb5aca5a02b7432994650f9665"
-
-
+# 开发环境下github配置，与生产环境不同
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
-  client_id: "fd066f57759362e23798",
-  client_secret: "efb20b946c19c0872aa5475e49e6814b284d00be"
+  client_id: "ad4e4ead45b08891286f",
+  client_secret: "1830579f407847e0eec418b37af6c18eabcdbf85"
