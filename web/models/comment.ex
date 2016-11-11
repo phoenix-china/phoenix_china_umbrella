@@ -19,7 +19,7 @@ defmodule PhoenixChina.Comment do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:content, :index, :post_id, :user_id])
-    |> validate_required([:content, :index])
+    |> validate_required([:content, :index, :post_id, :user_id])
     |> validate_length(:content, min: 1, max: 1000)
     |> assoc_constraint(:user)
     |> assoc_constraint(:post)
