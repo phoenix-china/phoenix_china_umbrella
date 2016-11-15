@@ -20,4 +20,18 @@
     </li>
   </ul>
   <%= end %>
+
+  <%= if logged_in?(@conn) and current_user(@conn).id != @user.id do %>
+  <ul class="is-right">
+    <li>
+      <span class="zheye-web-chat-button">
+        <chat-button user-id="<%= @user.id %>"
+          user-name="<%= @user |> fullname %>"
+          user-avatar="<%= @user.avatar %>"
+          user-bio="<%= @user.bio %>">
+        </chat-button>
+      </span>
+    </li>
+  </ul>
+  <%= end %>
 </div>
