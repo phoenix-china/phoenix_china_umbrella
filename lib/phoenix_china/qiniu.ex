@@ -10,7 +10,7 @@ defmodule PhoenixChina.Qiniu do
     put_policy = Qiniu.PutPolicy.build(Keyword.get(@config, :resource))
     response = Qiniu.Uploader.upload put_policy, file.path, key: filename
 
-    case response.body |> Poison.Parser.parse! do
+    case response.body do
       %{"hash" => hash, "key" => key} ->
         {:ok, %{
           hash: hash,
