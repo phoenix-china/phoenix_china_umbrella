@@ -19,7 +19,7 @@
 <div class="columns" id="post-show">
   <div class="column">
     <div class="post-show">
-      <h1 class="title is-4 is-hidden-tablet"><%= @post.title %></h1>
+      <h1 class="title is-4"><%= @post.title %></h1>
       <div class="simditor simditor-markdown">
         <div class="simditor-body">
           <%= raw @post.content %>

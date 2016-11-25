@@ -43,12 +43,6 @@
               <%= end %>
             </div>
 
-            <%= if @conn.assigns[:title] do %>
-            <div class="nav-center is-hidden-mobile">
-              <h1 class="nav-item title is-5"><%= @conn.assigns[:title] %></h1>
-            </div>
-            <%= end %>
-
             <span class="nav-toggle">
               <span></span>
               <span></span>
