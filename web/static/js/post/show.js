@@ -1,6 +1,7 @@
 import $ from "jquery";
 import Vue from "vue/dist/vue.js";
 import VueResource from "vue-resource";
+import hljs from "highlight.js";
 
 (function() {
   Vue.use(VueResource);
@@ -184,4 +185,5 @@ import VueResource from "vue-resource";
 
     highlight_comment();
   }
+  hljs.initHighlightingOnLoad();
 })();
