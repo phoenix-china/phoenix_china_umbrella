@@ -49,6 +49,7 @@ defmodule PhoenixChina.Web do
 
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
+      use PhoenixHtmlSanitizer, :basic_html
 
       import PhoenixChina.Router.Helpers
       import PhoenixChina.ErrorHelpers

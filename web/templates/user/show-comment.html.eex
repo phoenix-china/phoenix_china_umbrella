@@ -15,7 +15,7 @@
             <%= comment.post.title %>
           <%= end %>
           <div class="">
-            <%= raw comment.content %>
+            <%= sanitize comment.content %>
           </div>
         </div>
         </article>

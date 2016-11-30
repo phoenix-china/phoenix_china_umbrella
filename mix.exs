@@ -52,6 +52,7 @@ defmodule PhoenixChina.Mixfile do
       {:qiniu, "~> 0.3.0"},
       {:hashids, "~> 2.0"},
       {:aliyun_direct_mail, github: "nanlong/aliyun-direct-mail"},
+      {:phoenix_html_sanitizer, "~> 1.0.0"},
     ]
   end
 

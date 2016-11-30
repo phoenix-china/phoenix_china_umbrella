@@ -4,7 +4,7 @@
       <%= for notification <- @pagination do %>
         <div class="panel-block">
           <span class="phoenix-moment" data-timestamp="<%= notification.inserted_at %>"></span>
-          <%= raw notification.html %>
+          <%= sanitize notification.html %>
         </div>
       <%= end %>
     </div>
