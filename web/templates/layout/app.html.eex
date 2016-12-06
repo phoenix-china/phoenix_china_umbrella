@@ -122,23 +122,5 @@
     </footer>
 
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-
-    <%= if logged_in?(@conn) do %>
-    <div id="zheye-web-chat"></div>
-    <script type="text/javascript">
-      var zheye = {};
-
-      zheye.config  = {
-        webchat: {
-          origin_id: "<%= current_user(@conn).id %>", // 用户id 唯一
-          id: "<%= current_user(@conn).id %>",
-          name: "<%= current_user(@conn) |> fullname %>", // 用户名称
-          avatar: "<%= current_user(@conn).avatar %>", // 头像
-          bio: "<%= current_user(@conn).bio %>" // 签名
-        }
-      }
-    </script>
-    <script src="https://www.zheye.im/js/app-f59c5e108e1ee8072c4f2a2ef0e378d1.js?vsn=d"></script>
-    <%= end %>
   </body>
 </html>
