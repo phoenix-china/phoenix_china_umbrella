@@ -177,9 +177,6 @@
       <%= link to: "https://www.taokouke.com/", target: "_blank", class: "panel-block has-text-centered" do %>
         <span>掏抠客－为您省钱</span>
       <%= end %>
-      <%= link to: "http://www.zizhixi.com/", target: "_blank", class: "panel-block has-text-centered" do %>
-        <span>自制系－手工玩家聚集地</span>
-      <%= end %>
     </div>
 
     <div class="panel">
