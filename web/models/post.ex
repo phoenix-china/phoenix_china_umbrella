@@ -15,6 +15,8 @@ defmodule PhoenixChina.Post do
     belongs_to :label, PhoenixChina.PostLabel
     belongs_to :latest_comment, PhoenixChina.Comment, foreign_key: :latest_comment_id
     has_many :comments, PhoenixChina.Comment, on_delete: :delete_all
+    has_many :praises, PhoenixChina.PostPraise
+    has_many :praises_users, through: [:praises, :user]
 
     timestamps()
   end

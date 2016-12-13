@@ -45,28 +45,18 @@ defmodule PhoenixChina.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    post = Post
-    |> preload([:label, :user, :latest_comment, latest_comment: :user])
-    |> Repo.get!(id)
-
-    comments = Comment
-    |> where(post_id: ^id)
-    |> order_by(asc: :index)
-    |> preload([:user])
-    |> Repo.all
-
-    praises = User
-    |> join(:inner, [u], p in PostPraise, u.id == p.user_id and p.post_id == ^id)
-    |> order_by([p], [desc: p.inserted_at])
-    |> Repo.all
+    post = 
+      Post
+      |> preload([:user, :praises_users])
+      |> Repo.get!(id)
+      |> Repo.preload(latest_comment: :user)
+      |> Repo.preload(comments: from(c in Comment, order_by: c.inserted_at, preload: [:user]))
 
     changeset = Comment.changeset(%Comment{})
 
     conn
     |> assign(:title, post.title)
     |> assign(:post, post)
-    |> assign(:comments, comments)
-    |> assign(:praises, praises)
     |> assign(:changeset, changeset)
     |> render("show.html")
   end

@@ -80,7 +80,7 @@
         共收到 <%= @post.comment_count %> 条回复
       </div>
       <hr>
-      <%= for comment <- @comments do %>
+      <%= for comment <- @post.comments do %>
 
         <%= if comment.is_deleted do %>
         <div class="media block comment-deleted">
@@ -266,7 +266,7 @@
       </div>
       <div class="panel-block">
         <ul class="is-clearfix">
-          <%= for user <- @praises do %>
+          <%= for user <- @post.praises_users do %>
           <li class="is-pulled-left" style="margin: 0 5px 5px 0;">
             <%= link to: user_path(@conn, :show, user.username), class: "hint--left", aria_label: fullname(user) do %>
               <article class="image is-24x24">
