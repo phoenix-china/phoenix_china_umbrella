@@ -1,7 +1,14 @@
 defmodule PhoenixChina.PostController do
   use PhoenixChina.Web, :controller
 
-  alias PhoenixChina.{User, Post, PostLabel, PostPraise, Comment, Notification}
+  alias PhoenixChina.{
+    User, 
+    Post, 
+    PostLabel, 
+    PostPraise, 
+    Comment, 
+    Notification,
+  }
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.Ecto.Helpers, only: [update_field: 3]
@@ -10,8 +17,14 @@ defmodule PhoenixChina.PostController do
     when action in [:new, :create, :edit, :update, :delete]
 
   def new(conn, _params) do
-    changeset = Post.changeset(:insert, %Post{})
-    labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
+    changeset = 
+      Post.changeset(:insert, %Post{})
+
+    labels = 
+      PostLabel 
+      |> where(is_hide: false) 
+      |> order_by(:order) 
+      |> Repo.all
 
     conn
     |> assign(:title, "发布帖子")
@@ -21,10 +34,11 @@ defmodule PhoenixChina.PostController do
   end
 
   def create(conn, %{"post" => post_params}) do
-    current_user = current_user(conn)
-    post_params = post_params
-    |> Dict.put_new("user_id", current_user.id)
-    changeset = Post.changeset(:insert, %Post{}, post_params)
+    current_user = 
+      current_user(conn)
+
+    changeset = 
+      Post.changeset(:insert, build_assoc(current_user, :posts), post_params)
 
     case Repo.insert(changeset) do
       {:ok, post} ->
@@ -34,7 +48,11 @@ defmodule PhoenixChina.PostController do
         |> put_flash(:info, "帖子发布成功.")
         |> redirect(to: page_path(conn, :index))
       {:error, changeset} ->
-        labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
+        labels = 
+          PostLabel 
+          |> where(is_hide: false) 
+          |> order_by(:order) 
+          |> Repo.all
 
         conn
         |> assign(:title, "发布帖子")
@@ -52,7 +70,8 @@ defmodule PhoenixChina.PostController do
       |> Repo.preload(latest_comment: :user)
       |> Repo.preload(comments: from(c in Comment, order_by: c.inserted_at, preload: [:user]))
 
-    changeset = Comment.changeset(%Comment{})
+    changeset = 
+      Comment.changeset(%Comment{})
 
     conn
     |> assign(:title, post.title)
@@ -62,11 +81,20 @@ defmodule PhoenixChina.PostController do
   end
 
   def edit(conn, %{"id" => id}) do
-    current_user = current_user(conn)
-    post = Repo.get_by!(Post, id: id, user_id: current_user.id)
+    post = 
+      conn
+      |> current_user
+      |> assoc(:posts)
+      |> Repo.get!(id)
 
-    changeset = Post.changeset(:update, post)
-    labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
+    changeset = 
+      Post.changeset(:update, post)
+
+    labels = 
+      PostLabel 
+      |> where(is_hide: false) 
+      |> order_by(:order) 
+      |> Repo.all
 
     conn
     |> assign(:title, "编辑帖子")
@@ -80,9 +108,12 @@ defmodule PhoenixChina.PostController do
   关闭帖子
   """
   def update(conn, %{"id" => id, "post" => %{"is_closed" => is_closed}}) do
-    current_user = current_user(conn)
-    post = Repo.get_by!(Post, id: id, user_id: current_user.id)
-    post |> update_field(:is_closed, is_closed == "true")
+    post = 
+      conn
+      |> current_user
+      |> assoc(:posts)
+      |> Repo.get!(id)
+      |> update_field(:is_closed, is_closed == "true")
 
     conn
     |> put_flash(:info, "操作成功，帖子已结束")
@@ -90,18 +121,27 @@ defmodule PhoenixChina.PostController do
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do
-    current_user = current_user(conn)
-    post = Repo.get_by!(Post, id: id, user_id: current_user.id)
+    post = 
+      conn
+      |> current_user
+      |> assoc(:posts)
+      |> Repo.get!(id)
 
-    changeset = Post.changeset(:update, post, post_params)
+    changeset = 
+      Post.changeset(:update, post, post_params)
 
     case Repo.update(changeset) do
       {:ok, post} ->
         conn
         |> put_flash(:info, "帖子更新成功.")
         |> redirect(to: post_path(conn, :show, post))
+
       {:error, changeset} ->
-        labels = PostLabel |> where(is_hide: false) |> order_by(:order) |> Repo.all
+        labels = 
+          PostLabel 
+          |> where(is_hide: false) 
+          |> order_by(:order) 
+          |> Repo.all
 
         conn
         |> assign(:title, "编辑帖子")
@@ -112,13 +152,11 @@ defmodule PhoenixChina.PostController do
     end
   end
 
-
-
   def delete(conn, %{"id" => id}) do
-    current_user = current_user(conn)
-
-    Post
-    |> Repo.get_by!(Post, id: id, user_id: current_user.id)
+    conn
+    |> current_user
+    |> assoc(:posts)
+    |> Repo.get!(id)
     |> Repo.delete!
 
     conn

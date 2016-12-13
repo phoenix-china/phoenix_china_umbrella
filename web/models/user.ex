@@ -24,6 +24,7 @@ defmodule PhoenixChina.User do
     field :luotest_response, :string, virtual: true
 
     has_many :github, PhoenixChina.UserGithub
+    has_many :posts, PhoenixChina.Post
 
     timestamps()
   end
