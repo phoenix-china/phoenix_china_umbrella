@@ -51,7 +51,7 @@ defmodule PhoenixChina.PostPraiseController do
         conn
         |> render("show.json", post: Repo.get(Post, post_id), is_praise: false)
 
-      {:ok, _} ->
+      {:error, _} ->
         conn
         |> put_status(:bad_request)
         |> json(%{})

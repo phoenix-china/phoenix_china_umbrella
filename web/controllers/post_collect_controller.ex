@@ -59,7 +59,7 @@ defmodule PhoenixChina.PostCollectController do
         conn
         |> render("show.json", is_collect: false)
 
-      {:ok, _} ->
+      {:error, _} ->
         conn
         |> put_status(:bad_request)
         |> json(%{})

@@ -26,7 +26,7 @@ defmodule PhoenixChina.CommentPraiseController do
         conn
         |> render("show.json", comment: Repo.get(Comment, comment_id), is_praise: true)
 
-      {:ok, %{comment_praise: changeset}} ->
+      {:error, %{comment_praise: changeset}} ->
         conn
         |> put_status(:bad_request)
         |> render("error.json", changeset: changeset)
@@ -51,7 +51,7 @@ defmodule PhoenixChina.CommentPraiseController do
         conn
         |> render("show.json", comment: Repo.get(Comment, comment_id), is_praise: false)
 
-      {:ok, _} ->
+      {:error, _} ->
         conn
         |> put_status(:bad_request)
         |> json(%{})
