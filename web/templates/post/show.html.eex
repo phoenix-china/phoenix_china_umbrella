@@ -15,147 +15,149 @@
   </div>
 </div> -->
 
-
-<div class="columns" id="post-show">
+<div class="columns">
   <div class="column">
-    <div class="post-show">
-      <h1 class="title is-4"><%= @post.title %></h1>
-      <div class="simditor simditor-markdown">
-        <div class="simditor-body">
-          <%= sanitize @post.content %>
+    <div id="post-show">
+      <div class="post-show">
+        <h1 class="title is-4"><%= @post.title %></h1>
+        <div class="simditor simditor-markdown">
+          <div class="simditor-body">
+            <%= sanitize @post.content %>
+          </div>
         </div>
-      </div>
-      <hr>
-      <nav class="level">
-        <div class="level-left">
-          <div class="level-item">
-            <%= if logged_in?(@conn) do %>
-              <post-praise
-                :is-praise="<%= PhoenixChina.PostPraiseView.praise?(@conn, @post) %>"
-                :praise-count="<%= @post.praise_count %>"
-                :post-id="<%= @post.id %>">
-              </post-praise>
-            <%= else %>
-              <%= link to: post_praise_path(@conn, :create, @post), class: "button is-light is-small", method: :post do %>
-                <span class="icon is-small"><i class="fa fa-heart-o"></i></span>
-                <span><%= PhoenixChina.PostPraiseView.praise_count(@post) %></span>
+        <hr>
+        <nav class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <%= if logged_in?(@conn) do %>
+                <post-praise
+                  :is-praise="<%= PhoenixChina.PostPraiseView.praise?(@conn, @post) %>"
+                  :praise-count="<%= @post.praise_count %>"
+                  :post-id="<%= @post.id %>">
+                </post-praise>
+              <%= else %>
+                <%= link to: post_praise_path(@conn, :create, @post), class: "button is-light is-small", method: :post do %>
+                  <span class="icon is-small"><i class="fa fa-heart-o"></i></span>
+                  <span><%= PhoenixChina.PostPraiseView.praise_count(@post) %></span>
+                <%= end %>
               <%= end %>
-            <%= end %>
-          </div>
-          <div class="level-item">
-            <%= if logged_in?(@conn) do %>
-              <post-collect
-                :is-collect="<%= PhoenixChina.PostCollectView.collect?(@conn, @post) %>"
-                :post-id="<%= @post.id %>">
-              </post-collect>
-            <%= else %>
-              <%= link to: post_collect_path(@conn, :create, @post), class: "button is-light is-small", method: :post do %>
-                <span class="icon is-small"><i class="fa fa-bookmark-o"></i></span>
-                <span>收藏</span>
-              <%= end %>
-            <%= end %>
-          </div>
-        </div>
-        <%= if logged_in?(@conn) and current_user(@conn).id == @post.user_id and not @post.is_closed do %>
-        <div class="level-right">
-          <div class="level-item">
-            <%= link to: post_path(@conn, :update, @post), class: "button is-danger is-small", method: :put, data: [confirm: "确定要关闭吗？关闭之后不能再打开了。"] do %>
-              <input type="hidden" name="post[is_closed]" value="true">
-              <span class="icon is-small"><i class="fa fa-check"></i></span>
-              <span>关闭</span>
-            <%= end %>
-          </div>
-
-          <%= link to: post_path(@conn, :edit, @post), class: "level-item button is-success is-small" do %>
-            <span class="icon is-small"><i class="fa fa-pencil"></i></span>
-            <span>编辑</span>
-          <%= end %>
-        </div>
-        <%= end %>
-      </nav>
-    </div>
-
-    <%= if @post.comment_count > 0 do %>
-      <div class="title is-6" style="margin-top: 20px;">
-        共收到 <%= @post.comment_count %> 条回复
-      </div>
-      <hr>
-      <%= for comment <- @post.comments do %>
-
-        <%= if comment.is_deleted do %>
-        <div class="media block comment-deleted">
-          <a name="comment-<%= comment.index %>"></a>
-          <div class="has-text-centered">
-            <del><%= comment.index %> 楼已删除</del>
-          </div>
-        </div>
-        <%= else %>
-          <comment class="media comment-entry<%= if comment.praise_count >= 5, do: " popular"%>">
-            <a name="comment-<%= comment.index %>" style="margin-top: -20px;"></a>
-            <figure class="media-left">
-              <p class="image is-32x32">
-                <%= link to: user_path(@conn, :show, comment.user.username) do %>
-                  <img src="<%= comment.user.avatar %>" alt="<%= comment.user.nickname %>">
-                <%= end %>
-              </p>
-            </figure>
-            <div class="media-content">
-              <p>
-                <strong class="tag is-small">#<%= comment.index %></strong>
-
-                <%= if @post.user_id == comment.user_id do %>
-                  <span class="tag is-small is-primary">楼主</span>
-                <%= end %>
-
-                <%= link to: user_path(@conn, :show, comment.user.username) do %>
-                  <%= comment.user |> fullname %>
-                <%= end %>
-
-                <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
-              </p>
-              <div class="simditor simditor-markdown">
-                <div class="simditor-body">
-                  <%= sanitize comment.content %>
-                </div>
-              </div>
             </div>
-            <div class="media-right">
-              <nav class="level">
-                <div class="level-left">
-                  <%= if logged_in?(@conn) and current_user(@conn).id == comment.user_id do %>
-                  <%= link to: post_comment_path(@conn, :edit, @post, comment), class: "level-item button is-small is-link comment-edit-btn is-hidden" do %>
-                    <span class="icon is-small"><i class="fa fa-pencil"></i></span>
-                    <span>编辑</span>
+            <div class="level-item">
+              <%= if logged_in?(@conn) do %>
+                <post-collect
+                  :is-collect="<%= PhoenixChina.PostCollectView.collect?(@conn, @post) %>"
+                  :post-id="<%= @post.id %>">
+                </post-collect>
+              <%= else %>
+                <%= link to: post_collect_path(@conn, :create, @post), class: "button is-light is-small", method: :post do %>
+                  <span class="icon is-small"><i class="fa fa-bookmark-o"></i></span>
+                  <span>收藏</span>
+                <%= end %>
+              <%= end %>
+            </div>
+          </div>
+          <%= if logged_in?(@conn) and current_user(@conn).id == @post.user_id and not @post.is_closed do %>
+          <div class="level-right">
+            <div class="level-item">
+              <%= link to: post_path(@conn, :update, @post), class: "button is-danger is-small", method: :put, data: [confirm: "确定要关闭吗？关闭之后不能再打开了。"] do %>
+                <input type="hidden" name="post[is_closed]" value="true">
+                <span class="icon is-small"><i class="fa fa-check"></i></span>
+                <span>关闭</span>
+              <%= end %>
+            </div>
+
+            <%= link to: post_path(@conn, :edit, @post), class: "level-item button is-success is-small" do %>
+              <span class="icon is-small"><i class="fa fa-pencil"></i></span>
+              <span>编辑</span>
+            <%= end %>
+          </div>
+          <%= end %>
+        </nav>
+      </div>
+
+      <%= if @post.comment_count > 0 do %>
+        <div class="title is-6" style="margin-top: 20px;">
+          共收到 <%= @post.comment_count %> 条回复
+        </div>
+        <hr>
+        <%= for comment <- @post.comments do %>
+
+          <%= if comment.is_deleted do %>
+          <div class="media block comment-deleted">
+            <a name="comment-<%= comment.index %>"></a>
+            <div class="has-text-centered">
+              <del><%= comment.index %> 楼已删除</del>
+            </div>
+          </div>
+          <%= else %>
+            <comment class="media comment-entry<%= if comment.praise_count >= 5, do: " popular"%>">
+              <a name="comment-<%= comment.index %>" style="margin-top: -20px;"></a>
+              <figure class="media-left">
+                <p class="image is-32x32">
+                  <%= link to: user_path(@conn, :show, comment.user.username) do %>
+                    <img src="<%= comment.user.avatar %>" alt="<%= comment.user.nickname %>">
                   <%= end %>
+                </p>
+              </figure>
+              <div class="media-content">
+                <p>
+                  <strong class="tag is-small">#<%= comment.index %></strong>
+
+                  <%= if @post.user_id == comment.user_id do %>
+                    <span class="tag is-small is-primary">楼主</span>
                   <%= end %>
 
-                  <div class="level-item">
-                    <%= if logged_in?(@conn) do %>
-                      <comment-praise
-                        :is-praise="<%= PhoenixChina.CommentPraiseView.praise?(@conn, comment) %>"
-                        :praise-count="<%= comment.praise_count %>"
-                        :comment-id="<%= comment.id %>">
-                      </comment-praise>
-                    <%= else %>
-                      <%= link to: comment_praise_path(@conn, :create, comment), class: "button is-small is-link", method: :post do %>
-                        <span class="icon is-small"><i class="fa fa-heart-o"></i></span>
-                        <span><%= PhoenixChina.CommentPraiseView.praise_count(comment) %></span>
-                      <%= end %>
-                    <%= end %>
+                  <%= link to: user_path(@conn, :show, comment.user.username) do %>
+                    <%= comment.user |> fullname %>
+                  <%= end %>
+
+                  <small class="phoenix-moment" data-timestamp="<%= comment.inserted_at %>"></small>
+                </p>
+                <div class="simditor simditor-markdown">
+                  <div class="simditor-body">
+                    <%= sanitize comment.content %>
                   </div>
                 </div>
-              </nav>
-            </div>
-          </comment>
+              </div>
+              <div class="media-right">
+                <nav class="level">
+                  <div class="level-left">
+                    <%= if logged_in?(@conn) and current_user(@conn).id == comment.user_id do %>
+                    <%= link to: post_comment_path(@conn, :edit, @post, comment), class: "level-item button is-small is-link comment-edit-btn is-hidden" do %>
+                      <span class="icon is-small"><i class="fa fa-pencil"></i></span>
+                      <span>编辑</span>
+                    <%= end %>
+                    <%= end %>
+
+                    <div class="level-item">
+                      <%= if logged_in?(@conn) do %>
+                        <comment-praise
+                          :is-praise="<%= PhoenixChina.CommentPraiseView.praise?(@conn, comment) %>"
+                          :praise-count="<%= comment.praise_count %>"
+                          :comment-id="<%= comment.id %>">
+                        </comment-praise>
+                      <%= else %>
+                        <%= link to: comment_praise_path(@conn, :create, comment), class: "button is-small is-link", method: :post do %>
+                          <span class="icon is-small"><i class="fa fa-heart-o"></i></span>
+                          <span><%= PhoenixChina.CommentPraiseView.praise_count(comment) %></span>
+                        <%= end %>
+                      <%= end %>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </comment>
+          <%= end %>
         <%= end %>
+      <%= else %>
+      <hr>
+      <div class="has-text-centered">
+        暂无回复
+      </div>
+      <hr>
       <%= end %>
-    <%= else %>
-    <hr>
-    <div class="has-text-centered">
-      暂无回复
     </div>
-    <hr>
-    <%= end %>
+    
 
     <%= if @post.is_closed do %>
       <div class="box has-text-centered">

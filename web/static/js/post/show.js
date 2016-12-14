@@ -180,10 +180,14 @@ import hljs from "highlight.js";
 
   if ($('#post-show').length > 0) {
     new Vue({
-      el: '#post-show'
-    });
+      el: "#post-show"
+    })
 
-    highlight_comment();
+    highlight_comment() 
   }
+  
   hljs.initHighlightingOnLoad();
 })();
+
+
+

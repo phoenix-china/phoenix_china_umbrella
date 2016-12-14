@@ -1,16 +1,14 @@
-import $ from "jquery";
 import Simditor from "simditor";
 import "to-markdown";
 import "marked";
 import "simditor-markdown";
 
 (function() {
-  $(function() {
-    let $simditor_textarea = $('.simditor-textarea');
+    const simditor_textarea = document.querySelector(".simditor-textarea");
 
-    if ($simditor_textarea.length > 0) {
+    if (simditor_textarea) {
       new Simditor({
-        textarea: $simditor_textarea,
+        textarea: simditor_textarea,
         markdown: true,
         toolbar: [
           'title',
@@ -37,13 +35,13 @@ import "simditor-markdown";
           fileKey: "file"
         }
       });
-    };
+    }
 
-    let $simditor_comment_textarea = $('.simditor-comment-textarea');
+    const simditor_comment_textarea = document.querySelector('.simditor-comment-textarea');
 
-    if ($simditor_comment_textarea.length > 0) {
+    if (simditor_comment_textarea) {
       new Simditor({
-        textarea: $simditor_comment_textarea,
+        textarea: simditor_comment_textarea,
         markdown: true,
         toolbar: [
           'bold',
@@ -62,5 +60,5 @@ import "simditor-markdown";
         }
       });
     };
-  });
+
 })();

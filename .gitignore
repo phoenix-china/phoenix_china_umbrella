@@ -24,3 +24,4 @@ erl_crash.dump
 /config/prod.secret.exs
 /config/config.secret.exs
 .DS_Store
+yarn.lock
