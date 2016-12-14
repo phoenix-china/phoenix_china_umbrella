@@ -5,7 +5,6 @@ defmodule PhoenixChina.PostPraiseController do
   alias Ecto.Multi
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
-  import PhoenixChina.Ecto.Helpers, only: [increment: 2, decrement: 2]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
 

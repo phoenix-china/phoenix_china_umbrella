@@ -2,10 +2,8 @@ defmodule PhoenixChina.PostController do
   use PhoenixChina.Web, :controller
 
   alias PhoenixChina.{
-    User, 
     Post, 
     PostLabel, 
-    PostPraise, 
     Comment, 
     Notification,
   }
