@@ -49,6 +49,17 @@
               <span></span>
             </span>
 
+            <div class="nav-center">
+              <form action="https://www.google.com" target="_blank">
+                <input type="hidden" name="cx" value="008442000702506575290:kmpth_oh5gg">
+                <input type="hidden" name="ie" value="UTF-8">
+                <p class="control has-icon" style="margin-top: 9px;">
+                  <input class="input" type="text" name="q" placeholder="搜索">
+                  <i class="fa fa-search"></i>
+                </p>
+              </form>
+            </div>
+
             <div class="nav-right nav-menu">
               <%= if logged_in?(@conn) do %>
                 <%= link to: notification_path(@conn, :index), class: "nav-item" do %>
