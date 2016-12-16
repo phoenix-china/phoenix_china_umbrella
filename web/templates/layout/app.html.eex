@@ -75,7 +75,7 @@
                 <%= end %>
 
                 <%= link to: user_path(@conn, :show, current_user(@conn).username), class: "nav-item" do %>
-                  <figure>
+                  <figure class="image is-24x24">
                     <img src="<%= current_user(@conn).avatar %>" alt="<%= current_user(@conn).username %>" />
                   </figure>
                   <span style="margin-left: 5px;"><%= current_user(@conn) |> fullname %></span>
