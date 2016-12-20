@@ -1,11 +1,12 @@
 defmodule PhoenixChina.PageView do
   use PhoenixChina.Web, :view
 
-  def navs(conn, labels) do
-     navigation = Enum.map(labels, fn label ->
-       [page_path(conn, :index, label: label.content), label.content, label.content]
-     end)
-     |> List.insert_at(0, ["/", "全部", "全部"])
+  def navs(conn) do
+    navigation = [
+      {page_path(conn, :index), :default, "默认"},
+      {page_path(conn, :last), :last, "最新"},
+      {page_path(conn, :noreply), :noreply, "无人问津"},
+    ]
 
      render("navs.html", conn: conn, navigation: navigation)
   end

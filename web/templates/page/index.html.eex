@@ -1,27 +1,6 @@
 <div class="columns">
   <div class="column">
-    <div class="tabs">
-      <ul>
-        <%= if @current_label == "全部" do %>
-        <li class="is-active">
-        <%= else %>
-        <li>
-        <%= end %>
-          <%= link "全部", to: page_path(@conn, :index) %>
-        </li>
-        <%= for label <- @labels do %>
-        <%= if @current_label == label.content do %>
-        <li class="is-active">
-        <%= else %>
-        <li>
-        <%= end %>
-          <%= link to: page_path(@conn, :index, label: label.content) do %>
-            <%= label.content %>
-          <%= end %>
-        </li>
-        <%= end %>
-      </ul>
-    </div>
+    <%= navs(@conn) %>
 
     <%= if @pagination.total_entries > 0 do %>
     <div class="page-content">
@@ -83,6 +62,7 @@
             </small>
           </nav>
         </div>
+        <%= if post.comment_count > 0 do %>
         <div class="media-right">
           <%= link to: post_path(@conn, :show, post) do %>
             <span class="icon is-small">
@@ -91,6 +71,7 @@
             <span><%= post.comment_count %></span>
           <%= end %>
         </div>
+        <%= end %>
       </article>
       <%= end %>
     </div>

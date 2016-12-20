@@ -28,6 +28,8 @@ defmodule PhoenixChina.Router do
     pipe_through [:browser, :browser_session, :admin_browser_session]
 
     get "/", PageController, :index
+    get "/last", PageController, :last
+    get "/noreply", PageController, :noreply
     get "/signup", UserController, :new
     post "/signup", UserController, :create
     get "/signin", SessionController, :new
