@@ -1,6 +1,22 @@
 <div class="columns">
   <div class="column">
-    <%= navs(@conn) %>
+    <%= if @conn.assigns[:label] && @conn.assigns[:for_label_count] do %>
+      <section class="hero is-light has-text-centered">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">
+              <%= @label.content %>
+            </h1>
+            <h2 class="subtitle">
+              共有 <%= @for_label_count %> 个帖子
+            </h2>
+          </div>
+        </div>
+      </section>
+      <hr>
+    <%= else %>
+      <%= navs(@conn) %>
+    <%= end %>
 
     <%= if @pagination.total_entries > 0 do %>
     <div class="page-content">
@@ -77,7 +93,20 @@
     </div>
 
     <hr>
-    <%= pagination_links @conn, @pagination, path: &page_path/3, label: Map.get(@conn.params, "label", "全部") %>
+
+    <%= if @conn.assigns[:label] do %>
+      <%= pagination_links @conn, @pagination, 
+        path: &page_path/3, 
+        action: Phoenix.Controller.action_name(@conn),
+        label: @label.content 
+      %>
+    <%= else %>
+      <%= pagination_links @conn, @pagination, 
+        path: &page_path/3, 
+        action: Phoenix.Controller.action_name(@conn) 
+      %>
+    <%= end %>
+
     <%= else %>
     <section class="hero is-medium is-primary is-bold has-text-centered">
       <div class="hero-body">

@@ -16,19 +16,29 @@ defmodule PhoenixChina.PageController do
   end
 
   def index(conn, %{"label" => label} = params) do
-    query = 
-      Post
-      |> order_by(desc: :is_top, desc: :latest_comment_inserted_at)
-      |> preload([:label, :user, :latest_comment, latest_comment: :user])
-
-    query = 
+    {conn, query} = 
       case PostLabel |> Repo.get_by(content: label) do
-        nil -> query
-        label_res -> query |> where(label_id: ^label_res.id)
+        nil -> {conn, Post}
+        label -> 
+          query = 
+            Post 
+            |> where(label_id: ^label.id)
+
+          count = 
+            Repo.one(from p in query, select: count(p.id, :distinct))
+          
+          conn =
+            conn
+            |> assign(:label, label)
+            |> assign(:for_label_count, count)
+            
+          {conn, query}
       end
 
     pagination = 
       query
+      |> order_by(desc: :is_top, desc: :latest_comment_inserted_at)
+      |> preload([:label, :user, :latest_comment, latest_comment: :user])
       |> Repo.paginate(params)
 
     conn
