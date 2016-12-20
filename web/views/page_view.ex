@@ -3,7 +3,7 @@ defmodule PhoenixChina.PageView do
 
   def navs(conn) do
     navigation = [
-      {page_path(conn, :index), :default, "默认"},
+      {page_path(conn, :index), :index, "默认"},
       {page_path(conn, :last), :last, "最新"},
       {page_path(conn, :noreply), :noreply, "无人问津"},
     ]

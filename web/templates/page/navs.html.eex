@@ -1,7 +1,7 @@
 <div class="tabs">
   <ul>
     <%= for {href, id, caption} <- @navigation do %>
-      <%= if @conn.assigns[:current_page] && @conn.assigns[:current_page] == id do %>
+      <%= if Phoenix.Controller.action_name(@conn) == id do %>
       <li class="is-active">
       <%= else %>
       <li>

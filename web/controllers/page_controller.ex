@@ -31,7 +31,7 @@ defmodule PhoenixChina.PageController do
             conn
             |> assign(:label, label)
             |> assign(:for_label_count, count)
-            
+
           {conn, query}
       end
 
@@ -42,13 +42,16 @@ defmodule PhoenixChina.PageController do
       |> Repo.paginate(params)
 
     conn
-    |> assign(:current_page, :default)
     |> assign(:pagination, pagination)
     |> render("index.html")
   end
 
-  def index(conn, _params) do
-    index(conn, %{"label" => "全部"})
+  def index(conn, params) do
+    params =
+      params
+      |> Map.put_new("label", "全部")
+
+    index(conn, params)
   end
 
   def last(conn, params) do
@@ -59,7 +62,6 @@ defmodule PhoenixChina.PageController do
       |> Repo.paginate(params)
 
     conn
-    |> assign(:current_page, :last)
     |> assign(:pagination, pagination)
     |> render("index.html")
   end
@@ -73,7 +75,6 @@ defmodule PhoenixChina.PageController do
       |> Repo.paginate(params)
 
     conn
-    |> assign(:current_page, :noreply)
     |> assign(:pagination, pagination)
     |> render("index.html")
   end
