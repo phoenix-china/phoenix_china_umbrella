@@ -30,17 +30,7 @@
               <%= link to: page_path(@conn, :index), class: "nav-item" do %>
                 <span class="title is-5">PhoenixChina</span>
               <%= end %>
-
-              <%= link "首页", to: "/", class: "nav-item" %>
-              <%= link "学习Elixir", to: "https://wizardforcel.gitbooks.io/programming-elixir/content/", class: "nav-item", target: "_blank" %>
-              <%= link "中文指南", to: "https://mydearxym.gitbooks.io/phoenix-doc-in-chinese/content/", class: "nav-item", target: "_blank" %>
-
-              <%= link to: "https://github.com/chenxsan/PhoenixFramework", class: "nav-item", target: "_blank" do %>
-                <span class="icon is-small is-danger">
-                  <i class="fa fa-fire"></i>
-                </span>
-                <span>中文教程</span>
-              <%= end %>
+              <%= link "社区", to: "/", class: "nav-item" %>
             </div>
 
             <span class="nav-toggle">

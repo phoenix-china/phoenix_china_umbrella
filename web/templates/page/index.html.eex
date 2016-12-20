@@ -160,21 +160,41 @@
 
     <div class="panel">
       <div class="panel-heading">
+        <span>推荐资源</span>
+      </div>
+      <%= link to: "https://wizardforcel.gitbooks.io/programming-elixir/content/", target: "_blank", class: "panel-block" do %>
+        <span>Elixir 程序设计</span>
+      <%= end %>
+      <%= link to: "https://mydearxym.gitbooks.io/phoenix-doc-in-chinese/content/", target: "_blank", class: "panel-block" do %>
+        <span>Phoenix 中文文档</span>
+      <%= end %>
+      <%= link to: "https://github.com/chenxsan/PhoenixFramework", target: "_blank", class: "panel-block" do %>
+        <span>Phoenix 中文入门教程</span>
+      <%= end %>
+
+      <%= link to: "https://ruby-china.org/topics/31631", target: "_blank", class: "panel-block" do %>
+        <span>UPYUN hex.pm 国内镜像</span>
+      <%= end %>
+    </div>
+
+
+    <div class="panel">
+      <div class="panel-heading">
         <span>友情链接</span>
       </div>
-      <%= link to: "http://www.elixir-cn.com/", target: "_blank", class: "panel-block has-text-centered" do %>
+      <%= link to: "http://www.elixir-cn.com/", target: "_blank", class: "panel-block" do %>
         <span>Elixir中文社区</span>
       <%= end %>
-      <%= link to: "https://ruby-china.org/", target: "_blank", class: "panel-block has-text-centered" do %>
+      <%= link to: "https://ruby-china.org/", target: "_blank", class: "panel-block" do %>
         <span>Ruby中文社区</span>
       <%= end %>
-      <%= link to: "https://python-china.org/", target: "_blank", class: "panel-block has-text-centered" do %>
+      <%= link to: "https://python-china.org/", target: "_blank", class: "panel-block" do %>
         <span>Python中文社区</span>
       <%= end %>
-      <%= link to: "https://rust-china.org/", target: "_blank", class: "panel-block has-text-centered" do %>
+      <%= link to: "https://rust-china.org/", target: "_blank", class: "panel-block" do %>
         <span>Rust中文社区</span>
       <%= end %>
-      <%= link to: "https://www.taokouke.com/", target: "_blank", class: "panel-block has-text-centered" do %>
+      <%= link to: "https://www.taokouke.com/", target: "_blank", class: "panel-block" do %>
         <span>掏抠客－为您省钱</span>
       <%= end %>
     </div>
