@@ -1,15 +1,12 @@
 <div class="tabs">
   <ul class="is-left">
-    <%= for {tab, name, path} <- tabs(@conn, @user) do %>
-      <%= if @current_tab == tab do %>
-      <li class="is-active">
-      <%= else %>
-      <li>
-      <%= end %>
-        <%= link raw(name), to: path %>
+    <%= for {href, id, caption} <- tabs(@conn, @user) do %>
+      <li<%= if @current_tab == id, do: " class=is-active"%>>
+        <%= link raw(caption), to: href %>
       </li>
     <%= end %>
   </ul>
+  
   <%= if logged_in?(@conn) and current_user(@conn).id == @user.id do %>
   <ul class="is-right">
     <li>

@@ -5,12 +5,12 @@ defmodule PhoenixChina.UserView do
 
   def tabs(conn, user) do
     [
-      # {"index", "主页", user_path(conn, :show, user.username)},
-      {"post", "帖子", user_path(conn, :show, user.username, tab: "post")},
-      {"comment", "回复", user_path(conn, :show, user.username, tab: "comment")},
-      {"collect", "收藏", user_path(conn, :show, user.username, tab: "collect")},
-      {"followers", "关注者", user_path(conn, :show, user.username, tab: "followers")},
-      {"following", "正在关注", user_path(conn, :show, user.username, tab: "following")},
+      # {user_path(conn, :show, user.username), "index", "主页"},
+      {user_path(conn, :show, user.username, tab: "post"), "post", "帖子"},
+      {user_path(conn, :show, user.username, tab: "comment"), "comment", "回复"},
+      {user_path(conn, :show, user.username, tab: "collect"), "collect", "收藏"},
+      {user_path(conn, :show, user.username, tab: "followers"), "followers", "关注者"},
+      {user_path(conn, :show, user.username, tab: "following"), "following", "正在关注"},
     ]
   end
 
@@ -18,12 +18,14 @@ defmodule PhoenixChina.UserView do
     current_user = current_user(conn)
 
     navigation = [
-      {"profile", "个人信息", user_path(conn, :edit, "profile")}
+      {user_path(conn, :edit, "profile"), "profile", "个人信息"}
     ]
 
     case current_user.password_hash do
       nil -> navigation
-      _ -> List.insert_at(navigation, 1, {"password", "修改密码", user_path(conn, :edit, "password")})
+      _ -> 
+        navigation
+        |> List.insert_at(1, {user_path(conn, :edit, "password"), "password", "修改密码"})
     end
   end
 end

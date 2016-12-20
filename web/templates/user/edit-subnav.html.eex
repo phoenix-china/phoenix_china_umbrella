@@ -5,17 +5,9 @@
   <div class="panel-block">
     <aside class="menu">
       <ul class="menu-list">
-        <%= for {page, name, path} <- subnavs(@conn) do %>
+        <%= for {href, id, caption} <- subnavs(@conn) do %>
         <li>
-          <%= if @current_page == page do %>
-            <%= link to: path, class: "is-active" do %>
-              <%= name %>
-            <%= end %>
-          <%= else %>
-            <%= link to: path do %>
-              <%= name %>
-            <%= end %>
-          <%= end %>
+          <%= link caption, to: href, class: if @current_page == id, do: "is-active" %>
         </li>
         <%= end %>
       </ul>
