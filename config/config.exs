@@ -22,6 +22,13 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :logger, format: "[$level] $message\n",
+  backends: [{LoggerFileBackend, :error_log}, :console]
+
+config :logger, :error_log,
+  path: "log/error.log",
+  level: :error
+
 config :guardian, Guardian,
   issuer: "PhoenixChina.#{Mix.env}",
   ttl: { 30, :days },

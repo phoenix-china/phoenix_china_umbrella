@@ -19,8 +19,9 @@ defmodule PhoenixChina.Mixfile do
   def application do
     [mod: {PhoenixChina, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger,
-      :gettext, :phoenix_ecto, :postgrex, :timex, :timex_ecto, :ueberauth_github,
-      :con_cache, :qiniu]]
+      :gettext, :phoenix_ecto, :postgrex, :comeonin, :guardian, :scrivener, :scrivener_ecto, 
+      :scrivener_html, :timex, :timex_ecto, :ueberauth_github, :con_cache, :qiniu, :hashids, 
+      :aliyun_direct_mail, :phoenix_html_sanitizer, :logger_file_backend]]
   end
 
   # Specifies which paths to compile per environment.
@@ -53,6 +54,7 @@ defmodule PhoenixChina.Mixfile do
       {:hashids, "~> 2.0"},
       {:aliyun_direct_mail, github: "nanlong/aliyun-direct-mail"},
       {:phoenix_html_sanitizer, "~> 1.0.0"},
+      {:logger_file_backend, "~> 0.0.9"},
     ]
   end
 
