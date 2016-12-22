@@ -1,6 +1,6 @@
 <div class="columns">
   <div class="column">
-    <%= if @conn.assigns[:label] && @conn.assigns[:for_label_count] do %>
+    <%= if @conn.assigns[:label] do %>
       <section class="hero is-light has-text-centered">
         <div class="hero-body">
           <div class="container">
@@ -8,7 +8,7 @@
               <%= @label.content %>
             </h1>
             <h2 class="subtitle">
-              共有 <%= @for_label_count %> 个帖子
+              共有 <%= @pagination.total_entries %> 个帖子
             </h2>
           </div>
         </div>

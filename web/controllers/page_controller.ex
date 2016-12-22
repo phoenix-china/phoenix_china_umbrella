@@ -24,13 +24,9 @@ defmodule PhoenixChina.PageController do
             Post 
             |> where(label_id: ^label.id)
 
-          count = 
-            Repo.one(from p in query, select: count(p.id, :distinct))
-          
           conn =
             conn
             |> assign(:label, label)
-            |> assign(:for_label_count, count)
 
           {conn, query}
       end
