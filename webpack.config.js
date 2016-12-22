@@ -6,7 +6,7 @@ var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: ["./web/static/css/app.scss", "./web/static/js/app.js"]
+    app: ["./web/static/css/app.css", "./web/static/js/app.js"]
   },
   output: {
     path: "./priv/static",
