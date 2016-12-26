@@ -29,7 +29,7 @@
         <nav class="level">
           <div class="level-left">
             <div class="level-item">
-              <%= if logged_in?(@conn) do %>
+              <%= if @authenticated? do %>
                 <post-praise
                   :is-praise="<%= PhoenixChina.PostPraiseView.praise?(@conn, @post) %>"
                   :praise-count="<%= @post.praise_count %>"
@@ -43,7 +43,7 @@
               <%= end %>
             </div>
             <div class="level-item">
-              <%= if logged_in?(@conn) do %>
+              <%= if @authenticated? do %>
                 <post-collect
                   :is-collect="<%= PhoenixChina.PostCollectView.collect?(@conn, @post) %>"
                   :post-id="<%= @post.id %>">
@@ -56,7 +56,7 @@
               <%= end %>
             </div>
           </div>
-          <%= if logged_in?(@conn) and current_user(@conn).id == @post.user_id and not @post.is_closed do %>
+          <%= if @authenticated? and @current_user.id == @post.user_id and not @post.is_closed do %>
           <div class="level-right">
             <div class="level-item">
               <%= link to: post_path(@conn, :update, @post), class: "button is-danger is-small", method: :put, data: [confirm: "确定要关闭吗？关闭之后不能再打开了。"] do %>
@@ -122,7 +122,7 @@
               <div class="media-right">
                 <nav class="level">
                   <div class="level-left">
-                    <%= if logged_in?(@conn) and current_user(@conn).id == comment.user_id do %>
+                    <%= if @authenticated? and @current_user.id == comment.user_id do %>
                     <%= link to: post_comment_path(@conn, :edit, @post, comment), class: "level-item button is-small is-link comment-edit-btn is-hidden" do %>
                       <span class="icon is-small"><i class="fa fa-pencil"></i></span>
                       <span>编辑</span>
@@ -130,7 +130,7 @@
                     <%= end %>
 
                     <div class="level-item">
-                      <%= if logged_in?(@conn) do %>
+                      <%= if @authenticated? do %>
                         <comment-praise
                           :is-praise="<%= PhoenixChina.CommentPraiseView.praise?(@conn, comment) %>"
                           :praise-count="<%= comment.praise_count %>"
@@ -164,11 +164,11 @@
         帖子已经关闭，不再接受任何回帖
       </div>
     <%= else %>
-      <%= if logged_in?(@conn) do %>
+      <%= if @authenticated? do %>
       <article class="media">
         <figure class="media-left">
           <p class="image is-64x64">
-            <img src="<%= current_user(@conn).avatar %>">
+            <img src="<%= @current_user.avatar %>">
           </p>
         </figure>
         <div class="media-content">

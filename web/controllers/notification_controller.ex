@@ -6,7 +6,7 @@ defmodule PhoenixChina.NotificationController do
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.Ecto.Helpers, only: [update_field: 3]
 
-  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
 
   def index(conn, params) do
     current_user = current_user(conn)

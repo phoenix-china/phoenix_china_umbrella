@@ -12,6 +12,7 @@ defmodule PhoenixChina.Router do
   pipeline :browser_session do
     plug Guardian.Plug.VerifySession
     plug Guardian.Plug.LoadResource
+    plug PhoenixChina.Guardian.CurrentUser
   end
 
   pipeline :admin_browser_session do

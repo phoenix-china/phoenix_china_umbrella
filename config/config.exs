@@ -34,7 +34,7 @@ config :guardian, Guardian,
   ttl: { 30, :days },
   verify_issuer: true,
   secret_key: to_string(Mix.env),
-  serializer: PhoenixChina.GuardianSerializer
+  serializer: PhoenixChina.Guardian.Serializer
 
 config :scrivener_html,
   routes_helper: PhoenixChina.Router.Helpers

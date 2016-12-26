@@ -5,7 +5,7 @@ defmodule PhoenixChina.UserController do
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
-  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
     when action in [:edit, :update]
 
   def new(conn, _params) do

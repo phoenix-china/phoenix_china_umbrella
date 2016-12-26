@@ -17,7 +17,7 @@
       <br>
       <small>Joined on <%= @user.inserted_at |> strftime %></small>
     </div>
-    <%= if logged_in?(@conn) and current_user(@conn).id != @user.id do %>
+    <%= if @authenticated? and @current_user.id != @user.id do %>
     <div class="content">
       <%= if PhoenixChina.UserFollowView.follow?(@conn, @user) do %>
         <%= link to: user_follow_path(@conn, :delete, @user.username), class: "button is-primary is-fullwidth", method: :delete do %>

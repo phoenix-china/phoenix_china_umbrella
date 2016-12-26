@@ -1,9 +1,9 @@
 <div class="columns">
   <div class="column is-4">
-    <%= render "show-card.html", conn: @conn, user: @user %>
+    <%= render "show-card.html", assigns %>
   </div>
   <div class="column">
-    <%= render "show-tabs.html", conn: @conn, user: @user, current_tab: @current_tab %>
+    <%= render "show-tabs.html", assigns %>
 
     <%= if @pagination.total_entries > 0 do %>
       <%= for post <- @pagination do %>

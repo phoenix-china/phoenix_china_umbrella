@@ -6,7 +6,7 @@ defmodule PhoenixChina.CommentPraiseController do
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
-  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
 
   def create(conn, %{"comment_id" => comment_id}) do
     current_user = current_user(conn)

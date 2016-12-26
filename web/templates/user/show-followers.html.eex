@@ -1,9 +1,9 @@
 <div class="columns">
   <div class="column is-4">
-    <%= render "show-card.html", conn: @conn, user: @user %>
+    <%= render "show-card.html", assigns %>
   </div>
   <div class="column">
-    <%= render "show-tabs.html", conn: @conn, user: @user, current_tab: @current_tab %>
+    <%= render "show-tabs.html", assigns %>
 
     <%= if @pagination.total_entries > 0 do %>
     <div class="columns is-multiline">
@@ -24,7 +24,7 @@
                   <%= link user |> fullname, to: user_path(@conn, :show, user.username) %>
                 </div>
                 <div class="subtitle is-6" style="margin-top: 0;">
-                  <%= if logged_in?(@conn) and current_user(@conn).id != user.id do %>
+                  <%= if @authenticated? and @current_user.id != user.id do %>
                     <%= if PhoenixChina.UserFollowView.follow?(@conn, user) do %>
                     <%= link "取消关注",
                       to: "#{user_follow_path(@conn, :delete, user.username)}?next=#{user_path(@conn, :show, @user.username, tab: "followers")}",

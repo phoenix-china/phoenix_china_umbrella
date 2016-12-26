@@ -11,7 +11,7 @@ defmodule PhoenixChina.PostController do
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.Ecto.Helpers, only: [update_field: 3]
 
-  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
     when action in [:new, :create, :edit, :update, :delete]
 
   def new(conn, _params) do

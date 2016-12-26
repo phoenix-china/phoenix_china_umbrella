@@ -7,7 +7,7 @@
     <%= end %>
   </ul>
   
-  <%= if logged_in?(@conn) and current_user(@conn).id == @user.id do %>
+  <%= if @authenticated? and @current_user.id == @user.id do %>
   <ul class="is-right">
     <li>
       <%= link to: user_path(@conn, :edit, "profile"), class: "button is-small is-primary" do %>

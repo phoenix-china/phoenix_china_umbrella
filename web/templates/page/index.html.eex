@@ -125,7 +125,7 @@
     <%= end %>
   </div>
   <div class="column is-3">
-    <%= if logged_in?(@conn) do %>
+    <%= if @authenticated? do %>
     <div class="panel">
       <div class="panel-block">
         <%= link to: post_path(@conn, :new), class: "button is-info is-fullwidth" do %>
@@ -139,30 +139,30 @@
         <div class="media">
           <div class="media-left">
             <figure class="image is-32x32">
-              <img src="<%= current_user(@conn).avatar %>" alt="Image">
+              <img src="<%= @current_user.avatar %>" alt="Image">
             </figure>
           </div>
           <div class="media-content">
-            <p class="title is-5"><%= current_user(@conn).nickname %></p>
-            <p class="subtitle is-6">@<%= current_user(@conn).username %></p>
+            <p class="title is-5"><%= @current_user.nickname %></p>
+            <p class="subtitle is-6">@<%= @current_user.username %></p>
           </div>
         </div>
-        <%= if current_user(@conn).bio do %>
+        <%= if @current_user.bio do %>
         <div class="content">
-          <%= current_user(@conn).bio %>
+          <%= @current_user.bio %>
         </div>
         <%= end %>
 
       </div>
       <footer class="card-footer">
-        <%= link to: user_path(@conn, :show, current_user(@conn).username, tab: "followers"), class: "card-footer-item" do %>
-          关注者 <%= current_user(@conn).follower_count %>
+        <%= link to: user_path(@conn, :show, @current_user.username, tab: "followers"), class: "card-footer-item" do %>
+          关注者 <%= @current_user.follower_count %>
         <%= end %>
-        <%= link to: user_path(@conn, :show, current_user(@conn).username, tab: "following"), class: "card-footer-item" do %>
-          正在关注 <%= current_user(@conn).followed_count %>
+        <%= link to: user_path(@conn, :show, @current_user.username, tab: "following"), class: "card-footer-item" do %>
+          正在关注 <%= @current_user.followed_count %>
         <%= end %>
-        <%= link to: user_path(@conn, :show, current_user(@conn).username, tab: "collect"), class: "card-footer-item" do %>
-          收藏 <%= current_user(@conn).collect_count %>
+        <%= link to: user_path(@conn, :show, @current_user.username, tab: "collect"), class: "card-footer-item" do %>
+          收藏 <%= @current_user.collect_count %>
         <%= end %>
       </footer>
     </div>

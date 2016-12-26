@@ -10,7 +10,7 @@ defmodule PhoenixChina.CommentController do
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.Ecto.Helpers, only: [increment: 2, update_field: 3]
 
-  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
     when action in [:create, :edit, :update, :delete]
 
   def show(conn, %{"post_id" => post_id, "id" => comment_id}) do

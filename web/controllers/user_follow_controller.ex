@@ -6,7 +6,7 @@ defmodule PhoenixChina.UserFollowController do
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
-  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
 
   def create(conn, %{"user_username" => username}) do
     current_user = current_user(conn)
@@ -24,7 +24,7 @@ defmodule PhoenixChina.UserFollowController do
       end)
 
     case Repo.transaction(multi) do
-      {:ok, res} ->
+      {:ok, _res} ->
         conn
         |> put_flash(:info, "关注成功.")
         

@@ -6,7 +6,7 @@ defmodule PhoenixChina.PostCollectController do
 
   import PhoenixChina.ViewHelpers, only: [current_user: 1]
 
-  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.GuardianErrorHandler]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
 
   @doc """
   收藏帖子
