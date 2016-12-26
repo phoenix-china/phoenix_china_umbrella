@@ -25,8 +25,6 @@ defmodule PhoenixChina.UserFollowController do
 
     case Repo.transaction(multi) do
       {:ok, res} ->
-        IO.inspect res
-
         conn
         |> put_flash(:info, "关注成功.")
         
