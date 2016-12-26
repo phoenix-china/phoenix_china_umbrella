@@ -1,12 +1,12 @@
 defmodule PhoenixChina.CommentPraiseView do
   use PhoenixChina.Web, :view
 
-  alias PhoenixChina.{Repo, ViewHelpers, CommentPraise}
+  alias PhoenixChina.{Repo, CommentPraise}
   import Ecto.Query
 
   def praise?(conn, comment) do
-    if ViewHelpers.logged_in?(conn) do
-      current_user = ViewHelpers.current_user(conn)
+    if conn.assigns[:authenticated?] do
+      current_user = conn.assigns[:current_user]
       praise = CommentPraise
       |> where(user_id: ^current_user.id)
       |> where(comment_id: ^comment.id)

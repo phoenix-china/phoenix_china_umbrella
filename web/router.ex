@@ -17,6 +17,7 @@ defmodule PhoenixChina.Router do
 
   pipeline :admin_browser_session do
     plug Guardian.Plug.VerifySession, key: :admin
+    plug PhoenixChina.Guardian.CurrentUser, key: :admin
   end
 
   pipeline :api do

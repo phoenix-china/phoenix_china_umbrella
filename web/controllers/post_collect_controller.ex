@@ -4,15 +4,13 @@ defmodule PhoenixChina.PostCollectController do
   alias PhoenixChina.{User, Post, PostCollect, Notification}
   alias Ecto.Multi
 
-  import PhoenixChina.ViewHelpers, only: [current_user: 1]
-
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
 
   @doc """
   收藏帖子
   """
   def create(conn, %{"post_id" => post_id}) do
-    current_user = current_user(conn)
+    current_user = conn.assigns[:current_user]
 
     multi =
       Multi.new
@@ -40,7 +38,7 @@ defmodule PhoenixChina.PostCollectController do
   取消收藏帖子
   """
   def delete(conn, %{"post_id" => post_id}) do
-    current_user = current_user(conn)
+    current_user = conn.assigns[:current_user]
     post_collect = Repo.get_by(PostCollect, user_id: current_user.id, post_id: post_id)
 
     multi =

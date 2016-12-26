@@ -1,12 +1,12 @@
 defmodule PhoenixChina.PostCollectView do
   use PhoenixChina.Web, :view
 
-  alias PhoenixChina.{Repo, ViewHelpers, PostCollect}
+  alias PhoenixChina.{Repo, PostCollect}
   import Ecto.Query
 
   def collect?(conn, post) do
-    if ViewHelpers.logged_in?(conn) do
-      current_user = ViewHelpers.current_user(conn)
+    if conn.assigns[:authenticated?] do
+      current_user = conn.assigns[:current_user]
       collect = PostCollect
       |> where(user_id: ^current_user.id)
       |> where(post_id: ^post.id)

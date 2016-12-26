@@ -4,12 +4,10 @@ defmodule PhoenixChina.CommentPraiseController do
   alias PhoenixChina.{Comment, CommentPraise, Notification}
   alias Ecto.Multi
 
-  import PhoenixChina.ViewHelpers, only: [current_user: 1]
-
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
 
   def create(conn, %{"comment_id" => comment_id}) do
-    current_user = current_user(conn)
+    current_user = conn.assigns[:current_user]
 
     multi =
       Multi.new
@@ -33,7 +31,7 @@ defmodule PhoenixChina.CommentPraiseController do
   end
 
   def delete(conn, %{"comment_id" => comment_id}) do
-    current_user = current_user(conn)
+    current_user = conn.assigns[:current_user]
     comment_praise = Repo.get_by(CommentPraise, comment_id: comment_id, user_id: current_user.id)
 
     multi =

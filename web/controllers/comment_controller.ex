@@ -7,7 +7,6 @@ defmodule PhoenixChina.CommentController do
     Notification,
   }
 
-  import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.Ecto.Helpers, only: [increment: 2, update_field: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
@@ -37,7 +36,7 @@ defmodule PhoenixChina.CommentController do
     
     struct = 
       build_assoc post, :comments, 
-        user_id: current_user(conn).id, 
+        user_id: conn.assigns[:current_user].id, 
         index: post.comment_count + 1
     
     changeset = Comment.changeset(struct, comment_params)
@@ -66,7 +65,7 @@ defmodule PhoenixChina.CommentController do
     comment =
       post
       |> assoc(:comments)
-      |> where(user_id: ^current_user(conn).id)
+      |> where(user_id: ^conn.assigns[:current_user].id)
       |> Repo.get!(id)
 
     changeset = Comment.changeset(comment)
@@ -85,7 +84,7 @@ defmodule PhoenixChina.CommentController do
     comment =
       post
       |> assoc(:comments)
-      |> where(user_id: ^current_user(conn).id)
+      |> where(user_id: ^conn.assigns[:current_user].id)
       |> Repo.get!(id)
 
     changeset = Comment.changeset(comment, comment_params)
@@ -112,7 +111,7 @@ defmodule PhoenixChina.CommentController do
     comment =
       post
       |> assoc(:comments)
-      |> where(user_id: ^current_user(conn).id)
+      |> where(user_id: ^conn.assigns[:current_user].id)
       |> Repo.get!(id)
 
     latest_comment_id = 

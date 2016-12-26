@@ -3,8 +3,6 @@ defmodule PhoenixChina.UserController do
 
   alias PhoenixChina.{User, Post, Comment, PostCollect, UserFollow}
 
-  import PhoenixChina.ViewHelpers, only: [current_user: 1]
-
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
     when action in [:edit, :update]
 
@@ -152,7 +150,7 @@ defmodule PhoenixChina.UserController do
   end
 
   def edit(conn, %{"page" => "profile"}) do
-    current_user = current_user(conn)
+    current_user = conn.assigns[:current_user]
     changeset = User.changeset(:profile, current_user)
 
     conn
@@ -163,7 +161,7 @@ defmodule PhoenixChina.UserController do
   end
 
   def edit(conn, %{"page" => "password"}) do
-    current_user = current_user(conn)
+    current_user = conn.assigns[:current_user]
     changeset = User.changeset(:account, current_user)
 
     conn
@@ -174,7 +172,7 @@ defmodule PhoenixChina.UserController do
   end
 
   def update(conn, %{"page" => "profile", "user" => user_params}) do
-    user = current_user(conn)
+    user = conn.assigns[:current_user]
 
     #upload to qiniu
     user_params = case is_nil(user_params["avatar"]) do
@@ -202,7 +200,7 @@ defmodule PhoenixChina.UserController do
   end
 
   def update(conn, %{"page" => "password", "user" => user_params}) do
-    current_user = current_user(conn)
+    current_user = conn.assigns[:current_user]
     changeset = User.changeset(:account, current_user, user_params)
 
     case Repo.update(changeset) do

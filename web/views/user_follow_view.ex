@@ -1,12 +1,12 @@
 defmodule PhoenixChina.UserFollowView do
   use PhoenixChina.Web, :view
 
-  alias PhoenixChina.{Repo, ViewHelpers, UserFollow}
+  alias PhoenixChina.{Repo, UserFollow}
   import Ecto.Query
 
   def follow?(conn, user) do
-    if ViewHelpers.logged_in?(conn) do
-      current_user = ViewHelpers.current_user(conn)
+    if conn.assigns[:authenticated?] do
+      current_user = conn.assigns[:current_user]
 
       follow = UserFollow
       |> where(user_id: ^current_user.id)

@@ -15,7 +15,7 @@ defmodule PhoenixChina.UserView do
   end
 
   def subnavs(conn) do
-    current_user = current_user(conn)
+    current_user = conn.assigns[:current_user]
 
     navigation = [
       {user_path(conn, :edit, "profile"), "profile", "个人信息"}

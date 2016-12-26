@@ -4,22 +4,6 @@ defmodule PhoenixChina.ViewHelpers do
 
   alias PhoenixChina.{Repo, User, UserFollow, Post, PostCollect, PostPraise, Comment, CommentPraise}
 
-  def logged_in?(conn) do
-    Guardian.Plug.authenticated?(conn)
-  end
-
-  def current_user(conn) do
-    Guardian.Plug.current_resource(conn)
-  end
-
-  def admin_logged_in?(conn) do
-    Guardian.Plug.authenticated?(conn, :admin)
-  end
-
-  def admin_user(conn) do
-    Guardian.Plug.current_resource(conn, :admin)
-  end
-
   def user_follow?(%User{:id => user_id}, %User{:id => to_user_id}) do
     UserFollow
     |> where(user_id: ^user_id)

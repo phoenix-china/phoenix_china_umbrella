@@ -8,7 +8,6 @@ defmodule PhoenixChina.PostController do
     Notification,
   }
 
-  import PhoenixChina.ViewHelpers, only: [current_user: 1]
   import PhoenixChina.Ecto.Helpers, only: [update_field: 3]
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
@@ -33,7 +32,7 @@ defmodule PhoenixChina.PostController do
 
   def create(conn, %{"post" => post_params}) do
     current_user = 
-      current_user(conn)
+      conn.assigns[:current_user]
 
     changeset = 
       Post.changeset(:insert, build_assoc(current_user, :posts), post_params)
@@ -80,8 +79,7 @@ defmodule PhoenixChina.PostController do
 
   def edit(conn, %{"id" => id}) do
     post = 
-      conn
-      |> current_user
+      conn.assigns[:current_user]
       |> assoc(:posts)
       |> Repo.get!(id)
 
@@ -107,8 +105,7 @@ defmodule PhoenixChina.PostController do
   """
   def update(conn, %{"id" => id, "post" => %{"is_closed" => is_closed}}) do
     post = 
-      conn
-      |> current_user
+      conn.assigns[:current_user]
       |> assoc(:posts)
       |> Repo.get!(id)
       |> update_field(:is_closed, is_closed == "true")
@@ -120,8 +117,7 @@ defmodule PhoenixChina.PostController do
 
   def update(conn, %{"id" => id, "post" => post_params}) do
     post = 
-      conn
-      |> current_user
+      conn.assigns[:current_user]
       |> assoc(:posts)
       |> Repo.get!(id)
 
@@ -151,8 +147,7 @@ defmodule PhoenixChina.PostController do
   end
 
   def delete(conn, %{"id" => id}) do
-    conn
-    |> current_user
+    conn.assigns[:current_user]
     |> assoc(:posts)
     |> Repo.get!(id)
     |> Repo.delete!

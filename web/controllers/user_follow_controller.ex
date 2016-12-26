@@ -4,12 +4,10 @@ defmodule PhoenixChina.UserFollowController do
   alias PhoenixChina.{User, UserFollow, Notification}
   alias Ecto.Multi
 
-  import PhoenixChina.ViewHelpers, only: [current_user: 1]
-
   plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixChina.Guardian.ErrorHandler]
 
   def create(conn, %{"user_username" => username}) do
-    current_user = current_user(conn)
+    current_user = conn.assigns[:current_user]
     to_user = Repo.get_by!(User, username: username)
     
     multi =
@@ -36,7 +34,7 @@ defmodule PhoenixChina.UserFollowController do
   end
 
   def delete(conn, %{"user_username" => username}) do
-    current_user = current_user(conn)
+    current_user = conn.assigns[:current_user]
     to_user = Repo.get_by!(User, username: username)
     user_follow = Repo.get_by!(UserFollow, user_id: current_user.id, to_user_id: to_user.id)
     
