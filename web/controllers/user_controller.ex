@@ -52,7 +52,7 @@ defmodule PhoenixChina.UserController do
   帖子
   """
   def show(conn, %{"username" => username, "tab" => "post"} = params) do
-    user = Repo.get_by(User, %{username: username})
+    user = Repo.get_by!(User, %{username: username})
 
     pagination = Post
     |> where(user_id: ^user.id)
@@ -72,7 +72,7 @@ defmodule PhoenixChina.UserController do
   回复
   """
   def show(conn, %{"username" => username, "tab" => "comment"} = params) do
-    user = Repo.get_by(User, %{username: username})
+    user = Repo.get_by!(User, %{username: username})
 
     pagination = Comment
     |> where(user_id: ^user.id)
@@ -93,7 +93,7 @@ defmodule PhoenixChina.UserController do
   收藏
   """
   def show(conn, %{"username" => username, "tab" => "collect"} = params) do
-    user = Repo.get_by(User, %{username: username})
+    user = Repo.get_by!(User, %{username: username})
 
     pagination = Post
     |> join(:inner, [p], c in PostCollect, c.post_id == p.id and c.user_id == ^user.id)
@@ -113,7 +113,7 @@ defmodule PhoenixChina.UserController do
   关注者
   """
   def show(conn, %{"username" => username, "tab" => "followers"} = params) do
-    user = Repo.get_by(User, %{username: username})
+    user = Repo.get_by!(User, %{username: username})
 
     pagination = User
     |> join(:inner, [u], f in UserFollow, f.user_id == u.id and f.to_user_id == ^user.id)
@@ -132,7 +132,7 @@ defmodule PhoenixChina.UserController do
   正在关注
   """
   def show(conn, %{"username" => username, "tab" => "following"} = params) do
-    user = Repo.get_by(User, %{username: username})
+    user = Repo.get_by!(User, %{username: username})
 
     pagination = User
     |> join(:inner, [u], f in UserFollow, f.user_id == ^user.id and f.to_user_id == u.id)
