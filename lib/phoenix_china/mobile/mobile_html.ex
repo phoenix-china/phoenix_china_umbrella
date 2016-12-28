@@ -1,6 +1,9 @@
 defmodule PhoenixChina.Plug.MobileHtml do
 
   @doc """
+  https://github.com/elixytics/ua_inspector
+  Maby use ua_inspector to  parser User agent is better~ 
+
   1. update pipeline
 
     pipeline :browser do
@@ -49,26 +52,34 @@ defmodule PhoenixChina.Plug.MobileHtml do
   def call(conn, _opts) do
     conn
     |> judge_platform
-    |> set_platform
+    |> set_format
   end
 
   defp judge_platform(conn) do
-    user_agent = get_req_header(conn, "user-agent") |> List.first
+    user_agent = 
+      conn 
+      |> get_req_header("user-agent") 
+      |> hd
     
-    is_mobile = 
+    mobile? = 
       cond do
         user_agent =~ "Android" -> true
         user_agent =~ "Mobile" -> true
         true -> false
       end
+    
+    unset? =
+      conn
+      |> get_session(:mobile)
+      |> is_nil
 
-    case is_mobile && is_nil(get_session(conn, :mobile)) do
+    case mobile? && unset? do
       true -> put_session(conn, :mobile, "true")
       false -> conn
     end
   end
 
-  defp set_platform(conn) do
+  defp set_format(conn) do
     case get_session(conn, :mobile) do
       "true" ->
         conn

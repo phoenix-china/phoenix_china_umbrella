@@ -2,10 +2,13 @@ defmodule PhoenixChina.MobilePreferenceController do
   use PhoenixChina.Web, :controller
 
   def create(conn, %{"mobile" => is_mobile}) do
-    redirect_to = get_req_header(conn, "referer") |> List.first
+    referer = 
+      conn
+      |> get_req_header("referer") 
+      |> hd
 
     conn
     |> put_session(:mobile, is_mobile)
-    |> redirect(external: redirect_to)
+    |> redirect(external: referer)
   end
 end
