@@ -181,7 +181,12 @@
       <%= link to: "https://github.com/chenxsan/PhoenixFramework", target: "_blank", class: "panel-block" do %>
         <span>Phoenix 中文入门教程</span>
       <%= end %>
-
+      <%= link to: "https://learngraphql.com/basics/introduction", target: "_blank", class: "panel-block" do %>
+        <span>Learn GraphQL</span>
+      <%= end %>
+      <%= link to: "https://github.com/EasonWang01/elm-lang-chinese-manual", target: "_blank", class: "panel-block" do %>
+        <span>elm-lang 中文手册</span>
+      <%= end %>
       <%= link to: "https://ruby-china.org/topics/31631", target: "_blank", class: "panel-block" do %>
         <span>UPYUN hex.pm 国内镜像</span>
       <%= end %>
