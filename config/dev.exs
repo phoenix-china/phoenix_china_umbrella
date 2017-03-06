@@ -48,4 +48,4 @@ config :phoenix_china, PhoenixChina.Repo,
 # 开发环境下github配置，与生产环境不同
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
   client_id: "ad4e4ead45b08891286f",
-  client_secret: "1830579f407847e0eec418b37af6c18eabcdbf85"
+  client_secret: "17b9d84b64ff5432ed7dc01308a428718f546de8"

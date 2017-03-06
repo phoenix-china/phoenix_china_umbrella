@@ -2,7 +2,7 @@ defmodule PhoenixChina.RoomChannel do
   use Phoenix.Channel
 
   def join("rooms:lobby", msg, socket) do
-    send(self, {:after_join, msg})
+    send(self(), {:after_join, msg})
     {:ok, socket}
   end
 

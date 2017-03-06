@@ -41,7 +41,7 @@ config :scrivener_html,
 
 config :ueberauth, Ueberauth,
   providers: [
-    github: { Ueberauth.Strategy.Github, [default_scope: ""] },
+    github: {Ueberauth.Strategy.Github, [default_scope: "user"]}
   ]
 
 # Import environment specific config. This must remain at the bottom

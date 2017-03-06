@@ -48,7 +48,7 @@ defmodule PhoenixChina.Mixfile do
       {:scrivener_html, "~> 1.1"},
       {:timex, "~> 3.0"},
       {:timex_ecto, "~> 3.0"},
-      {:ueberauth_github, "~> 0.2"},
+      {:ueberauth_github, "~> 0.4"},
       {:con_cache, "~> 0.11.1"},
       {:qiniu, "~> 0.3.0"},
       {:hashids, "~> 2.0"},
