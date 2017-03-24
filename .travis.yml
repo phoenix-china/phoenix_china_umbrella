@@ -11,6 +11,6 @@ services:
   - postgresql
 before_script:
   - mix ecto.create && mix ecto.migrate
-  - mix run apps/phoenix_china/priv/seeds.exs
+  - mix run apps/phoenix_china/priv/repo/seeds.exs
 script:
   - mix test
