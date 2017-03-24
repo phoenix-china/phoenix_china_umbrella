@@ -1,4 +1,4 @@
-# Phoenix中文社区
+# Phoenix 中文社区
 
 ## 依赖
 1. elixir >= 1.4.2
