@@ -33,7 +33,8 @@ defmodule PhoenixChina.Mixfile do
   defp deps do
     [{:postgrex, ">= 0.0.0"},
      {:ecto, "~> 2.1"},
-     {:phoenix, "~> 1.3.0-rc"}]
+     {:phoenix, "~> 1.3.0-rc"},
+     {:comeonin, "~> 3.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
