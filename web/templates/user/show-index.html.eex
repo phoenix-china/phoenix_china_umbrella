@@ -1,8 +1,0 @@
-<div class="columns">
-  <div class="column is-4">
-    <%= render "show-card.html", assigns %>
-  </div>
-  <div class="column">
-    <%= render "show-tabs.html", assigns %>
-  </div>
-</div>

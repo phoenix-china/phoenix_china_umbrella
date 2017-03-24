@@ -1,9 +1,0 @@
-<div class="tabs">
-  <ul>
-    <%= for {href, id, caption} <- @navigation do %>
-      <li<%= if Phoenix.Controller.action_name(@conn) == id, do: " class=is-active" %>>
-        <%= link caption, to: href %>
-      </li>
-    <%= end %>
-  </ul>
-</div>

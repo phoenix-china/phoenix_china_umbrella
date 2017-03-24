@@ -1,12 +1,17 @@
-# PhoenixChina
+# Phoenix中文社区
 
-项目运行:
+## 依赖
+1. elixir >= 1.4.2
+2. phoenix >= 1.3.0-rc.1
+3. postgresql >= 9.6
+4. node >= 7.2.0
+5. yarn >= 0.17.9
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Install Node.js dependencies with `npm install`
-  * Start Phoenix endpoint with `mix phoenix.server`
+## 开发环境首次运行
+1. 安装elixir包 `cd ~/phoenix-china && mix deps.get`
+2. 创建数据库并创建表，在当前目录下 `mix ecto.create && mix ecto.migrate`
+3. 如有预装数据 `mix run apps/phoenix_china/priv/seeds.exs`
+4. 安装前端依赖 `cd ~/phoenix-china/apps/phoenix_china_web/assets && yarn install`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+## 开发环境
+1. `cd ~/phoenix-china && mix phx.server`

@@ -1,5 +1,0 @@
-<div class="phoenix_china-form">
-  <h2>创建评论</h2>
-
-  <%= render "form.html", changeset: @changeset, action: post_comment_path(@conn, :create, @post_id) %>
-</div>
