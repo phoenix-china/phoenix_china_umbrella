@@ -23,7 +23,7 @@ defmodule PhoenixChina.Models.User do
   def changeset(struct, params) do
     struct
     |> cast(params, @required_fields ++ @optional_fields)
-    |> validate_required(@required_fields)
+    |> validate_required(@required_fields, message: "不能为空")
     |> unique_constraint(:email, name: :users_lower_email_index, message: "邮箱已存在")
     |> validate_format(:email, @regex_email, message: "请输入正确的邮箱地址")
     |> validate_exclusion(:nickname, ~w(admin, superadmin), message: "不允许使用的用户名")

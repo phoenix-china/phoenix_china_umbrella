@@ -1,0 +1,24 @@
+<%= form_for @changeset, @action, fn f -> %>
+
+  <%= label f, :email, "邮箱", class: "label" %>
+  <p class="control">
+    <%= text_input f, :email, class: "input" %>
+    <%= error_tag f, :email %>
+  </p>
+
+  <%= label f, :nickname, "昵称", class: "label" %>
+  <p class="control">
+    <%= text_input f, :nickname, class: "input" %>
+    <%= error_tag f, :nickname %>
+  </p>
+
+  <%= label f, :password, "密码", class: "label" %>
+  <p class="control">
+    <%= password_input f, :password, class: "input" %>
+    <%= error_tag f, :password %>
+  </p>
+
+  <p class="control">
+    <button class="button is-info is-fullwidth" type="submit">注册</button>
+  </p>
+<% end %>

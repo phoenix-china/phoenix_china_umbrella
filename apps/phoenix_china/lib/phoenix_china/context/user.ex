@@ -13,8 +13,8 @@ defmodule PhoenixChina.UserContext do
   end
 
   def create(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
+    :create
+    |> change_user(attrs)
     |> Repo.insert()
   end
 
@@ -26,5 +26,10 @@ defmodule PhoenixChina.UserContext do
 
   def delete(%User{} = user) do
     Repo.delete(user)
+  end
+
+  def change_user(:create, attrs \\ %{}) do
+    %User{}
+    |> User.changeset(attrs)
   end
 end
