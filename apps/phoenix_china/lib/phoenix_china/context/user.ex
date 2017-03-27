@@ -12,6 +12,10 @@ defmodule PhoenixChina.UserContext do
     Repo.get!(User, id)
   end
 
+  def get_by!(:email, email) do
+    Repo.get_by!(User, email: email)
+  end
+
   def create(attrs \\ %{}) do
     :create
     |> change_user(attrs)
@@ -31,5 +35,9 @@ defmodule PhoenixChina.UserContext do
   def change_user(:create, attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
+  end
+
+  def checkpw(%User{} = user, password) do
+    Comeonin.Bcrypt.checkpw(password, user.password_hash)
   end
 end
