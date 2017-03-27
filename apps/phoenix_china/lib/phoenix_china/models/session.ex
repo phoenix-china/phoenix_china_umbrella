@@ -23,10 +23,10 @@ defmodule PhoenixChina.Models.Session do
   defp validate_user(%{valid?: false} = changeset), do: changeset
   defp validate_user(changeset) do
     with email <- get_field(changeset, :email),
-      user <- UserContext.get_by!(:email, email) do
+      {:ok, user} <- UserContext.get_by(:email, email) do
         put_change(changeset, :user, user)
       else
-        %Ecto.NoResultsError{} -> add_error(changeset, :email, "用户不存在")
+        {:error, _} -> add_error(changeset, :email, "用户不存在")
       end
   end
 

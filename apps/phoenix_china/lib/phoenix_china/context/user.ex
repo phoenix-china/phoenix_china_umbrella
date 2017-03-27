@@ -12,8 +12,11 @@ defmodule PhoenixChina.UserContext do
     Repo.get!(User, id)
   end
 
-  def get_by!(:email, email) do
-    Repo.get_by!(User, email: email)
+  def get_by(:email, email) do
+    case Repo.get_by(User, email: email) do
+      nil -> {:error, nil}
+      user -> {:ok, user}
+    end
   end
 
   def create(attrs \\ %{}) do
