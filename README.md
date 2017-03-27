@@ -1,6 +1,6 @@
 # Phoenix 中文社区
 
-[![Build Status](https://travis-ci.org/nanlong/phoenix_china_umbrella.svg?branch=master)](https://travis-ci.org/nanlong/phoenix_china_umbrella)
+[![Build Status](https://travis-ci.org/phoenix-china/phoenix_china_umbrella.svg?branch=master)](https://travis-ci.org/phoenix-china/phoenix_china_umbrella)
 
 ## 依赖
 1. elixir >= 1.4.2
