@@ -9,12 +9,17 @@ defmodule PhoenixChina.SessionContext do
   end
   """
   def create(attrs \\ %{}) do
-    changeset = Session.changeset(%Session{}, attrs)
+    changeset = change_session(attrs)
     
     if changeset.valid? do
       {:ok, Session.get_user(changeset)}
     else
-      {:error, changeset}
+      {:error, %{changeset | action: :create}}
     end
+  end
+
+  def change_session(attrs \\ %{}) do
+    %Session{}
+    |> Session.changeset(attrs)
   end
 end

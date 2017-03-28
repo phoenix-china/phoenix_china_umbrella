@@ -8,6 +8,10 @@ defmodule PhoenixChina.UserContext do
     Repo.all(User)
   end
 
+  def get(id) do
+    Repo.get(User, id)
+  end
+
   def get!(id) do
     Repo.get!(User, id)
   end

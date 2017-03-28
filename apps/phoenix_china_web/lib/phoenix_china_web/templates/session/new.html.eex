@@ -1,0 +1,7 @@
+<div class="columns">
+  <div class="column is-4 is-offset-4">
+    <div class="box">
+      <%= render "form.html", changeset: @changeset, action: session_path(@conn, :create) %>
+    </div>
+  </div>
+</div>

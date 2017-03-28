@@ -19,8 +19,9 @@ defmodule PhoenixChina.Web.UserController do
   用户注册提交表单
   """
   def create(conn, %{"user" => user_params}) do
-    with {:ok, _user} <- UserContext.create(user_params) do
+    with {:ok, user} <- UserContext.create(user_params) do
       conn
+      |> Guardian.Plug.sign_in(user)
       |> put_flash(:info, "注册成功！")
       |> redirect(to: page_path(conn, :index))
     else
