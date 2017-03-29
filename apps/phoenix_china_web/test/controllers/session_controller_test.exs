@@ -26,4 +26,13 @@ defmodule PhoenixChina.Web.SessionControllerTest do
     conn = post conn, session_path(conn, :create), session: @invalid_attrs
     assert html_response(conn, 200) =~ "用户登录"
   end
+
+  test "delete session and redirects to index", %{conn: conn} do
+    fixture(:user)
+    conn = post conn, session_path(conn, :create), session: @create_attrs
+    assert redirected_to(conn) == page_path(conn, :index)
+
+    conn = delete conn, session_path(conn, :delete)
+    assert redirected_to(conn) == page_path(conn, :index)
+  end
 end
