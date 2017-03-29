@@ -6,7 +6,7 @@
     "watch": "webpack --watch --colors --progress"
   },
   "dependencies": {
-    "bulma": "^0.4.0",
+    "bulma": "^0.3.2",
     "phoenix": "file:../../../deps/phoenix",
     "phoenix_html": "file:../../../deps/phoenix_html"
   },
