@@ -23,12 +23,14 @@ defmodule PhoenixChina.Web.Router do
     pipe_through [:browser, :browser_session] # Use the default browser stack
 
     get "/", PageController, :index
-
+    
     get "/join", UserController, :new
     post "/join", UserController, :create
 
     get "/login", SessionController, :new
     post "/login", SessionController, :create
+
+    delete "/logout", SessionController, :delete
   end
 
   # Other scopes may use custom stacks.

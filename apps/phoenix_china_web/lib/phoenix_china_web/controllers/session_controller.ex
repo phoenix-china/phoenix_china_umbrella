@@ -32,4 +32,11 @@ defmodule PhoenixChina.Web.SessionController do
         |> render("new.html")
     end
   end
+
+  def delete(conn, _params) do
+    conn
+    |> Guardian.Plug.sign_out
+    |> put_flash(:info, "已退出登录")
+    |> redirect(to: page_path(conn, :index))
+  end
 end
