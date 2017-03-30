@@ -1,0 +1,19 @@
+phoenix_china_umbrella:
+  build: .
+  dockerfile: Dockerfile # That's our Dockerfile path
+  command: mix phx.server # Start the server if no other command is specified
+  environment:
+    - MIX_ENV=prod # That's the environment mode, you know
+    - PORT=4000
+    - SECRET_KEY_BASE=phoenix_china_umbrella
+  volumes:
+    - .:/ # Here we're mounting our project's root directory inside the container
+  ports:
+    - "4000:4000"
+  links:
+    - postgres
+
+postgres:
+  image: postgres:latest # https://hub.docker.com/_/postgres/
+  ports:
+    - "5432"
