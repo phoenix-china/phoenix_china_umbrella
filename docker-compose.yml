@@ -7,7 +7,7 @@ phoenix_china_umbrella:
     - PORT=4000
     - SECRET_KEY_BASE=phoenix_china_umbrella
   volumes:
-    - .:/ # Here we're mounting our project's root directory inside the container
+    - .:/app # Here we're mounting our project's root directory inside the container
   ports:
     - "4000:4000"
   links:
