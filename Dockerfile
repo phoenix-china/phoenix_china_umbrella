@@ -38,6 +38,7 @@ RUN npm install -g yarn
 # Initialize
 RUN mkdir /phoenix_china_umbrella
 WORKDIR /phoenix_china_umbrella
+ENV MIX_ENV=prod
 
 # Things don't change that often. For instance, dependencies
 # Install Elixir Deps
@@ -73,7 +74,7 @@ RUN echo "use Mix.Config;\
   username: \"postgres\",\
   password: \"postgres\",\
   database: \"phoenix_china_prod\",\
-  hostname: \"localhost\",\
+  hostname: \"postgres\",\
   pool_size: 50" > ./apps/phoenix_china/config/prod.secret.exs
 # Compile Elixir App
 RUN MIX_ENV=prod mix compile
