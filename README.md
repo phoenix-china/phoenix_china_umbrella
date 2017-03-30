@@ -22,7 +22,8 @@
 ## Docker 环境运行
 ```bash
 docker-compose up -d phoenix_china_umbrella
-docker-compose run phoenix_china_umbrella mix ecto.create && mix ecto.migrate
+docker-compose run phoenix_china_umbrella mix ecto.create
+docker-compose run phoenix_china_umbrella mix ecto.migrate
 docker-compose run phoenix_china_umbrella mix run apps/phoenix_china/priv/repo/seeds.exs
 docker-compose restart phoenix_china_umbrella
 ```
