@@ -20,8 +20,10 @@
 
 
 ## Docker 环境运行
+```bash
 docker build -t phoenix_china_umbrella .
 docker run -p 4000 --rm --name phoenix_china_umbrella -e SECRET_KEY_BASE='phoenix_china_umbrella' -e PORT='4000' -i -t phoenix_china_umbrella
+```
 
 ## 项目结构说明
 * `apps/phoenix_china` 数据库
