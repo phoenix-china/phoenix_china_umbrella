@@ -81,7 +81,7 @@ RUN MIX_ENV=prod mix compile
 # RUN MIX_ENV=prod mix ecto.create && mix ecto.migrate
 # RUN MIX_ENV=prod mix run apps/phoenix_china/priv/repo/seeds.exs
 # Phoenix digest
-RUN MIX_ENV=prod mix phx.digest ./apps/phoenix_china_web/assets/static -o ./apps/phoenix_china_web/assets/static
+RUN MIX_ENV=prod mix phx.digest ./apps/phoenix_china_web/assets/static -o ./_build/prod/lib/phoenix_china_web/priv/static
 # Exposes port
 EXPOSE 4000
 
