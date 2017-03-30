@@ -5,7 +5,7 @@ phoenix_china_umbrella:
   environment:
     - MIX_ENV=prod # That's the environment mode, you know
     - PORT=4000
-    - SECRET_KEY_BASE=phoenix_china_umbrella
+    - SECRET_KEY_BASE=M)uJej7Ei2rYvw7,fDoskeXYL8[8y(VrvpwuP+g4tYxHz>qV?hkF=P[nsnuJfF>D
   volumes:
     - .:/app # Here we're mounting our project's root directory inside the container
   ports:
