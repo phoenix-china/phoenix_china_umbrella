@@ -47,37 +47,52 @@ RUN npm install -g yarn
 ####### Node #######
 
 # Initialize
-RUN mkdir /app
-WORKDIR /app
+RUN mkdir /phoenix_china_umbrella
+WORKDIR /phoenix_china_umbrella
 
 # Things don't change that oftern. For instance, dependencies
 # Install Elixir Deps
 ADD mix.* ./
+RUN mkdir -p ./apps/phoenix_china
+RUN mkdir -p ./apps/phoenix_china_web
+ADD ./apps/phoenix_china/mix.* ./apps/phoenix_china
+ADD ./apps/phoenix_china_web/mix.* ./apps/phoenix_china_web
 RUN MIX_ENV=prod mix local.rebar
 RUN MIX_ENV=prod mix local.hex --force
 RUN MIX_ENV=prod mix deps.get
+RUN ls
 
 # Install Node Deps
-RUN mkdir -p ./apps／phoenix_china_web/assets
-ADD ./apps／phoenix_china_web/assets ./apps／phoenix_china_web/assets
-WORKDIR ./apps／phoenix_china_web/assets
-# Install Node Deps
+RUN mkdir -p ./apps/phoenix_china_web/assets
+ADD ./apps/phoenix_china_web/assets/package.json ./apps/phoenix_china_web/assets
+WORKDIR ./apps/phoenix_china_web/assets
 RUN yarn install
 
 
-WORKDIR /app
+WORKDIR /phoenix_china_umbrella
 ADD . .
 # Compile Node App
 WORKDIR ./apps/phoenix_china_web/assets
 RUN yarn run deploy
-WORKDIR ../
-# Phoenix digest
-RUN MIX_ENV=prod mix phx.digest
-WORKDIR /app
+
+WORKDIR /phoenix_china_umbrella
+
+# Create prod.secret.exs
+RUN echo "use Mix.Config" > ./apps/phoenix_china_web/config/prod.secret.exs
+RUN echo "use Mix.Config;\
+  config :phoenix_china, PhoenixChina.Repo,\
+  adapter: Ecto.Adapters.Postgres,\
+  username: \"postgres\",\
+  password: \"postgres\",\
+  database: \"phoenix_china_prod\",\
+  hostname: \"localhost\",\
+  pool_size: 50" > ./apps/phoenix_china/config/prod.secret.exs
 # Compile Elixir App
 RUN MIX_ENV=prod mix compile
 RUN MIX_ENV=prod mix ecto.create && mix ecto.migrate
 RUN MIX_ENV=prod mix run apps/phoenix_china/priv/repo/seeds.exs
+# Phoenix digest
+RUN MIX_ENV=prod mix phx.digest ./apps/phoenix_china_web/assets/static -o ./apps/phoenix_china_web/assets/static
 # Exposes port
 EXPOSE 4000
 
