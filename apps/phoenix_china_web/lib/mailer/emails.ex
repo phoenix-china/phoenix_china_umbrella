@@ -9,11 +9,11 @@ defmodule PhoenixChina.Emails do
   欢迎邮件
   """
   def welcome_email(person) do
-      base_email()
-      |> to(person)
-      |> subject("欢迎注册Phoenix中文社区")
-      |> render(:welcome)
-      |> send
+    base_email()
+    |> to(person)
+    |> subject("欢迎注册Phoenix中文社区")
+    |> render(:welcome)
+    |> send
   end
 
   defp base_email do
