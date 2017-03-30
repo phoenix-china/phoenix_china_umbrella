@@ -21,7 +21,7 @@
 
 ## Docker 环境运行
 ```bash
-docker-compose up -d phoenix_china_umbrella
+docker-compose up phoenix_china_umbrella
 ```
 
 ## 项目结构说明
