@@ -2,7 +2,6 @@ defmodule PhoenixChina.Web.UserController do
   use PhoenixChina.Web, :controller
 
   alias PhoenixChina.UserContext
-  alias PhoenixChina.Mailer
   alias PhoenixChina.Emails
 
   @doc """
