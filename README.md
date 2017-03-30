@@ -18,6 +18,11 @@
 ## 开发环境
 1. `cd ~/phoenix_china_umbrella && mix phx.server`
 
+
+## Docker 环境运行
+docker build -t phoenix_china_umbrella .
+docker run -p 4000 --rm --name phoenix_china_umbrella -e SECRET_KEY_BASE='phoenix_china_umbrella' -e PORT='4000' -i -t phoenix_china_umbrella
+
 ## 项目结构说明
 * `apps/phoenix_china` 数据库
 * `apps/phoenix_china_web` 网页
@@ -31,7 +36,7 @@
 * 如有问题请随时在论坛或者qq群联系
 
 ## TODO
-* [ ] 用户相关 
+* [ ] 用户相关
   * [x] 用户注册
   * [x] 用户登录
   * [x] 用户退出登录

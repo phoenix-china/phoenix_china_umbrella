@@ -49,6 +49,10 @@ defmodule PhoenixChina.Web.Endpoint do
   """
   def load_from_system_env(config) do
     port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
+    secret_key_base = System.get_env("SECRET_KEY_BASE") || raise "expected the SECRET_KEY_BASE environment variable to be set"
+    config = config
+      |> Keyword.put(:http, [port: port, compress: true])
+      |> Keyword.put(:secret_key_base, secret_key_base)
     {:ok, Keyword.put(config, :http, [:inet6, port: port])}
   end
 end
