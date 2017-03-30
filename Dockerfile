@@ -39,7 +39,7 @@ RUN npm install -g yarn
 RUN mkdir /phoenix_china_umbrella
 WORKDIR /phoenix_china_umbrella
 
-# Things don't change that oftern. For instance, dependencies
+# Things don't change that often. For instance, dependencies
 # Install Elixir Deps
 ADD mix.* ./
 RUN mkdir -p ./apps/phoenix_china
@@ -77,8 +77,8 @@ RUN echo "use Mix.Config;\
   pool_size: 50" > ./apps/phoenix_china/config/prod.secret.exs
 # Compile Elixir App
 RUN MIX_ENV=prod mix compile
-RUN MIX_ENV=prod mix ecto.create && mix ecto.migrate
-RUN MIX_ENV=prod mix run apps/phoenix_china/priv/repo/seeds.exs
+# RUN MIX_ENV=prod mix ecto.create && mix ecto.migrate
+# RUN MIX_ENV=prod mix run apps/phoenix_china/priv/repo/seeds.exs
 # Phoenix digest
 RUN MIX_ENV=prod mix phx.digest ./apps/phoenix_china_web/assets/static -o ./apps/phoenix_china_web/assets/static
 # Exposes port

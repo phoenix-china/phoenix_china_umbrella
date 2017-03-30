@@ -21,7 +21,10 @@
 
 ## Docker 环境运行
 ```bash
-docker-compose up phoenix_china_umbrella
+docker-compose up -d phoenix_china_umbrella
+docker-compose run phoenix_china_umbrella mix ecto.create && mix ecto.migrate
+docker-compose run phoenix_china_umbrella mix run apps/phoenix_china/priv/repo/seeds.exs
+docker-compose restart phoenix_china_umbrella
 ```
 
 ## 项目结构说明
@@ -70,3 +73,6 @@ docker-compose up phoenix_china_umbrella
   * [ ] 管理帖子
   * [ ] 管理评论
 * [ ] GraphQL接口
+* [ ] Build & CI
+  * [x] Travis
+  * [ ] Docker
