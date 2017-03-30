@@ -1,4 +1,4 @@
-FROM elixir:latest
+FROM elixir:1.4.2
 
 ####### Node #######
 RUN groupadd --gid 1000 node \
@@ -76,12 +76,12 @@ RUN echo "use Mix.Config;\
   database: \"phoenix_china_prod\",\
   hostname: \"postgres\",\
   pool_size: 50" > ./apps/phoenix_china/config/prod.secret.exs
+# Phoenix digest
+RUN MIX_ENV=prod mix phx.digest
 # Compile Elixir App
 RUN MIX_ENV=prod mix compile
 # RUN MIX_ENV=prod mix ecto.create && mix ecto.migrate
 # RUN MIX_ENV=prod mix run apps/phoenix_china/priv/repo/seeds.exs
-# Phoenix digest
-RUN MIX_ENV=prod mix phx.digest ./apps/phoenix_china_web/assets/static -o ./_build/prod/lib/phoenix_china_web/priv/static
 # Exposes port
 EXPOSE 4000
 
