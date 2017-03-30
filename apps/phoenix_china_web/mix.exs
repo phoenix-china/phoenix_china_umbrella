@@ -40,7 +40,8 @@ defmodule PhoenixChina.Web.Mixfile do
      {:gettext, "~> 0.11"}, 
      {:phoenix_china, in_umbrella: true}, 
      {:cowboy, "~> 1.0"},
-     {:guardian, "~> 0.14"}]
+     {:guardian, "~> 0.14"},
+     {:bamboo, "~> 0.8"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

@@ -34,5 +34,7 @@ defmodule PhoenixChina.Web.SessionControllerTest do
 
     conn = delete conn, session_path(conn, :delete)
     assert redirected_to(conn) == page_path(conn, :index)
+
+    PhoenixChina.Emails.welcome_email |> PhoenixChina.Mailer.deliver_later
   end
 end
