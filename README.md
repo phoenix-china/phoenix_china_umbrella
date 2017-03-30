@@ -76,4 +76,4 @@ docker-compose restart phoenix_china_umbrella
 * [ ] GraphQL接口
 * [ ] Build & CI
   * [x] Travis
-  * [ ] Docker
+  * [x] Docker
