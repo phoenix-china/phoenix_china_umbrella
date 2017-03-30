@@ -37,8 +37,8 @@ config :guardian, Guardian,
 
 config :phoenix_china, PhoenixChina.Mailer,
   adapter: Bamboo.MailgunAdapter,
-  api_key: "key-bb2d3d19408d7ccf5abc25e0a9281cd7",
-  domain: "https://api.mailgun.net/v3/mg.phoenix-china.org"
+  api_key: System.get_env("MAILGUN_API_KEY"),
+  domain: System.get_env("MAILGUN_DOMAIN")
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

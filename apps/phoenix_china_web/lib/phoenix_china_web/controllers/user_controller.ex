@@ -2,6 +2,8 @@ defmodule PhoenixChina.Web.UserController do
   use PhoenixChina.Web, :controller
 
   alias PhoenixChina.UserContext
+  alias PhoenixChina.Mailer
+  alias PhoenixChina.Emails
 
   @doc """
   用户注册页面
@@ -20,6 +22,9 @@ defmodule PhoenixChina.Web.UserController do
   """
   def create(conn, %{"user" => user_params}) do
     with {:ok, user} <- UserContext.create(user_params) do
+      # 发送注册成功邮件
+      Emails.welcome_email(user.email)     
+
       conn
       |> Guardian.Plug.sign_in(user)
       |> put_flash(:info, "注册成功！")
