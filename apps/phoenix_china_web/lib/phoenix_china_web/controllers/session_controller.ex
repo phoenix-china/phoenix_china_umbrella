@@ -33,6 +33,9 @@ defmodule PhoenixChina.Web.SessionController do
     end
   end
 
+  @doc """
+  用户退出登录
+  """
   def delete(conn, _params) do
     conn
     |> Guardian.Plug.sign_out

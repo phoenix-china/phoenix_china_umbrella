@@ -35,6 +35,11 @@ config :guardian, Guardian,
   secret_key: "z4pyE6JoizjOGkhvak7XVEG+vmVYA6072W4HZzCuuY+CXQzbDwkviYpWurq83tef",
   serializer: PhoenixChina.Guardian.Serializer
 
+config :phoenix_china, PhoenixChina.Mailer,
+  adapter: Bamboo.MailgunAdapter,
+  api_key: System.get_env("MAILGUN_API_KEY"),
+  domain: System.get_env("MAILGUN_DOMAIN")
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
