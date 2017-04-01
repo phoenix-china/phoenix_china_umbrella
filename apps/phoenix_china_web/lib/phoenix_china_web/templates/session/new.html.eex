@@ -2,6 +2,12 @@
   <div class="column is-4 is-offset-4">
     <div class="box">
       <%= render "form.html", changeset: @changeset, action: session_path(@conn, :create) %>
+      <hr>
+      <div class="is-clearfix">
+        <%= link to: password_reset_path(@conn, :new), class: "is-pulled-right" do %>
+          忘记密码？
+        <%= end %>
+      </div>
     </div>
   </div>
 </div>

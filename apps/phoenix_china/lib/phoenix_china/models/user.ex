@@ -12,7 +12,7 @@ defmodule PhoenixChina.Models.User do
     field :password_hash, :string
 
     field :password, :string, virtual: true
-
+    field :password_confirmation, :string, virtual: true
     timestamps()
   end
 
@@ -31,6 +31,15 @@ defmodule PhoenixChina.Models.User do
     |> validate_length(:password, min: 6, max: 128, message: "密码长度6-128位")
     |> put_password_hash
     |> put_avatar
+  end
+
+  def changeset_password_reset(struct, params) do
+    struct
+    |> cast(params, [:password, :password_confirmation])
+    |> validate_required([:password, :password_confirmation], message: "不能为空")
+    |> validate_length(:password, mix: 6, max: 128, message: "密码长度6-128位")
+    |> validate_confirmation(:password, message: "两次输入密码不一致")
+    |> put_password_hash
   end
 
   defp put_password_hash(%{valid?: false} = changeset), do: changeset

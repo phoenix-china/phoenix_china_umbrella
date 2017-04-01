@@ -1,0 +1,10 @@
+<div class="columns">
+  <div class="column is-4 is-offset-4">
+    <div class="box">
+      <div style="padding-bottom: 20px;">
+        输入您的邮件地址，我们将发送一封包含重置密码链接的邮件。
+      </div>
+      <%= render "form.html", changeset: @changeset, action: password_reset_path(@conn, :create) %>
+    </div>
+  </div>
+</div>

@@ -35,6 +35,24 @@ defmodule PhoenixChina.UserContext do
     |> Repo.update()
   end
 
+  def update(token, %{"password" => _password} = attrs) when is_binary(token) do
+    changeset = change_password_reset(%User{}, attrs)
+
+    # token 12小时后过期
+    with {:ok, user_id} <- validate_token(token),
+      true <- changeset.valid? do
+        changeset = %{changeset | data: get!(user_id)}
+        Repo.update(changeset)
+      else
+        {:error, :invalid} -> {:error, :invalid}
+        {:error, :expired} -> {:error, :expired}
+        false ->
+          {:ok, user_id} = validate_token(token)
+          changeset = %{changeset | data: get!(user_id), action: :update}
+          {:error, changeset}
+      end
+  end
+
   def delete(%User{} = user) do
     Repo.delete(user)
   end
@@ -44,7 +62,20 @@ defmodule PhoenixChina.UserContext do
     |> User.changeset(attrs)
   end
 
+  def change_password_reset(%User{} = user, attrs \\ %{}) do
+    user
+    |> User.changeset_password_reset(attrs)
+  end
+
   def checkpw(%User{} = user, password) do
     Comeonin.Bcrypt.checkpw(password, user.password_hash)
+  end
+
+  def generate_token(%User{} = user, signed_at \\ System.system_time(:seconds)) do
+    Phoenix.Token.sign(PhoenixChina.Web.Endpoint, "phoenix_china", user.id, signed_at: signed_at)
+  end
+
+  def validate_token(token) do
+    Phoenix.Token.verify(PhoenixChina.Web.Endpoint, "phoenix_china", token, max_age: 43200)
   end
 end

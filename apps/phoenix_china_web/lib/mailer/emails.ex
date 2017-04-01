@@ -2,7 +2,8 @@ defmodule PhoenixChina.Emails do
   use Bamboo.Phoenix, view: PhoenixChina.Web.EmailView
 
   alias PhoenixChina.Mailer
-
+  alias PhoenixChina.Models.User
+  alias PhoenixChina.UserContext
   @from "Support<support@mg.phoenix-china.org>"
 
   @doc """
@@ -13,6 +14,16 @@ defmodule PhoenixChina.Emails do
     |> to(person)
     |> subject("欢迎注册Phoenix中文社区")
     |> render(:welcome)
+    |> send
+  end
+
+  def password_reset_email(%User{} = user) do
+    base_email()
+    |> to(user.email)
+    |> subject("找回您的账号密码")
+    |> assign(:user, user)
+    |> assign(:token, UserContext.generate_token(user))
+    |> render(:password_reset)
     |> send
   end
 

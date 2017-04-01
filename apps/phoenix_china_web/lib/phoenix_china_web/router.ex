@@ -31,6 +31,10 @@ defmodule PhoenixChina.Web.Router do
     post "/login", SessionController, :create
 
     delete "/logout", SessionController, :delete
+
+    get "/password_reset", PasswordResetController, :new
+    post "/password_reset", PasswordResetController, :create
+    put "/password_reset", PasswordResetController, :update
   end
 
   # Other scopes may use custom stacks.

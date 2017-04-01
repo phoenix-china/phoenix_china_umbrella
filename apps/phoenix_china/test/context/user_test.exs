@@ -50,4 +50,22 @@ defmodule PhoenixChina.UserContextTest do
     assert {:ok, %User{}} = UserContext.delete(user)
     assert_raise Ecto.NoResultsError, fn -> UserContext.get!(user.id) end
   end
+
+  test "update/2 with valid data for password reset" do
+    user = fixture(:user)
+    token = UserContext.generate_token(user)
+    assert {:ok, user} = UserContext.update(token, %{"password" => "passwordreset", "password_confirmation" => "passwordreset"})
+    assert UserContext.checkpw(user, "passwordreset")
+  end
+
+  test "update/2 with invalid token for password reset" do
+    token = "error token"
+    assert {:error, :invalid} = UserContext.update(token, %{"password" => "passwordreset", "password_confirmation" => "passwordreset"})
+  end
+
+  test "update/2 with expired token for password reset" do
+    user = fixture(:user)
+    token = UserContext.generate_token(user, System.system_time(:seconds) - (60 * 60 * 12))
+    assert {:error, :expired} = UserContext.update(token, %{"password" => "passwordreset", "password_confirmation" => "passwordreset"})
+  end
 end
