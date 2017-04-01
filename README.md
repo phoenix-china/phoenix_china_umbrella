@@ -45,12 +45,12 @@ docker-compose restart phoenix_china_umbrella
   * [x] 用户注册
   * [x] 用户登录
   * [x] 用户退出登录
+  * [x] 找回密码
   * [ ] 邮箱验证
   * [ ] github登录
   * [ ] 个人主页
   * [ ] 个人资料修改
   * [ ] 修改密码
-  * [ ] 找回密码
   * [ ] 用户关注
 * [ ] 帖子相关
   * [ ] 发帖
@@ -74,6 +74,6 @@ docker-compose restart phoenix_china_umbrella
   * [ ] 管理帖子
   * [ ] 管理评论
 * [ ] GraphQL接口
-* [ ] Build & CI
+* [x] Build & CI
   * [x] Travis
   * [x] Docker
