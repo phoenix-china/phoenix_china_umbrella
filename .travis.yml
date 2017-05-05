@@ -9,6 +9,10 @@ addons:
   postgresql: '9.4'
 services:
   - postgresql
+cache:
+  directories:
+    - _build
+    - deps
 before_script:
   - mix ecto.create && mix ecto.migrate
   - mix run apps/phoenix_china/priv/repo/seeds.exs
